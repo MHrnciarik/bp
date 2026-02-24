@@ -1,5 +1,5 @@
 class InvoicesController < ApplicationController
-  before_action :set_invoice, only: [:show, :edit, :destroy]
+  before_action :set_invoice, only: [ :show, :edit, :destroy ]
 
   def index
     @invoices = Invoice.order(created_at: :desc)
