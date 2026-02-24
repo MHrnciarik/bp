@@ -1,1 +1,38 @@
-<h1>Invoices</h1>
+<div class="flex items-center justify-between mb-8">
+  <h1 class="text-3xl font-bold text-mint">Invoices</h1>
+  <%= link_to "+ New Invoice", new_invoice_path, class: "bg-mint text-charcoal font-semibold px-5 py-2 rounded-lg hover:bg-mint-dark transition-colors duration-200" %>
+</div>
+
+<div class="overflow-x-auto rounded-xl border border-charcoal-lighter shadow-lg">
+  <table class="w-full text-left">
+    <thead class="bg-charcoal-lighter text-lavender uppercase text-sm tracking-wide">
+      <tr>
+        <th class="px-5 py-3">Issued</th>
+        <th class="px-5 py-3">Client</th>
+        <th class="px-5 py-3">Amount</th>
+        <th class="px-5 py-3">Status</th>
+        <th class="px-5 py-3"></th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-charcoal-lighter">
+      <% @invoices.each do |inv| %>
+        <tr class="bg-charcoal-light hover:bg-charcoal-lighter transition-colors duration-150">
+          <td class="px-5 py-3"><%= inv.issued_on %></td>
+          <td class="px-5 py-3 font-medium"><%= inv.client_name %></td>
+          <td class="px-5 py-3 text-mint-light font-mono"><%= "#{inv.currency} #{'%.2f' % inv.amount}" %></td>
+          <td class="px-5 py-3">
+            <span class="px-2 py-1 rounded-full text-xs font-semibold
+              <%= inv.status == 'paid' ? 'bg-mint/20 text-mint' : 'bg-lavender/20 text-lavender' %>">
+              <%= inv.status %>
+            </span>
+          </td>
+          <td class="px-5 py-3 flex gap-3 text-sm">
+            <%= link_to "Show", invoice_path(inv), class: "text-mint hover:text-mint-light" %>
+            <%= link_to "Edit", edit_invoice_path(inv), class: "text-lavender hover:text-lavender-dark" %>
+            <%= link_to "Delete", invoice_path(inv), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "text-red-400 hover:text-red-300" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

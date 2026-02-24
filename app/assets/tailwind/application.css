@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+@theme {
+  --color-charcoal: #272D2D;
+  --color-charcoal-light: #353C3C;
+  --color-charcoal-lighter: #424B4B;
+  --color-lavender: #A799B7;
+  --color-lavender-dark: #9888A5;
+  --color-mint-light: #B2E6D4;
+  --color-mint: #83E8BA;
+  --color-mint-dark: #6AD4A2;
+}

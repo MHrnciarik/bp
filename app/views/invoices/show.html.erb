@@ -1,0 +1,45 @@
+<div class="mb-6">
+  <%= link_to "← Back to Invoices", invoices_path, class: "text-lavender hover:text-lavender-dark text-sm transition-colors" %>
+</div>
+
+<div class="bg-charcoal-light rounded-xl border border-charcoal-lighter shadow-lg p-8">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-3xl font-bold text-mint">Invoice</h1>
+    <%= link_to "Edit", edit_invoice_path(@invoice), class: "bg-lavender-dark text-white font-semibold px-5 py-2 rounded-lg hover:bg-lavender transition-colors duration-200" %>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+      <p class="text-lavender text-sm uppercase tracking-wide mb-1">Issued</p>
+      <p class="text-lg"><%= @invoice.issued_on %></p>
+    </div>
+    <div>
+      <p class="text-lavender text-sm uppercase tracking-wide mb-1">Due</p>
+      <p class="text-lg"><%= @invoice.due_on %></p>
+    </div>
+    <div>
+      <p class="text-lavender text-sm uppercase tracking-wide mb-1">Client</p>
+      <p class="text-lg font-medium"><%= @invoice.client_name %></p>
+    </div>
+    <div>
+      <p class="text-lavender text-sm uppercase tracking-wide mb-1">Amount</p>
+      <p class="text-lg font-mono text-mint-light"><%= "#{@invoice.currency} #{'%.2f' % @invoice.amount}" %></p>
+    </div>
+    <div>
+      <p class="text-lavender text-sm uppercase tracking-wide mb-1">Status</p>
+      <p>
+        <span class="px-3 py-1 rounded-full text-sm font-semibold
+          <%= @invoice.status == 'paid' ? 'bg-mint/20 text-mint' : 'bg-lavender/20 text-lavender' %>">
+          <%= @invoice.status %>
+        </span>
+      </p>
+    </div>
+  </div>
+
+  <% if @invoice.note.present? %>
+    <div class="mt-8 pt-6 border-t border-charcoal-lighter">
+      <p class="text-lavender text-sm uppercase tracking-wide mb-2">Note</p>
+      <p class="text-gray-200 leading-relaxed"><%= @invoice.note %></p>
+    </div>
+  <% end %>
+</div>

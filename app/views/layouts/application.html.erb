@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Bp" %></title>
+    <title><%= content_for(:title) || "Funance" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Bp">
@@ -24,8 +24,10 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body class="bg-charcoal min-h-screen text-gray-100">
     <%= render "shared/navbar" %>
-    <%= yield %>
+    <main class="max-w-5xl mx-auto px-6 py-8">
+      <%= yield %>
+    </main>
   </body>
 </html>

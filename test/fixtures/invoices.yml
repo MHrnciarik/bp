@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  issued_on: 2026-02-24
+  due_on: 2026-02-24
+  status: MyString
+  currency: MyString
+  amount: 9.99
+  number: MyString
+  client_name: MyString
+  client_address: MyText
+  note: MyText
+  user_id: 1
+
+two:
+  issued_on: 2026-02-24
+  due_on: 2026-02-24
+  status: MyString
+  currency: MyString
+  amount: 9.99
+  number: MyString
+  client_name: MyString
+  client_address: MyText
+  note: MyText
+  user_id: 1
