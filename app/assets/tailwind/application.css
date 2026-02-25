@@ -12,7 +12,7 @@
 }
 
 .form-input {
-  @apply w-full bg-charcoal border border-charcoal-lighter rounded-lg px-4 py-2 text-gray-100 transition focus:outline-none focus:ring-2 focus:ring-mint/50 focus:border-mint;
+  @apply w-full bg-charcoal border border-charcoal-lighter rounded-lg px-2 py-2 text-gray-100 transition focus:outline-none focus:ring-2 focus:ring-mint/50 focus:border-mint;
 }
 
 .form-label {

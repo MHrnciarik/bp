@@ -1,0 +1,54 @@
+<!-- filepath: /home/leny/bp/app/views/expenses/show.html.erb -->
+<div class="max-w-2xl mx-auto">
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <%= link_to "← Back to Expenses", expenses_path, class: "text-lavender hover:text-lavender-dark transition-colors" %>
+    </div>
+    <div class="flex items-center gap-3">
+      <%= link_to "Edit", edit_expense_path(@expense), class: "submit-button" %>
+      <%= button_to "Delete", expense_path(@expense), method: :delete,
+            class: "bg-red-600 text-white font-semibold px-6 py-2.5 rounded-lg hover:bg-red-700 transition-colors duration-200 cursor-pointer",
+            data: { turbo_confirm: "Are you sure you want to delete this expense?" } %>
+    </div>
+  </div>
+
+  <h1 class="text-2xl font-bold text-mint mb-6">Expense Details</h1>
+
+  <div class="bg-charcoal-light rounded-lg p-6 space-y-4">
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <span class="form-label">Date</span>
+        <p class="text-gray-100"><%= @expense.date.strftime("%B %d, %Y") %></p>
+      </div>
+      <div>
+        <span class="form-label">Amount</span>
+        <p class="text-gray-100 text-xl font-semibold">
+          <%= number_to_currency(@expense.amount, unit: @expense.currency + " ") %>
+        </p>
+      </div>
+      <div>
+        <span class="form-label">Category</span>
+        <p class="text-gray-100"><%= @expense.category %></p>
+      </div>
+      <div>
+        <span class="form-label">Payment Method</span>
+        <p class="text-gray-100"><%= @expense.payment_method %></p>
+      </div>
+      <div>
+        <span class="form-label">Vendor / Merchant</span>
+        <p class="text-gray-100"><%= @expense.vendor.presence || "—" %></p>
+      </div>
+      <div>
+        <span class="form-label">Currency</span>
+        <p class="text-gray-100"><%= @expense.currency %></p>
+      </div>
+    </div>
+
+    <% if @expense.note.present? %>
+      <div>
+        <span class="form-label">Note</span>
+        <p class="text-gray-100"><%= @expense.note %></p>
+      </div>
+    <% end %>
+  </div>
+</div>

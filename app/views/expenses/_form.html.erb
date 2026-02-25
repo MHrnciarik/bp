@@ -1,0 +1,52 @@
+<%= form_with model: expense, class: "bg-charcoal-light rounded-xl border border-charcoal-lighter shadow-lg p-8 space-y-5" do |f| %>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <div>
+      <%= f.label :date, class: "form-label" %>
+      <%= f.date_field :date, class: "form-input" %>
+    </div>
+
+    <div>
+      <%= f.label :amount, class: "form-label" %>
+      <%= f.number_field :amount, step: 1, min: 0, class: "form-input" %>
+    </div>
+
+    <div>
+      <%= f.label :currency, class: "form-label" %>
+      <%= f.select :currency,
+            options_for_select(Expense::CURRENCIES, expense.currency),
+            {},
+            class: "form-input" %>
+    </div>
+
+    <div>
+      <%= f.label :vendor, "Vendor / Merchant", class: "form-label" %>
+      <%= f.text_field :vendor, class: "form-input" %>
+    </div>
+
+    <div>
+      <%= f.label :category, class: "form-label" %>
+      <%= f.select :category,
+            options_for_select(Expense::CATEGORIES, expense.category),
+            { prompt: "Select a category" },
+            class: "form-input" %>
+    </div>
+
+    <div>
+      <%= f.label :payment_method, class: "form-label" %>
+      <%= f.select :payment_method,
+            options_for_select(Expense::PAYMENT_METHODS, expense.payment_method),
+            { prompt: "Select payment method" },
+            class: "form-input" %>
+    </div>
+  </div>
+
+  <div>
+    <%= f.label :note, class: "form-label" %>
+    <%= f.text_area :note, rows: 3, class: "form-input", placeholder: "Optional notes..." %>
+  </div>
+
+  <div class="flex items-center gap-4">
+    <%= f.submit class: "submit-button" %>
+    <%= link_to "Cancel", expenses_path, class: "text-lavender hover:text-lavender-dark transition-colors" %>
+  </div>
+<% end %>

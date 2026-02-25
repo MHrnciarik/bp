@@ -27,6 +27,18 @@
   <body class="bg-charcoal min-h-screen text-gray-100">
     <%= render "shared/navbar" %>
     <main class="max-w-5xl mx-auto px-6 py-8">
+      <% if notice.present? %>
+        <div class="bg-mint/10 border border-mint rounded-lg px-4 py-3 text-mint mb-6">
+          <%= notice %>
+        </div>
+      <% end %>
+
+      <% if alert.present? %>
+        <div class="bg-red-900/50 border border-red-500 rounded-lg px-4 py-3 text-red-300 mb-6">
+          <%= alert %>
+        </div>
+      <% end %>
+      
       <%= yield %>
     </main>
   </body>
