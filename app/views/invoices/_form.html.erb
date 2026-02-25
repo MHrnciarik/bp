@@ -1,49 +1,49 @@
 <%= form_with model: @invoice, class: "bg-charcoal-light rounded-xl border border-charcoal-lighter shadow-lg p-8 space-y-5" do |f| %>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
     <div>
-      <%= f.label :issued_on, class: "block text-lavender text-sm font-medium mb-1" %>
-      <%= f.date_field :issued_on, class: "w-full bg-charcoal border border-charcoal-lighter rounded-lg px-4 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-mint/50 focus:border-mint transition" %>
+      <%= f.label :issued_on, class: "form-label" %>
+      <%= f.date_field :issued_on, class: "form-input" %>
     </div>
     <div>
-      <%= f.label :due_on, class: "block text-lavender text-sm font-medium mb-1" %>
-      <%= f.date_field :due_on, class: "w-full bg-charcoal border border-charcoal-lighter rounded-lg px-4 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-mint/50 focus:border-mint transition" %>
+      <%= f.label :due_on, class: "form-label" %>
+      <%= f.date_field :due_on, class: "form-input" %>
     </div>
     <div>
-      <%= f.label :status, class: "block text-lavender text-sm font-medium mb-1" %>
+      <%= f.label :status, class: "form-label" %>
       <%= f.select :status, Invoice::STATUSES.map { |s| [s.capitalize, s] },
             {},
-            class: "appearance-none w-full bg-charcoal border border-charcoal-lighter rounded-lg px-4 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-mint/50 focus:border-mint transition cursor-pointer" %>
+            class: "appearance-none form-input cursor-pointer" %>
     </div>
     <div>
-      <%= f.label :currency, class: "block text-lavender text-sm font-medium mb-1" %>
+      <%= f.label :currency, class: "form-label" %>
       <%= f.select :currency, Invoice::CURRENCIES,
         {},
-        class: "w-full bg-charcoal border border-charcoal-lighter rounded-lg px-4 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-mint/50 focus:border-mint transition" %>
+        class: "form-input" %>
     </div>
     <div>
-      <%= f.label :amount, class: "block text-lavender text-sm font-medium mb-1" %>
-      <%= f.number_field :amount, step: 1, class: "w-full bg-charcoal border border-charcoal-lighter rounded-lg px-4 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-mint/50 focus:border-mint transition" %>
+      <%= f.label :amount, class: "form-label" %>
+      <%= f.number_field :amount, step: 1, class: "form-input" %>
     </div>
     <div>
-      <%= f.label :number, class: "block text-lavender text-sm font-medium mb-1" %>
-      <%= f.text_field :number, class: "w-full bg-charcoal border border-charcoal-lighter rounded-lg px-4 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-mint/50 focus:border-mint transition" %>
+      <%= f.label :number, class: "form-label" %>
+      <%= f.text_field :number, class: "form-input" %>
     </div>
     <div>
-      <%= f.label :client_name, class: "block text-lavender text-sm font-medium mb-1" %>
-      <%= f.text_field :client_name, class: "w-full bg-charcoal border border-charcoal-lighter rounded-lg px-4 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-mint/50 focus:border-mint transition" %>
+      <%= f.label :client_name, class: "form-label" %>
+      <%= f.text_field :client_name, class: "form-input" %>
     </div>
     <div>
-      <%= f.label :client_address, class: "block text-lavender text-sm font-medium mb-1" %>
-      <%= f.text_field :client_address, class: "w-full bg-charcoal border border-charcoal-lighter rounded-lg px-4 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-mint/50 focus:border-mint transition" %>
+      <%= f.label :client_address, class: "form-label" %>
+      <%= f.text_field :client_address, class: "form-input" %>
     </div>
   </div>
 
   <div>
-    <%= f.label :note, class: "block text-lavender text-sm font-medium mb-1" %>
-    <%= f.text_area :note, rows: 4, class: "w-full bg-charcoal border border-charcoal-lighter rounded-lg px-4 py-2 text-gray-100 focus:outline-none focus:ring-2 focus:ring-mint/50 focus:border-mint transition" %>
+    <%= f.label :note, class: "form-label" %>
+    <%= f.text_area :note, rows: 4, class: "form-input" %>
   </div>
 
   <div class="pt-2">
-    <%= f.submit class: "bg-mint text-charcoal font-semibold px-6 py-2.5 rounded-lg hover:bg-mint-dark transition-colors duration-200 cursor-pointer" %>
+    <%= f.submit class: "submit-button" %>
   </div>
 <% end %>

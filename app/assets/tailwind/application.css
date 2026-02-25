@@ -10,3 +10,16 @@
   --color-mint: #83E8BA;
   --color-mint-dark: #6AD4A2;
 }
+
+.form-input {
+  @apply w-full bg-charcoal border border-charcoal-lighter rounded-lg px-4 py-2 text-gray-100 transition focus:outline-none focus:ring-2 focus:ring-mint/50 focus:border-mint;
+}
+
+.form-label {
+  @apply block text-lavender text-sm font-medium mb-1;
+}
+
+.submit-button {
+  @apply bg-mint text-charcoal font-semibold px-6 py-2.5 rounded-lg hover:bg-mint-dark transition-colors duration-200 cursor-pointer;
+}
+
