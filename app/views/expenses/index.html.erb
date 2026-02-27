@@ -1,107 +1,94 @@
-<!-- filepath: /home/leny/bp/app/views/expenses/index.html.erb -->
-<div class="max-w-6xl mx-auto">
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold text-mint">Expenses</h1>
-    <%= link_to "New Expense", new_expense_path, class: "submit-button" %>
-  </div>
+<div class="flex flex-col items-center">
+  <div class="w-full max-w-5xl">
+    <!-- Filters -->
+    <details class="collapse collapse-arrow border-3 border-base-content/10 my-4">
+      <summary class="collapse-title font-bold">Filters</summary>
+      <div class="collapse-content text-sm">
+        <%= form_with url: expenses_path, method: :get, class:"grid grid-cols-5 gap-4 w-full" do |form| %>
+          <div>
+            <div class="input">
+              <%= form.label :start_date, "From", class:"label" %>
+              <%= form.date_field :start_date, value: params[:start_date], class:"date w-full" %>
+            </div>
+            <div class="input">
+              <%= form.label :end_date, "To", class:"label" %>
+              <%= form.date_field :end_date, value: params[:end_date], class:"date w-full" %>
+            </div>
 
-  <!-- Filters -->
-  <details class="bg-charcoal-light rounded-lg mb-6 group">
-    <summary class="px-4 py-3 cursor-pointer text-lavender font-medium flex items-center justify-between list-none">
-      <span>Filters</span>
-      <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-      </svg>
-    </summary>
-    <div class="px-4 pb-4">
-      <%= form_with url: expenses_path, method: :get, class: "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" do |form| %>
-        <div>
-          <%= form.label :category, class: "form-label" %>
-          <%= form.select :category,
-                options_for_select(Expense::CATEGORIES, params[:category]),
-                { prompt: "All Categories" },
-                class: "form-input text-sm" %>
-        </div>
+            <div class="mt-4">
+              <%= form.submit "Filter", class:"btn btn-soft btn-primary" %>
+              <%= link_to "Clear", expenses_path, class:"btn btn-soft btn-error" %>
+            </div>
+          </div>
 
-        <div>
-          <%= form.label :payment_method, class: "form-label" %>
-          <%= form.select :payment_method,
-                options_for_select(Expense::PAYMENT_METHODS, params[:payment_method]),
-                { prompt: "All Methods" },
-                class: "form-input text-sm" %>
-        </div>
+          <div></div>
 
-        <div>
-          <%= form.label :currency, class: "form-label" %>
-          <%= form.select :currency,
-                options_for_select(Expense::CURRENCIES, params[:currency]),
-                { prompt: "All Currencies" },
-                class: "form-input text-sm" %>
-        </div>
+          <div>
+            <%= form.select :category,
+                  options_for_select(Expense::CATEGORIES, params[:category]),
+                  { include_blank: "All Categories"},
+                  { class:"select w-full"} %>
+          </div>
 
-        <div>
-          <%= form.label :start_date, "From", class: "form-label" %>
-          <%= form.date_field :start_date, value: params[:start_date], class: "form-input text-sm" %>
-        </div>
+          <div>
+            <%= form.select :payment_method,
+                  options_for_select(Expense::PAYMENT_METHODS, params[:payment_method]),
+                  { include_blank: "All Payment Methods"},
+                  { class:"select w-full" } %>
+          </div>
 
-        <div>
-          <%= form.label :end_date, "To", class: "form-label" %>
-          <%= form.date_field :end_date, value: params[:end_date], class: "form-input text-sm" %>
-        </div>
+          <div>
+            <%= form.select :currency,
+                  options_for_select(Expense::CURRENCIES, params[:currency]),
+                  { include_blank: "All Currencies" },
+                  { class:"select w-full" } %>
 
-        <div>
-          <%= form.label :min_amount, "Min Amount", class: "form-label" %>
-          <%= form.number_field :min_amount, value: params[:min_amount], step: 1, min: 0, class: "form-input text-sm", placeholder: "0" %>
-        </div>
+              <div>
+                <label class="label">Min: <span data-range-label-target="minLabel"><%= params[:min_amount] || 0 %></span></label>
+                <%= form.range_field :min_amount, min: 0, max: 1000000, step: 10, value: params[:min_amount] || 0, class: "range range-sm w-full", data: { range_label_target: "min", action: "input->range-label#update" } %>
 
-        <div>
-          <%= form.label :max_amount, "Max Amount", class: "form-label" %>
-          <%= form.number_field :max_amount, value: params[:max_amount], step: 1, min: 0, class: "form-input text-sm", placeholder: "0" %>
-        </div>
+                <label class="label">Max: <span data-range-label-target="maxLabel"><%= params[:max_amount] || 1000000 %></span></label>
+                <%= form.range_field :max_amount, min: 0, max: 1000000, step: 10, value: params[:max_amount] || 1000000, class: "range range-sm w-full", data: { range_label_target: "max", action: "input->range-label#update" } %>
+              </div>
+          </div>
+        <% end %>
+      </div>
+    </details>
 
-        <div class="flex items-end gap-2">
-          <%= form.submit "Filter", class: "submit-button text-sm" %>
-          <%= link_to "Clear", expenses_path, class: "text-lavender hover:text-lavender-dark transition-colors ml-2 py-2" %>
-        </div>
-      <% end %>
-    </div>
-  </details>
-
-  <!-- Expenses Table -->
-  <% if @expenses.any? %>
-    <div class="overflow-x-auto rounded-lg border border-charcoal-lighter">
-      <table class="w-full text-left">
-        <thead class="bg-charcoal-lighter text-lavender text-sm uppercase tracking-wider">
-          <tr>
-            <th class="px-4 py-3">Date</th>
-            <th class="px-4 py-3">Vendor</th>
-            <th class="px-4 py-3">Category</th>
-            <th class="px-4 py-3">Payment</th>
-            <th class="px-4 py-3 text-right">Amount</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-charcoal-lighter">
-          <% @expenses.each do |expense| %>
-            <tr class="bg-charcoal-light hover:bg-charcoal-lighter transition-colors cursor-pointer"
-                onclick="window.location='<%= expense_path(expense) %>'">
-              <td class="px-4 py-3 text-gray-100"><%= expense.date.strftime("%b %d, %Y") %></td>
-              <td class="px-4 py-3 text-gray-100"><%= expense.vendor.presence || "—" %></td>
-              <td class="px-4 py-3">
-                <span class="bg-charcoal px-2 py-1 rounded text-sm text-mint-light"><%= expense.category %></span>
-              </td>
-              <td class="px-4 py-3 text-gray-300 text-sm"><%= expense.payment_method %></td>
-              <td class="px-4 py-3 text-right text-gray-100 font-semibold">
-                <%= number_to_currency(expense.amount, unit: expense.currency + " ") %>
-              </td>
+    <!-- Expenses Table -->
+    <% if @expenses.any? %>
+    <div class="flex justify-center">
+      <div class="overflow-x-auto rounded-box border-3 border-base-content/10 w-full">
+        <table class="table-lg table-fixed w-full">
+          <thead>
+            <tr class="border-b-2 border-base-content/10 text-left">
+              <th>Date</th>
+              <th>Vendor</th>
+              <th>Category</th>
+              <th>Payment</th>
+              <th class="text-right">Amount</th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <% @expenses.each do |expense| %>
+              <tr class="hover:bg-base-300 border-b border-base-content/5 cursor-pointer" onclick="window.location='<%= expense_path(expense) %>'">
+                <td><%= expense.date.strftime("%b %d, %Y") %></td>
+                <td><%= expense.vendor.presence || "—" %></td>
+                <td><%= expense.category %></td>
+                <td><%= expense.payment_method %></td>
+                <td class="text-right"><%= number_to_currency(expense.amount, unit: expense.currency, format: "%n %u") %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
     </div>
-  <% else %>
-    <div class="bg-charcoal-light rounded-lg p-8 text-center">
-      <p class="text-gray-400">No expenses found.</p>
-      <%= link_to "Add your first expense", new_expense_path, class: "text-mint hover:text-mint-dark transition-colors" %>
-    </div>
-  <% end %>
+    <% else %>
+      <p>No expenses found.</p>
+    <% end %>
+  </div>
+</div>
+
+<div class="fab m-4">
+  <%= link_to "+", new_expense_path, class: "btn btn-lg btn-circle btn-primary" %>
 </div>
