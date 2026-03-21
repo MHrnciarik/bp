@@ -1,0 +1,11 @@
+one_design:
+  invoice: one
+  name: Design
+  quantity: 1
+  unit_price: 49.99
+
+two_consulting:
+  invoice: two
+  name: Consulting
+  quantity: 1
+  unit_price: 199.99

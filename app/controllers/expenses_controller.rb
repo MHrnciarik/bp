@@ -2,7 +2,10 @@ class ExpensesController < ApplicationController
   before_action :set_expense, only: [ :show, :edit, :update, :destroy ]
 
   def index
+    @vendors = Expense.where.not(vendor: [ nil, "" ]).distinct.order(:vendor).pluck(:vendor)
+
     @expenses = Expense.all
+    @expenses = @expenses.by_vendor(params[:vendor])
     @expenses = @expenses.by_category(params[:category])
     @expenses = @expenses.by_payment_method(params[:payment_method])
     @expenses = @expenses.by_currency(params[:currency])
@@ -16,7 +19,7 @@ class ExpensesController < ApplicationController
   end
 
   def new
-    @expense = Expense.new(date: Date.current, currency: "EUR")
+    @expense = Expense.new(date: Date.current, currency: "EUR", tax_rate: 23)
     build_expense_item
   end
 
@@ -53,6 +56,7 @@ class ExpensesController < ApplicationController
     params.require(:expense).permit(
       :date,
       :currency,
+      :tax_rate,
       :vendor,
       :category,
       :payment_method,

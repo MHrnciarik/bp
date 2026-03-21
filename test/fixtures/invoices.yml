@@ -1,25 +1,25 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  issued_on: 2026-02-24
+  issued_on: 2026-02-10
   due_on: 2026-02-24
-  status: MyString
-  currency: MyString
-  amount: 9.99
-  number: MyString
-  client_name: MyString
-  client_address: MyText
-  note: MyText
+  status: unpaid
+  currency: EUR
+  amount: 49.99
+  number: INV0001
+  client_name: Acme Corp
+  client_address: Example Street 1
+  note: First invoice
   user_id: 1
 
 two:
-  issued_on: 2026-02-24
-  due_on: 2026-02-24
-  status: MyString
-  currency: MyString
-  amount: 9.99
-  number: MyString
-  client_name: MyString
-  client_address: MyText
-  note: MyText
+  issued_on: 2026-03-05
+  due_on: 2026-03-20
+  status: paid
+  currency: HUF
+  amount: 199.99
+  number: INV0002
+  client_name: Beta LLC
+  client_address: Other Street 2
+  note: Second invoice
   user_id: 1

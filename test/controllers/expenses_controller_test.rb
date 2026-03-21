@@ -8,6 +8,7 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
           expense: {
             date: Date.current,
             currency: "EUR",
+            tax_rate: 23,
             vendor: "Market Hall",
             category: "Shopping",
             payment_method: "Debit Card",
@@ -24,7 +25,7 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
     expense = Expense.order(:created_at).last
 
     assert_redirected_to expenses_path
-    assert_equal BigDecimal("7.95"), expense.amount
+    assert_equal BigDecimal("9.78"), expense.amount
     assert_equal [ "Pasta", "Tomatoes" ], expense.expense_items.order(:name).pluck(:name)
   end
 end

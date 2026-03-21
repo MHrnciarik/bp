@@ -1,41 +1,136 @@
-<%= form_with model: @invoice do |f| %>
-  <div>
-    <%= f.label :issued_on %>
-    <%= f.date_field :issued_on %>
-  </div>
-  <div>
-    <%= f.label :due_on %>
-    <%= f.date_field :due_on %>
-  </div>
-  <div>
-    <%= f.label :status %>
-    <%= f.select :status, Invoice::STATUSES.map { |s| [s.capitalize, s] } %>
-  </div>
-  <div>
-    <%= f.label :currency %>
-    <%= f.select :currency, Invoice::CURRENCIES %>
-  </div>
-  <div>
-    <%= f.label :amount %>
-    <%= f.number_field :amount, step: 1 %>
-  </div>
-  <div>
-    <%= f.label :number %>
-    <%= f.text_field :number %>
-  </div>
-  <div>
-    <%= f.label :client_name %>
-    <%= f.text_field :client_name %>
-  </div>
-  <div>
-    <%= f.label :client_address %>
-    <%= f.text_field :client_address %>
-  </div>
-  <div>
-    <%= f.label :note %>
-    <%= f.text_area :note, rows: 4 %>
-  </div>
-  <div>
-    <%= f.submit %>
+<%= form_with model: @invoice,
+      class: "w-full max-w-4xl mx-auto rounded-box border-3 border-base-content/10 bg-base-100/30 p-6 space-y-6 my-4",
+      data: { controller: "expense-items" } do |f| %>
+  <% if @invoice.errors.any? %>
+    <div class="rounded-box border border-error/30 bg-error/10 p-4">
+      <h2 class="font-semibold text-error">Please fix the highlighted issues.</h2>
+      <ul class="mt-2 list-disc pl-5 text-sm">
+        <% @invoice.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <fieldset class="fieldset">
+    <div class="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+      <legend class="fieldset-legend text-2xl font-bold mb-2">Invoice Details</legend>
+
+      <div class="rounded-box border border-base-content/10 px-4 py-3">
+        <p class="text-2xl font-bold"><%= @invoice.display_number %></p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+      <div>
+        <%= f.label :issued_on, "Issued on", class: "label font-semibold text-lg" %>
+        <%= f.date_field :issued_on, class: "input input-bordered w-full" %>
+      </div>
+
+      <div>
+        <%= f.label :due_on, "Due on", class: "label font-semibold text-lg" %>
+        <%= f.date_field :due_on, class: "input input-bordered w-full" %>
+      </div>
+
+      <div>
+        <%= f.label :client_name, class: "label font-semibold text-lg" %>
+        <%= f.text_field :client_name, class: "input input-bordered w-full" %>
+      </div>
+
+      <div>
+        <%= f.label :status, class: "label font-semibold text-lg" %>
+        <%= f.select :status,
+              options_for_select(Invoice::STATUSES.map { |status| [status.capitalize, status] }, @invoice.status),
+              { prompt: "Select a status" },
+              { class: "select select-bordered w-full" } %>
+      </div>
+
+      <div>
+        <%= f.label :currency, class: "label font-semibold text-lg" %>
+        <%= f.select :currency,
+              options_for_select(Invoice::CURRENCIES, @invoice.currency),
+              {},
+              {
+                class: "select select-bordered w-full",
+                data: { expense_items_target: "currencySelect", action: "change->expense-items#updateCurrency" }
+              } %>
+      </div>
+
+      <div>
+        <%= f.label :tax_rate, "DPH (%)", class: "label font-semibold text-lg" %>
+        <%= f.number_field :tax_rate,
+              step: 0.01,
+              min: 0,
+              class: "input input-bordered w-full",
+              data: { expense_items_target: "taxRate", action: "input->expense-items#updateTotals" } %>
+      </div>
+
+      <div class="md:col-span-2">
+        <%= f.label :client_address, class: "label font-semibold text-lg" %>
+        <%= f.text_field :client_address,
+              placeholder: "Address",
+              class: "input input-bordered w-full" %>
+      </div>
+
+      <div class="md:col-span-2">
+        <%= f.label :note, class: "label font-semibold text-lg" %>
+        <%= f.text_area :note,
+              rows: 4,
+              placeholder: "Optional note...",
+              class: "textarea textarea-bordered w-full" %>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset class="fieldset">
+    <div class="flex items-center justify-between gap-3">
+      <legend class="fieldset-legend text-2xl font-bold mb-2">Items</legend>
+      <button type="button" class="btn btn-sm btn-soft btn-primary" data-action="expense-items#addRow">Add item</button>
+    </div>
+
+    <div class="overflow-x-auto rounded-box border border-base-content/10 bg-base-100/40 p-3">
+      <table class="table w-full">
+        <thead>
+          <tr class="text-base-content/70">
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Price</th>
+            <th class="px-0 text-right">Items total</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody data-expense-items-target="items">
+          <%= f.fields_for :invoice_items do |item_fields| %>
+            <%= render "invoice_item_fields", f: item_fields %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <template data-expense-items-target="template">
+      <%= f.fields_for :invoice_items, InvoiceItem.new(quantity: 1), child_index: "NEW_RECORD" do |item_fields| %>
+        <%= render "invoice_item_fields", f: item_fields %>
+      <% end %>
+    </template>
+  </fieldset>
+
+  <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+    <div class="rounded-box border border-base-content/10 bg-base-100/40 px-4 py-3">
+      <p class="text-sm text-base-content/60">
+        Subtotal:
+        <span data-expense-items-target="subtotal">0.00</span>
+        <span data-expense-items-target="currencyLabel"><%= @invoice.currency.presence || Invoice::CURRENCIES.first %></span>
+      </p>
+      <p class="text-sm uppercase tracking-wide text-base-content/60">Invoice total</p>
+      <p class="text-2xl font-bold">
+        <span data-expense-items-target="total">0.00</span>
+        <span><%= @invoice.currency.presence || Invoice::CURRENCIES.first %></span>
+      </p>
+    </div>
+
+    <div class="flex items-center justify-end gap-3">
+      <%= link_to "Cancel", invoices_path, class: "btn btn-ghost" %>
+      <%= f.submit class: "btn btn-primary" %>
+    </div>
   </div>
 <% end %>

@@ -5,6 +5,7 @@ class ExpenseTest < ActiveSupport::TestCase
     expense = Expense.new(
       date: Date.current,
       currency: "EUR",
+      tax_rate: 23,
       category: "Shopping",
       payment_method: "Debit Card",
       expense_items: [
@@ -14,13 +15,14 @@ class ExpenseTest < ActiveSupport::TestCase
     )
 
     assert expense.valid?
-    assert_equal BigDecimal("7.48"), expense.amount
+    assert_equal BigDecimal("9.20"), expense.amount
   end
 
   test "requires at least one item" do
     expense = Expense.new(
       date: Date.current,
       currency: "EUR",
+      tax_rate: 23,
       category: "Shopping",
       payment_method: "Debit Card"
     )

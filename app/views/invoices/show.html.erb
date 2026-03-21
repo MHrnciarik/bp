@@ -1,32 +1,97 @@
-<div>
-  <%= link_to "← Back to Invoices", invoices_path %>
-</div>
+<div class="flex flex-col items-center gap-4">
+  <div class="w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-4 mt-4">
+    <div class="grid grid-cols-2 items-center">
+      <div class="justify-self-start">
+        <%= link_to "Back", invoices_path, class: "btn btn-outline btn-sm" %>
+      </div>
+      <div class="justify-self-end">
+        <%= link_to "Edit", edit_invoice_path(@invoice), class: "btn btn-primary btn-sm" %>
+      </div>
+    </div>
+  </div>
 
-<div>
-  <h1>Invoice</h1>
-  <%= link_to "Edit", edit_invoice_path(@invoice) %>
+  <div class="w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-6">
+    <dl class="grid grid-cols-2 gap-x-8 gap-y-3">
+      <dt class="font-semibold text-base-content/80">Invoice Number</dt>
+      <dd><%= @invoice.display_number %></dd>
 
-  <dl>
-    <dt>Issued</dt>
-    <dd><%= @invoice.issued_on %></dd>
+      <dt class="font-semibold text-base-content/80">Issued On</dt>
+      <dd><%= @invoice.issued_on.strftime("%B %d, %Y") %></dd>
 
-    <dt>Due</dt>
-    <dd><%= @invoice.due_on %></dd>
+      <dt class="font-semibold text-base-content/80">Due On</dt>
+      <dd><%= @invoice.due_on.strftime("%B %d, %Y") %></dd>
 
-    <dt>Client</dt>
-    <dd><%= @invoice.client_name %></dd>
+      <dt class="font-semibold text-base-content/80">Client</dt>
+      <dd><%= @invoice.client_name.presence || "—" %></dd>
 
-    <dt>Amount</dt>
-    <dd><%= "#{@invoice.currency} #{'%.2f' % @invoice.amount}" %></dd>
+      <dt class="font-semibold text-base-content/80">Client Address</dt>
+      <dd><%= @invoice.client_address.presence || "—" %></dd>
 
-    <dt>Status</dt>
-    <dd><%= @invoice.status %></dd>
-  </dl>
+      <dt class="font-semibold text-base-content/80">Status</dt>
+      <dd><%= @invoice.status.capitalize %></dd>
+
+      <dt class="font-semibold text-base-content/80">Currency</dt>
+      <dd><%= @invoice.currency %></dd>
+
+      <dt class="font-semibold text-base-content/80">DPH</dt>
+      <dd><%= number_with_precision(@invoice.tax_rate, precision: 2) %>%</dd>
+    </dl>
+  </div>
+
+  <div class="w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-6">
+    <div class="flex items-center justify-between gap-3">
+      <h2 class="text-lg font-bold">Items</h2>
+    </div>
+
+    <div class="mt-4 overflow-x-auto">
+      <table class="table w-full">
+        <thead>
+          <tr class="text-base-content/70">
+            <th>Name</th>
+            <th class="text-right">Amount</th>
+            <th class="text-right">Price</th>
+            <th class="text-right">Item total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @invoice.invoice_items.each do |item| %>
+            <tr>
+              <td><%= item.name %></td>
+              <td class="text-right"><%= item.quantity %></td>
+              <td class="text-right"><%= number_to_currency(item.unit_price, unit: @invoice.currency, format: "%n %u") %></td>
+              <td class="text-right font-semibold"><%= number_to_currency(item.total_price, unit: @invoice.currency, format: "%n %u") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
   <% if @invoice.note.present? %>
-    <div>
-      <h2>Note</h2>
-      <p><%= @invoice.note %></p>
+    <div class="w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-6">
+      <h2 class="mb-2 text-lg font-bold">Note</h2>
+      <p class="text-base-content/90"><%= @invoice.note %></p>
     </div>
   <% end %>
+
+  <div class="w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-4">
+    <div class="grid grid-cols-2 items-center">
+      <div>
+        <h2 class="text-lg font-bold mx-2">
+          <span class="block text-sm font-normal text-base-content/60">
+            Subtotal: <%= number_to_currency(@invoice.subtotal_amount, unit: @invoice.currency, format: "%n %u") %>
+          </span>
+          Total:
+          <span class="font-semibold text-base-content">
+            <%= number_to_currency(@invoice.amount, unit: @invoice.currency, format: "%n %u") %>
+          </span>
+        </h2>
+      </div>
+      <div class="justify-self-end">
+        <%= button_to "Delete", invoice_path(@invoice), method: :delete,
+              data: { turbo_confirm: "Are you sure you want to delete this invoice?" },
+              class: "btn btn-error btn-outline btn-sm" %>
+      </div>
+    </div>
+  </div>
 </div>

@@ -10,6 +10,8 @@ export default class extends Controller {
     "price",
     "quantity",
     "row",
+    "subtotal",
+    "taxRate",
     "template",
     "total"
   ]
@@ -45,7 +47,7 @@ export default class extends Controller {
   }
 
   updateTotals() {
-    let total = 0
+    let subtotal = 0
 
     this.rowTargets.forEach((row) => {
       if (row.classList.contains("hidden")) {
@@ -61,8 +63,15 @@ export default class extends Controller {
         lineTotalElement.textContent = this.#format(lineTotal)
       }
 
-      total += lineTotal
+      subtotal += lineTotal
     })
+
+    const taxRate = this.#taxRate()
+    const total = subtotal * (1 + taxRate / 100)
+
+    if (this.hasSubtotalTarget) {
+      this.subtotalTarget.textContent = this.#format(subtotal)
+    }
 
     this.totalTarget.textContent = this.#format(total)
   }
@@ -76,5 +85,14 @@ export default class extends Controller {
 
   #format(value) {
     return value.toFixed(2)
+  }
+
+  #taxRate() {
+    if (!this.hasTaxRateTarget) {
+      return 0
+    }
+
+    const value = Number.parseFloat(this.taxRateTarget.value || "")
+    return Number.isFinite(value) ? value : 0
   }
 }

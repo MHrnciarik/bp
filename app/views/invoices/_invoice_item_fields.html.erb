@@ -1,0 +1,32 @@
+<tr data-expense-items-target="row" class="align-top">
+  <%= f.hidden_field :_destroy, value: 0 %>
+
+  <td class="px-0 py-2 pr-2">
+    <%= f.text_field :name,
+          placeholder: "Item name",
+          class: "input input-bordered w-full",
+          data: { action: "input->expense-items#updateTotals" } %>
+  </td>
+  <td class="px-0 py-2 pr-2">
+    <%= f.number_field :quantity,
+          step: 0.01,
+          min: 0,
+          placeholder: "1",
+          class: "input input-bordered w-full text-right",
+          data: { expense_items_target: "quantity", action: "input->expense-items#updateTotals" } %>
+  </td>
+  <td class="px-0 py-2 pr-2">
+    <%= f.number_field :unit_price,
+          step: 0.01,
+          min: 0,
+          placeholder: "0.00",
+          class: "input input-bordered w-full text-right",
+          data: { expense_items_target: "price", action: "input->expense-items#updateTotals" } %>
+  </td>
+  <td class="px-0 py-2 pr-2 text-right align-middle">
+    <span class="font-semibold" data-expense-items-target="lineTotal">0.00</span>
+  </td>
+  <td class="px-0 py-2 text-right align-middle">
+    <button type="button" class="btn btn-ghost btn-sm btn-error" data-action="expense-items#removeRow">Remove</button>
+  </td>
+</tr>

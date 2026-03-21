@@ -21,7 +21,12 @@
             </div>
           </div>
 
-          <div></div>
+          <div>
+            <%= form.select :vendor,
+                  options_for_select(@vendors, params[:vendor]),
+                  { include_blank: "All Vendors" },
+                  { class:"select w-full" } %>
+          </div>
 
           <div>
             <%= form.select :category,

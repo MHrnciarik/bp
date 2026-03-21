@@ -34,11 +34,13 @@ class Expense < ApplicationRecord
   validates :currency, presence: true, inclusion: { in: CURRENCIES }
   validates :category, presence: true, inclusion: { in: CATEGORIES }
   validates :payment_method, presence: true, inclusion: { in: PAYMENT_METHODS }
+  validates :tax_rate, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validate :must_have_at_least_one_item
 
   before_validation :sync_amount_from_items
 
   scope :by_category, ->(category) { where(category: category) if category.present? }
+  scope :by_vendor, ->(vendor) { where(vendor: vendor) if vendor.present? }
   scope :by_payment_method, ->(method) { where(payment_method: method) if method.present? }
   scope :by_currency, ->(currency) { where(currency: currency) if currency.present? }
   scope :by_date_range, ->(start_date, end_date) {
@@ -48,10 +50,15 @@ class Expense < ApplicationRecord
   scope :by_max_amount, ->(max) { where("amount <= ?", max) if max.present? }
   scope :recent, -> { order(date: :desc) }
 
+  def subtotal_amount
+    active_expense_items.sum(&:total_price)
+  end
+
   private
 
   def sync_amount_from_items
-    self.amount = active_expense_items.sum(&:total_price)
+    subtotal = subtotal_amount
+    self.amount = subtotal * (1 + tax_rate.to_d / 100)
   end
 
   def must_have_at_least_one_item

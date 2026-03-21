@@ -1,31 +1,109 @@
-<div>
-  <h1>Invoices</h1>
-  <%= link_to "+ New Invoice", new_invoice_path %>
+<div class="flex flex-col items-center">
+  <div class="w-full max-w-5xl">
+    <details class="collapse collapse-arrow border-3 border-base-content/10 my-4">
+      <summary class="collapse-title font-bold">Filters</summary>
+      <div class="collapse-content text-sm">
+        <%= form_with url: invoices_path, method: :get, class: "grid grid-cols-6 gap-4 w-full" do |form| %>
+        <div class="flex">
+          <div class="mt-auto">
+            <%= form.submit "Filter", class: "btn btn-soft btn-primary" %>
+            <%= link_to "Clear", invoices_path, class: "btn btn-soft btn-error" %>
+          </div>
+        </div>
+        <div>
+          <div>
+            <%= form.label :issued_start_date, "From", class: "label" %>
+            <%= form.date_field :issued_start_date, value: params[:issued_start_date], class: "input date w-full" %>
+          </div>
+          <div>
+            <%= form.label :issued_end_date, "To", class: "label" %>
+            <%= form.date_field :issued_end_date, value: params[:issued_end_date], class: "input date w-full" %>
+          </div>
+        </div>
+
+        <div>
+          <div>
+            <%= form.label :due_start_date, "From", class: "label" %>
+            <%= form.date_field :due_start_date, value: params[:due_start_date], class: "input date w-full" %>
+          </div>
+          <div>
+            <%= form.label :due_end_date, "To", class: "label" %>
+            <%= form.date_field :due_end_date, value: params[:due_end_date], class: "input date w-full" %>
+          </div>
+        </div>
+        
+        <div>
+           <%= form.select :client_name,
+                  options_for_select(@clients, params[:client_name]),
+                  { include_blank: "All Clients" },
+                  { class: "select w-full mt-5" } %>
+        </div>
+
+
+          <div>
+            <%= form.select :status,
+                  options_for_select(Invoice::STATUSES.map { |status| [status.capitalize, status] }, params[:status]),
+                  { include_blank: "All Statuses" },
+                  { class: "select w-full mt-5" } %>    
+          </div>
+
+          <div>
+             <%= form.label :min_amount, "Min Amount", class: "label" %>
+            <%= form.number_field :min_amount,
+                  min: 0,
+                  max: 1000000,
+                  step: 1,
+                  value: params[:min_amount] || 0,
+                  class: "input input-bordered w-full" %>
+
+            <%= form.label :max_amount, "Max Amount", class: "label" %>
+            <%= form.number_field :max_amount,
+                  min: 0,
+                  max: 1000000,
+                  step: 1,
+                  value: params[:max_amount] || 1000000,
+                  class: "input input-bordered w-full" %>
+          </div>
+
+        <% end %>
+      </div>
+    </details>
+
+    <% if @invoices.any? %>
+      <div class="flex justify-center my-4">
+        <div class="overflow-x-auto rounded-box border-3 border-base-content/10 w-full">
+          <table class="table-lg table-fixed w-full">
+            <thead>
+              <tr class="border-b-2 border-base-content/10 text-left">
+                <th>Invoice #</th>
+                <th>Issued</th>
+                <th>Due</th>
+                <th>Client</th>
+                <th>Status</th>
+                <th class="text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @invoices.each do |invoice| %>
+                <tr class="hover:bg-base-300 border-b border-base-content/5 cursor-pointer" onclick="window.location='<%= invoice_path(invoice) %>'">
+                  <td><%= invoice.number.presence || "—" %></td>
+                  <td><%= invoice.issued_on&.strftime("%b %d, %Y") || "—" %></td>
+                  <td><%= invoice.due_on&.strftime("%b %d, %Y") || "—" %></td>
+                  <td><%= invoice.client_name.presence || "—" %></td>
+                  <td><%= invoice.status.capitalize %></td>
+                  <td class="text-right"><%= number_to_currency(invoice.amount, unit: invoice.currency, format: "%n %u") %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% else %>
+      <p class="my-4">No invoices found.</p>
+    <% end %>
+  </div>
 </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Issued</th>
-      <th>Client</th>
-      <th>Amount</th>
-      <th>Status</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @invoices.each do |inv| %>
-      <tr>
-        <td><%= inv.issued_on %></td>
-        <td><%= inv.client_name %></td>
-        <td><%= "#{inv.currency} #{'%.2f' % inv.amount}" %></td>
-        <td><%= inv.status %></td>
-        <td>
-          <%= link_to "Show", invoice_path(inv) %>
-          <%= link_to "Edit", edit_invoice_path(inv) %>
-          <%= link_to "Delete", invoice_path(inv), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="fab m-4">
+  <%= link_to "+", new_invoice_path, class: "btn btn-lg btn-circle btn-primary" %>
+</div>
