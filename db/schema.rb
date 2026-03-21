@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_25_174035) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_20_110000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "expense_items", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "expense_id", null: false
+    t.string "name", null: false
+    t.decimal "quantity", precision: 10, scale: 2, default: "1.0", null: false
+    t.decimal "unit_price", precision: 12, scale: 2, default: "0.0", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expense_id"], name: "index_expense_items_on_expense_id"
+  end
 
   create_table "expenses", force: :cascade do |t|
     t.decimal "amount", precision: 12, scale: 2, default: "0.0", null: false
@@ -27,7 +37,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_25_174035) do
   end
 
   create_table "invoices", force: :cascade do |t|
-    t.decimal "amount", precision: 10, scale: 2
+    t.decimal "amount", precision: 12, scale: 2, default: "0.0", null: false
     t.text "client_address"
     t.string "client_name"
     t.datetime "created_at", null: false
@@ -40,4 +50,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_25_174035) do
     t.datetime "updated_at", null: false
     t.integer "user_id"
   end
+
+  add_foreign_key "expense_items", "expenses"
 end

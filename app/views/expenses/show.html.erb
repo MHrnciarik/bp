@@ -32,6 +32,35 @@
     </dl>
   </div>
 
+  <div class="w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-6">
+    <div class="flex items-center justify-between gap-3">
+      <h2 class="text-lg font-bold">Items</h2>
+    </div>
+
+    <div class="mt-4 overflow-x-auto">
+      <table class="table w-full">
+        <thead>
+          <tr class="text-base-content/70">
+            <th>Name</th>
+            <th class="text-right">Amount</th>
+            <th class="text-right">Price</th>
+            <th class="text-right">Item total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @expense.expense_items.each do |item| %>
+            <tr>
+              <td><%= item.name %></td>
+              <td class="text-right"><%= item.quantity %></td>
+              <td class="text-right"><%= number_to_currency(item.unit_price, unit: @expense.currency, format: "%n %u") %></td>
+              <td class="text-right font-semibold"><%= number_to_currency(item.total_price, unit: @expense.currency, format: "%n %u") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <% if @expense.note.present? %>
     <div class="w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-6">
       <h2 class="mb-2 text-lg font-bold">Note</h2>
@@ -41,7 +70,14 @@
 
   <div class="w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-4">
     <div class="grid grid-cols-2 items-center">
-      <div></div>
+      <div>
+        <h2 class="text-lg font-bold mx-2">
+        Total:
+        <span class="font-semibold text-base-content">
+          <%= number_to_currency(@expense.amount, unit: @expense.currency, format: "%n %u") %>
+        </span>
+      </h2>
+      </div>
       <div class="justify-self-end">
         <%= button_to "Delete", expense_path(@expense), method: :delete,
               data: { turbo_confirm: "Are you sure you want to delete this expense?" },

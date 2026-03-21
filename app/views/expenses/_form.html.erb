@@ -1,4 +1,17 @@
-<%= form_with model: expense, class: "w-full max-w-3xl mx-auto rounded-box border-3 border-base-content/10 bg-base-100/30 p-6 space-y-5 my-4" do |f| %>
+<%= form_with model: expense,
+      class: "w-full max-w-4xl mx-auto rounded-box border-3 border-base-content/10 bg-base-100/30 p-6 space-y-6 my-4",
+      data: { controller: "expense-items" } do |f| %>
+  <% if expense.errors.any? %>
+    <div class="rounded-box border border-error/30 bg-error/10 p-4">
+      <h2 class="font-semibold text-error">Please fix the highlighted issues.</h2>
+      <ul class="mt-2 list-disc pl-5 text-sm">
+        <% expense.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
   <fieldset class="fieldset">
     <legend class="fieldset-legend text-2xl font-bold mb-2">Expense Details</legend>
 
@@ -9,13 +22,12 @@
       </div>
 
       <div>
-        <%= f.label :amount, class: "label font-semibold text-lg" %>
-        <%= f.number_field :amount, step: 1, min: 0, class: "input input-bordered w-full" %>
-      </div>
-
-      <div>
         <%= f.label :currency, class: "label font-semibold text-lg" %>
-        <%= f.select :currency, options_for_select(Expense::CURRENCIES, expense.currency), {}, class: "select select-bordered w-full" %>
+        <%= f.select :currency,
+              options_for_select(Expense::CURRENCIES, expense.currency),
+              {},
+              class: "select select-bordered w-full",
+              data: { expense_items_target: "currencySelect", action: "change->expense-items#updateCurrency" } %>
       </div>
 
       <div>
@@ -46,8 +58,50 @@
     </div>
   </fieldset>
 
-  <div class="flex items-center justify-end gap-3">
-    <%= link_to "Cancel", expenses_path, class: "btn btn-ghost" %>
-    <%= f.submit class: "btn btn-primary" %>
+  <fieldset class="fieldset">
+    <div class="flex items-center justify-between gap-3">
+      <legend class="fieldset-legend text-2xl font-bold mb-2">Items</legend>
+      <button type="button" class="btn btn-sm btn-soft btn-primary" data-action="expense-items#addRow">Add item</button>
+    </div>
+
+    <div class="overflow-x-auto rounded-box border border-base-content/10 bg-base-100/40 p-3">
+      <table class="table w-full">
+        <thead>
+          <tr class="text-base-content/70">
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Price</th>
+            <th class="px-0 text-right">Items total</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody data-expense-items-target="items">
+          <%= f.fields_for :expense_items do |item_fields| %>
+            <%= render "expense_item_fields", f: item_fields %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <template data-expense-items-target="template">
+      <%= f.fields_for :expense_items, ExpenseItem.new(quantity: 1), child_index: "NEW_RECORD" do |item_fields| %>
+        <%= render "expense_item_fields", f: item_fields %>
+      <% end %>
+    </template>
+  </fieldset>
+
+  <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+    <div class="rounded-box border border-base-content/10 bg-base-100/40 px-4 py-3">
+      <p class="text-sm uppercase tracking-wide text-base-content/60">Expense total</p>
+      <p class="text-2xl font-bold">
+        <span data-expense-items-target="total">0.00</span>
+        <span data-expense-items-target="currencyLabel"><%= expense.currency.presence || Expense::CURRENCIES.first %></span>
+      </p>
+    </div>
+
+    <div class="flex items-center justify-end gap-3">
+      <%= link_to "Cancel", expenses_path, class: "btn btn-ghost btn-error" %>
+      <%= f.submit class: "btn btn-primary" %>
+    </div>
   </div>
 <% end %>

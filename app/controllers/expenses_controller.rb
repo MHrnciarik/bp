@@ -1,5 +1,6 @@
 class ExpensesController < ApplicationController
   before_action :set_expense, only: [ :show, :edit, :update, :destroy ]
+
   def index
     @expenses = Expense.all
     @expenses = @expenses.by_category(params[:category])
@@ -15,7 +16,8 @@ class ExpensesController < ApplicationController
   end
 
   def new
-    @expense = Expense.new(date: Date.current, currency: "EUR", amount: 0)
+    @expense = Expense.new(date: Date.current, currency: "EUR")
+    build_expense_item
   end
 
   def create
@@ -23,17 +25,20 @@ class ExpensesController < ApplicationController
     if @expense.save
        redirect_to expenses_path, notice: "Expense was successfully created!"
     else
+      build_expense_item
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
+    build_expense_item
   end
 
   def update
     if @expense.update(expense_params)
       redirect_to expenses_path, notice: "Expense was successfully updated!"
     else
+      build_expense_item
       render :edit, status: :unprocessable_entity
     end
   end
@@ -45,10 +50,24 @@ class ExpensesController < ApplicationController
 
   private
   def expense_params
-    params.require(:expense).permit(:date, :amount, :currency, :vendor, :category, :payment_method, :note)
+    params.require(:expense).permit(
+      :date,
+      :currency,
+      :vendor,
+      :category,
+      :payment_method,
+      :note,
+      expense_items_attributes: [ :id, :name, :quantity, :unit_price, :_destroy ]
+    )
   end
 
   def set_expense
     @expense = Expense.find(params[:id])
+  end
+
+  def build_expense_item
+    return if @expense.expense_items.reject(&:marked_for_destruction?).any?
+
+    @expense.expense_items.build(quantity: 1)
   end
 end

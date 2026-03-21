@@ -1,0 +1,23 @@
+one_apples:
+  expense: one
+  name: Apples
+  quantity: 2
+  unit_price: 2.50
+
+one_bread:
+  expense: one
+  name: Bread
+  quantity: 1
+  unit_price: 4.99
+
+two_fuel:
+  expense: two
+  name: Fuel
+  quantity: 1
+  unit_price: 20.00
+
+two_snacks:
+  expense: two
+  name: Snacks
+  quantity: 1
+  unit_price: 4.50

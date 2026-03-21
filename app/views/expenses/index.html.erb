@@ -6,11 +6,11 @@
       <div class="collapse-content text-sm">
         <%= form_with url: expenses_path, method: :get, class:"grid grid-cols-5 gap-4 w-full" do |form| %>
           <div>
-            <div class="input">
+            <div class="input mb-4">
               <%= form.label :start_date, "From", class:"label" %>
               <%= form.date_field :start_date, value: params[:start_date], class:"date w-full" %>
             </div>
-            <div class="input">
+            <div class="input my-4">
               <%= form.label :end_date, "To", class:"label" %>
               <%= form.date_field :end_date, value: params[:end_date], class:"date w-full" %>
             </div>
@@ -34,22 +34,20 @@
             <%= form.select :payment_method,
                   options_for_select(Expense::PAYMENT_METHODS, params[:payment_method]),
                   { include_blank: "All Payment Methods"},
-                  { class:"select w-full" } %>
+                  { class:"select w-full mb-2" } %>
+
+            <%= form.label :min_amount, "Min Amount", class:"label" %>
+            <%= form.number_field :min_amount, min: 0, max: 1000000, step: 1, value: params[:min_amount] || 0, class: "input input-bordered w-full my-2" %>
           </div>
 
           <div>
             <%= form.select :currency,
                   options_for_select(Expense::CURRENCIES, params[:currency]),
                   { include_blank: "All Currencies" },
-                  { class:"select w-full" } %>
+                  { class:"select w-full mb-2" } %>
 
-              <div>
-                <label class="label">Min: <span data-range-label-target="minLabel"><%= params[:min_amount] || 0 %></span></label>
-                <%= form.range_field :min_amount, min: 0, max: 1000000, step: 10, value: params[:min_amount] || 0, class: "range range-sm w-full", data: { range_label_target: "min", action: "input->range-label#update" } %>
-
-                <label class="label">Max: <span data-range-label-target="maxLabel"><%= params[:max_amount] || 1000000 %></span></label>
-                <%= form.range_field :max_amount, min: 0, max: 1000000, step: 10, value: params[:max_amount] || 1000000, class: "range range-sm w-full", data: { range_label_target: "max", action: "input->range-label#update" } %>
-              </div>
+            <%= form.label :max_amount, "Max Amount", class:"label" %>
+            <%= form.number_field :max_amount, min: 0, max: 1000000, step: 1, value: params[:max_amount] || 1000000, class: "input input-bordered w-full my-2" %>
           </div>
         <% end %>
       </div>

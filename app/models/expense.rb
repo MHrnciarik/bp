@@ -1,4 +1,7 @@
 class Expense < ApplicationRecord
+  has_many :expense_items, dependent: :destroy, inverse_of: :expense
+  accepts_nested_attributes_for :expense_items, allow_destroy: true, reject_if: :all_blank
+
   CATEGORIES = [
     "Food",
     "Transportation",
@@ -31,6 +34,9 @@ class Expense < ApplicationRecord
   validates :currency, presence: true, inclusion: { in: CURRENCIES }
   validates :category, presence: true, inclusion: { in: CATEGORIES }
   validates :payment_method, presence: true, inclusion: { in: PAYMENT_METHODS }
+  validate :must_have_at_least_one_item
+
+  before_validation :sync_amount_from_items
 
   scope :by_category, ->(category) { where(category: category) if category.present? }
   scope :by_payment_method, ->(method) { where(payment_method: method) if method.present? }
@@ -41,4 +47,20 @@ class Expense < ApplicationRecord
   scope :by_min_amount, ->(min) { where("amount >= ?", min) if min.present? }
   scope :by_max_amount, ->(max) { where("amount <= ?", max) if max.present? }
   scope :recent, -> { order(date: :desc) }
+
+  private
+
+  def sync_amount_from_items
+    self.amount = active_expense_items.sum(&:total_price)
+  end
+
+  def must_have_at_least_one_item
+    return if active_expense_items.any?
+
+    errors.add(:expense_items, "must include at least one item")
+  end
+
+  def active_expense_items
+    expense_items.reject(&:marked_for_destruction?)
+  end
 end
