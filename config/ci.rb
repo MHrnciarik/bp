@@ -21,4 +21,11 @@ CI.run do
   # else
   #   failure "Signoff: CI failed. Do not merge or deploy.", "Fix the issues and try again."
   # end
+  #
+  # #CI.run do
+  # step "Security: Brakeman", "bin/brakeman --no-pager"
+  # step "Security: Bundler Audit", "bin/bundler-audit"
+  # step "Security: Importmap Audit", "bin/importmap audit"
+  # step "Style: RuboCop", "bin/rubocop"
+  # step "Tests", "env RAILS_ENV=test DATABASE_URL=postgres://postgres:postgres@localhost:5432/bp_test bin/rails db:test:prepare test"
 end
