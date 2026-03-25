@@ -9,10 +9,18 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  get "sign_up", to: "registrations#new"
+  post "sign_up", to: "registrations#create"
+
+  get "login", to: "sessions#new"
+  post "login", to: "sessions#create"
+  delete "logout", to: "sessions#destroy"
+
+
   resources :invoices
   resources :expenses
-  resources :expenses, only: [ :index ]
   resources :profiles, only: [ :index ]
+  resources :companies, only: [ :new, :create ]
 
   root "profiles#index"
 end

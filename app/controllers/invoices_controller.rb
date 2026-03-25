@@ -1,5 +1,6 @@
 class InvoicesController < ApplicationController
   before_action :set_invoice, only: [ :show, :edit, :destroy ]
+  before_action :require_login
 
   def index
     @clients = Invoice.where.not(client_name: [ nil, "" ]).distinct.order(:client_name).pluck(:client_name)

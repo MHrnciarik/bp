@@ -1,5 +1,6 @@
 class ExpensesController < ApplicationController
   before_action :set_expense, only: [ :show, :edit, :update, :destroy ]
+  before_action :require_login
 
   def index
     @vendors = Expense.where.not(vendor: [ nil, "" ]).distinct.order(:vendor).pluck(:vendor)

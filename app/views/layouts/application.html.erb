@@ -27,15 +27,21 @@
   <body>
     <%= render "shared/navbar" %>
     <main>
+    <div class="mx-auto w-full max-w-md mt-6">
       <% if notice.present? %>
-        <p class="notice"><%= notice %></p>
+        <div class="alert alert-success shadow-md mb-4">
+          <span><%= notice %></span>
+        </div>
       <% end %>
 
       <% if alert.present? %>
-        <p class="alert"><%= alert %></p>
+        <div class="alert alert-error shadow-md mb-4">
+          <span><%= alert %></span>
+        </div>
       <% end %>
+    </div>
 
-      <%= yield %>
-    </main>
+    <%= yield %>
+  </main>
   </body>
 </html>

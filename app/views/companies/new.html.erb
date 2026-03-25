@@ -1,0 +1,68 @@
+<div class="mx-auto w-full max-w-2xl px-4 py-10">
+  <div class="card border border-base-content/10 bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h1 class="text-3xl font-bold text-center">Add company</h1>
+
+      <% if @company.errors.any? %>
+        <div class="alert alert-error">
+          <ul class="list-disc pl-5">
+            <% @company.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= form_with model: @company, class: "space-y-4" do |f| %>
+        <div>
+          <%= f.label :name, "Company name", class: "label font-semibold" %>
+          <%= f.text_field :name, class: "input input-bordered w-full" %>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <%= f.label :ico, "ICO", class: "label font-semibold" %>
+            <%= f.text_field :ico, class: "input input-bordered w-full" %>
+          </div>
+
+          <div>
+            <%= f.label :dic, "DIC", class: "label font-semibold" %>
+            <%= f.text_field :dic, class: "input input-bordered w-full" %>
+          </div>
+        </div>
+
+        <div>
+          <%= f.label :ic_dph, "IC DPH", class: "label font-semibold" %>
+          <%= f.text_field :ic_dph, class: "input input-bordered w-full" %>
+        </div>
+
+        <div>
+          <%= f.label :street, "Ulica", class: "label font-semibold" %>
+          <%= f.text_field :street, class: "input input-bordered w-full" %>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div>
+            <%= f.label :city, "Mesto", class: "label font-semibold" %>
+            <%= f.text_field :city, class: "input input-bordered w-full" %>
+          </div>
+
+          <div>
+            <%= f.label :postal_code, "PSC", class: "label font-semibold" %>
+            <%= f.text_field :postal_code, class: "input input-bordered w-full" %>
+          </div>
+
+          <div>
+            <%= f.label :country, "Stat", class: "label font-semibold" %>
+            <%= f.text_field :country, class: "input input-bordered w-full" %>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3">
+          <%= link_to "Back", profiles_path, class: "btn btn-ghost" %>
+          <%= f.submit "Save company", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
