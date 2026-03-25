@@ -1,6 +1,10 @@
 require "test_helper"
 
 class InvoicesControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    sign_in_as(users(:one))
+  end
+
   test "filters invoices by client status date and amount" do
     get invoices_path, params: {
       client_name: "Beta LLC",

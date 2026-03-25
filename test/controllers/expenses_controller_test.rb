@@ -1,6 +1,10 @@
 require "test_helper"
 
 class ExpensesControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    sign_in_as(users(:one))
+  end
+
   test "creates an expense from multiple items" do
     assert_difference("Expense.count", 1) do
       assert_difference("ExpenseItem.count", 2) do
