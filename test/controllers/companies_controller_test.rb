@@ -23,4 +23,14 @@ class CompaniesControllerTest < ActionDispatch::IntegrationTest
       delete company_url(companies(:two))
     end
   end
+
+  test "should select own company" do
+    sign_in_as users(:one)
+
+    patch select_company_url(companies(:another_one))
+
+    assert_redirected_to profiles_url
+    follow_redirect!
+    assert_match "Other Company", response.body
+  end
 end

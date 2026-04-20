@@ -1,7 +1,17 @@
-<nav class="navbar justify-center bg-neutral text-neutral-content gap-6 hover:shadow-2xl
- shadow-lg transition-shadow ease-in-out duration-500">
-  <%= link_to "Invoices", invoices_path, class:"btn btn-ghost text-xl"%>
-  <%= link_to "Expenses", expenses_path, class:"btn btn-ghost text-xl" %>
-  <%= link_to "Profiles", profiles_path, class:"btn btn-ghost text-xl" %>
-</nav>
+<nav class="navbar bg-neutral text-neutral-content shadow-lg transition-shadow duration-500 ease-in-out hover:shadow-2xl">
+  <div class="navbar-start"></div>
 
+  <div class="navbar-center gap-6">
+    <%= link_to "Invoices", invoices_path, class: "btn btn-ghost text-xl" %>
+    <%= link_to "Expenses", expenses_path, class: "btn btn-ghost text-xl" %>
+    <%= link_to "Profiles", profiles_path, class: "btn btn-ghost text-xl" %>
+  </div>
+
+  <div class="navbar-end px-4">
+    <% if logged_in? && current_company.present? %>
+      <%= link_to profiles_path, class: "badge badge-primary badge-lg max-w-56 truncate" do %>
+        <%= current_company.name %>
+      <% end %>
+    <% end %>
+  </div>
+</nav>

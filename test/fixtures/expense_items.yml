@@ -21,3 +21,9 @@ two_snacks:
   name: Snacks
   quantity: 1
   unit_price: 4.50
+
+three_paper:
+  expense: three
+  name: Paper
+  quantity: 1
+  unit_price: 12.00

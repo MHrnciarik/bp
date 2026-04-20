@@ -3,6 +3,7 @@ require "test_helper"
 class ExpenseTest < ActiveSupport::TestCase
   test "syncs the expense total from item rows" do
     expense = Expense.new(
+      company: companies(:one),
       date: Date.current,
       currency: "EUR",
       tax_rate: 23,
@@ -20,6 +21,7 @@ class ExpenseTest < ActiveSupport::TestCase
 
   test "requires at least one item" do
     expense = Expense.new(
+      company: companies(:one),
       date: Date.current,
       currency: "EUR",
       tax_rate: 23,

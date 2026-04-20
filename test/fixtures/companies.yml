@@ -11,6 +11,17 @@ one:
   postal_code: "12345"
   country: MyString
 
+another_one:
+  user: one
+  name: Other Company
+  ico: "22345678"
+  dic: "2234567890"
+  ic_dph: "SK2234567890"
+  street: Other Street
+  city: Other City
+  postal_code: "22345"
+  country: Other Country
+
 two:
   user: two
   name: MyString

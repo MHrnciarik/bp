@@ -3,6 +3,7 @@ require "test_helper"
 class InvoiceTest < ActiveSupport::TestCase
   test "syncs the invoice total from item rows" do
     invoice = Invoice.new(
+      company: companies(:one),
       issued_on: Date.current,
       due_on: Date.current,
       status: "unpaid",
@@ -21,6 +22,7 @@ class InvoiceTest < ActiveSupport::TestCase
 
   test "requires at least one item" do
     invoice = Invoice.new(
+      company: companies(:one),
       issued_on: Date.current,
       due_on: Date.current,
       status: "unpaid",
@@ -35,6 +37,7 @@ class InvoiceTest < ActiveSupport::TestCase
 
   test "generates an invoice number after create" do
     invoice = Invoice.create!(
+      company: companies(:one),
       issued_on: Date.current,
       due_on: Date.current,
       status: "unpaid",
@@ -49,6 +52,7 @@ class InvoiceTest < ActiveSupport::TestCase
 
   test "shows the next invoice number for a new record" do
     invoice = Invoice.new(
+      company: companies(:one),
       issued_on: Date.current,
       due_on: Date.current,
       status: "unpaid",

@@ -1,4 +1,5 @@
 class Expense < ApplicationRecord
+  belongs_to :company
   has_many :expense_items, dependent: :destroy, inverse_of: :expense
   accepts_nested_attributes_for :expense_items, allow_destroy: true, reject_if: :all_blank
 

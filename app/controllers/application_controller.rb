@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   # Changes to the importmap will invalidate the etag for HTML responses
   stale_when_importmap_changes
 
-  helper_method :current_user, :logged_in?
+  helper_method :current_user, :logged_in?, :current_company
 
   private
 
@@ -17,9 +17,27 @@ class ApplicationController < ActionController::Base
     current_user.present?
   end
 
+  def current_company
+    return unless logged_in?
+
+    @current_company ||= begin
+      selected_company = current_user.companies.find_by(id: session[:current_company_id])
+      selected_company ||= current_user.companies.order(:created_at, :id).first
+
+      session[:current_company_id] = selected_company.id if selected_company.present?
+      selected_company
+    end
+  end
+
   def require_login
     return if logged_in?
 
     redirect_to login_path, alert: "Please log in first."
+  end
+
+  def require_current_company
+    return if current_company.present?
+
+    redirect_to profiles_path, alert: "Add or select a company first."
   end
 end

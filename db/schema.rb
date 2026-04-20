@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_25_004948) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_20_121000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,6 +42,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_25_004948) do
   create_table "expenses", force: :cascade do |t|
     t.decimal "amount", precision: 12, scale: 2, default: "0.0", null: false
     t.string "category"
+    t.bigint "company_id"
     t.datetime "created_at", null: false
     t.string "currency"
     t.date "date"
@@ -50,6 +51,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_25_004948) do
     t.decimal "tax_rate", precision: 5, scale: 2, default: "0.0", null: false
     t.datetime "updated_at", null: false
     t.string "vendor"
+    t.index ["company_id"], name: "index_expenses_on_company_id"
   end
 
   create_table "invoice_items", force: :cascade do |t|
@@ -66,6 +68,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_25_004948) do
     t.decimal "amount", precision: 10, scale: 2
     t.text "client_address"
     t.string "client_name"
+    t.bigint "company_id"
     t.datetime "created_at", null: false
     t.string "currency"
     t.date "due_on"
@@ -76,6 +79,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_25_004948) do
     t.decimal "tax_rate", precision: 5, scale: 2, default: "0.0", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"
+    t.index ["company_id"], name: "index_invoices_on_company_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -88,5 +92,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_25_004948) do
 
   add_foreign_key "companies", "users"
   add_foreign_key "expense_items", "expenses"
+  add_foreign_key "expenses", "companies"
   add_foreign_key "invoice_items", "invoices"
+  add_foreign_key "invoices", "companies"
 end

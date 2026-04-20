@@ -20,7 +20,9 @@ Rails.application.routes.draw do
   resources :invoices
   resources :expenses
   resources :profiles, only: [ :index ]
-  resources :companies, only: [ :new, :create, :destroy ]
+  resources :companies, only: [ :new, :create, :destroy ] do
+    patch :select, on: :member
+  end
 
   root "profiles#index"
 end

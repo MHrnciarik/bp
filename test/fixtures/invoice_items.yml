@@ -9,3 +9,9 @@ two_consulting:
   name: Consulting
   quantity: 1
   unit_price: 199.99
+
+three_support:
+  invoice: three
+  name: Support
+  quantity: 1
+  unit_price: 120.00

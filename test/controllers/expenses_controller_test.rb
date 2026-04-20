@@ -3,6 +3,22 @@ require "test_helper"
 class ExpensesControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in_as(users(:one))
+    patch select_company_path(companies(:one))
+  end
+
+  test "only shows expenses for the selected company" do
+    get expenses_path
+
+    assert_response :success
+    assert_match "Corner Shop", response.body
+    assert_no_match "Supply Store", response.body
+
+    patch select_company_path(companies(:another_one))
+    get expenses_path
+
+    assert_response :success
+    assert_match "Supply Store", response.body
+    assert_no_match "Corner Shop", response.body
   end
 
   test "creates an expense from multiple items" do
@@ -29,6 +45,7 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
     expense = Expense.order(:created_at).last
 
     assert_redirected_to expenses_path
+    assert_equal companies(:one), expense.company
     assert_equal BigDecimal("9.78"), expense.amount
     assert_equal [ "Pasta", "Tomatoes" ], expense.expense_items.order(:name).pluck(:name)
   end

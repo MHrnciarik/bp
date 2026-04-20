@@ -1,11 +1,13 @@
 class InvoicesController < ApplicationController
-  before_action :set_invoice, only: [ :show, :edit, :destroy ]
   before_action :require_login
+  before_action :require_current_company
+  before_action :set_invoice, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @clients = Invoice.where.not(client_name: [ nil, "" ]).distinct.order(:client_name).pluck(:client_name)
+    company_invoices = current_company.invoices
+    @clients = company_invoices.where.not(client_name: [ nil, "" ]).distinct.order(:client_name).pluck(:client_name)
 
-    @invoices = Invoice.all
+    @invoices = company_invoices
     @invoices = @invoices.by_client_name(params[:client_name])
     @invoices = @invoices.by_status_filter(params[:status])
     @invoices = @invoices.by_issued_on_range(params[:issued_start_date], params[:issued_end_date])
@@ -19,12 +21,12 @@ class InvoicesController < ApplicationController
   end
 
   def new
-    @invoice = Invoice.new(issued_on: Date.current, due_on: Date.current, currency: "EUR", status: "unpaid", tax_rate: 23)
+    @invoice = current_company.invoices.new(issued_on: Date.current, due_on: Date.current, currency: "EUR", status: "unpaid", tax_rate: 23)
     build_invoice_item
   end
 
   def create
-    @invoice = Invoice.new(invoice_params)
+    @invoice = current_company.invoices.new(invoice_params)
 
     if @invoice.save
       redirect_to @invoice, notice: "Invoice created!"
@@ -35,8 +37,6 @@ class InvoicesController < ApplicationController
   end
 
   def update
-    set_invoice
-
     if @invoice.update(invoice_params)
       redirect_to @invoice, notice: "Invoice updated!"
     else
@@ -56,7 +56,7 @@ class InvoicesController < ApplicationController
 
   private
   def set_invoice
-    @invoice = Invoice.find(params[:id])
+    @invoice = current_company.invoices.find(params[:id])
   end
 
   def invoice_params

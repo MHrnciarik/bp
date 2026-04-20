@@ -9,15 +9,24 @@ class CompaniesController < ApplicationController
     @company = current_user.companies.new(company_params)
 
     if @company.save
+      session[:current_company_id] ||= @company.id
       redirect_to profiles_path, notice: "Company created successfully."
     else
       render :new, status: :unprocessable_entity
     end
   end
 
+  def select
+    @company = current_user.companies.find(params[:id])
+    session[:current_company_id] = @company.id
+
+    redirect_back fallback_location: profiles_path, notice: "Switched to #{@company.name}."
+  end
+
   def destroy
     @company = current_user.companies.find(params[:id])
     @company.destroy
+    session[:current_company_id] = current_user.companies.order(:created_at, :id).first&.id if session[:current_company_id].to_i == @company.id
 
     redirect_to profiles_path, notice: "Company deleted successfully."
   end

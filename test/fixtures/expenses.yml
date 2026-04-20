@@ -1,6 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  company: one
   date: 2026-02-25
   amount: 9.99
   currency: EUR
@@ -10,6 +11,7 @@ one:
   note: Grocery run
 
 two:
+  company: one
   date: 2026-02-25
   amount: 24.50
   currency: HUF
@@ -17,3 +19,13 @@ two:
   category: Transportation
   payment_method: Credit Card
   note: Fuel and snacks
+
+three:
+  company: another_one
+  date: 2026-04-10
+  amount: 12.00
+  currency: EUR
+  vendor: Supply Store
+  category: Shopping
+  payment_method: Debit Card
+  note: Office supplies

@@ -1,6 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  company: one
   issued_on: 2026-02-10
   due_on: 2026-02-24
   status: unpaid
@@ -13,6 +14,7 @@ one:
   user_id: 1
 
 two:
+  company: one
   issued_on: 2026-03-05
   due_on: 2026-03-20
   status: paid
@@ -22,4 +24,17 @@ two:
   client_name: Beta LLC
   client_address: Other Street 2
   note: Second invoice
+  user_id: 1
+
+three:
+  company: another_one
+  issued_on: 2026-04-05
+  due_on: 2026-04-20
+  status: unpaid
+  currency: EUR
+  amount: 120.00
+  number: INV0003
+  client_name: Gamma GmbH
+  client_address: Third Street 3
+  note: Third invoice
   user_id: 1

@@ -1,11 +1,13 @@
 class ExpensesController < ApplicationController
-  before_action :set_expense, only: [ :show, :edit, :update, :destroy ]
   before_action :require_login
+  before_action :require_current_company
+  before_action :set_expense, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @vendors = Expense.where.not(vendor: [ nil, "" ]).distinct.order(:vendor).pluck(:vendor)
+    company_expenses = current_company.expenses
+    @vendors = company_expenses.where.not(vendor: [ nil, "" ]).distinct.order(:vendor).pluck(:vendor)
 
-    @expenses = Expense.all
+    @expenses = company_expenses
     @expenses = @expenses.by_vendor(params[:vendor])
     @expenses = @expenses.by_category(params[:category])
     @expenses = @expenses.by_payment_method(params[:payment_method])
@@ -20,12 +22,12 @@ class ExpensesController < ApplicationController
   end
 
   def new
-    @expense = Expense.new(date: Date.current, currency: "EUR", tax_rate: 23)
+    @expense = current_company.expenses.new(date: Date.current, currency: "EUR", tax_rate: 23)
     build_expense_item
   end
 
   def create
-    @expense = Expense.new(expense_params)
+    @expense = current_company.expenses.new(expense_params)
     if @expense.save
        redirect_to expenses_path, notice: "Expense was successfully created!"
     else
@@ -67,7 +69,7 @@ class ExpensesController < ApplicationController
   end
 
   def set_expense
-    @expense = Expense.find(params[:id])
+    @expense = current_company.expenses.find(params[:id])
   end
 
   def build_expense_item

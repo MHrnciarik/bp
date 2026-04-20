@@ -3,6 +3,7 @@ require "test_helper"
 class InvoicesControllerTest < ActionDispatch::IntegrationTest
   setup do
     sign_in_as(users(:one))
+    patch select_company_path(companies(:one))
   end
 
   test "filters invoices by client status date and amount" do
@@ -21,6 +22,21 @@ class InvoicesControllerTest < ActionDispatch::IntegrationTest
     assert_select "tbody tr", count: 1
     assert_select "tbody tr td", text: "INV0002"
     assert_select "tbody tr td", text: "Beta LLC"
+  end
+
+  test "only shows invoices for the selected company" do
+    get invoices_path
+
+    assert_response :success
+    assert_match "INV0001", response.body
+    assert_no_match "INV0003", response.body
+
+    patch select_company_path(companies(:another_one))
+    get invoices_path
+
+    assert_response :success
+    assert_match "INV0003", response.body
+    assert_no_match "INV0001", response.body
   end
 
   test "creates an invoice from multiple items" do
@@ -48,6 +64,7 @@ class InvoicesControllerTest < ActionDispatch::IntegrationTest
     invoice = Invoice.order(:created_at).last
 
     assert_redirected_to invoice_path(invoice)
+    assert_equal companies(:one), invoice.company
     assert_equal BigDecimal("430.5"), invoice.amount
     assert_equal [ "Consulting", "Design" ], invoice.invoice_items.order(:name).pluck(:name)
   end
