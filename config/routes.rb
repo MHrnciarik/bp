@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   resources :invoices
   resources :expenses
   resources :profiles, only: [ :index ]
-  resources :companies, only: [ :new, :create ]
+  resources :companies, only: [ :new, :create, :destroy ]
 
   root "profiles#index"
 end

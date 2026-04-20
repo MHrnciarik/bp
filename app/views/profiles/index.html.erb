@@ -20,12 +20,19 @@
             <div class="space-y-4">
               <% current_user.companies.each do |company| %>
                 <div class="rounded-box border border-base-content/10 p-4">
-                  <h3 class="text-lg font-semibold"><%= company.name %></h3>
+                  <div class="flex items-start justify-between gap-4">
+                    <h3 class="min-w-0 break-words text-lg font-semibold"><%= company.name %></h3>
+                    <%= button_to "Delete",
+                      company_path(company),
+                      method: :delete,
+                      class: "btn btn-error btn-sm",
+                      form: { class: "shrink-0", data: { turbo_confirm: "Delete #{company.name}?" } } %>
+                  </div>
 
                   <div class="mt-2 space-y-1 text-sm text-base-content/70">
-                    <p><strong>ICO:</strong> <%= company.ico %></p>
-                    <p><strong>DIC:</strong> <%= company.dic.presence || "—" %></p>
-                    <p><strong>IC DPH:</strong> <%= company.ic_dph.presence || "—" %></p>
+                    <p><strong>IČO:</strong> <%= company.ico %></p>
+                    <p><strong>DIČ:</strong> <%= company.dic.presence || "—" %></p>
+                    <p><strong>IČ DPH:</strong> <%= company.ic_dph.presence || "—" %></p>
                     <p><strong>Address:</strong> <%= company.street %>, <%= company.city %>, <%= company.postal_code %>, <%= company.country %></p>
                   </div>
                 </div>

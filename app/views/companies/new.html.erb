@@ -21,39 +21,58 @@
 
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
-            <%= f.label :ico, "ICO", class: "label font-semibold" %>
-            <%= f.text_field :ico, class: "input input-bordered w-full" %>
+            <%= f.label :ico, "IČO", class: "label font-semibold" %>
+            <%= f.text_field :ico,
+              class: "input input-bordered w-full",
+              inputmode: "numeric",
+              maxlength: 8,
+              pattern: "\\d{8}",
+              title: "Enter exactly 8 digits" %>
           </div>
 
           <div>
-            <%= f.label :dic, "DIC", class: "label font-semibold" %>
-            <%= f.text_field :dic, class: "input input-bordered w-full" %>
+            <%= f.label :dic, "DIČ", class: "label font-semibold" %>
+            <%= f.text_field :dic,
+              class: "input input-bordered w-full",
+              inputmode: "numeric",
+              maxlength: 10,
+              pattern: "\\d{8,10}",
+              title: "Enter 8 to 10 digits" %>
           </div>
         </div>
 
         <div>
-          <%= f.label :ic_dph, "IC DPH", class: "label font-semibold" %>
-          <%= f.text_field :ic_dph, class: "input input-bordered w-full" %>
+          <%= f.label :ic_dph, "IČ DPH", class: "label font-semibold" %>
+          <%= f.text_field :ic_dph,
+            class: "input input-bordered w-full",
+            maxlength: 12,
+            pattern: "(SK|CZ)\\d{10}",
+            title: "Enter SK or CZ followed by 10 digits" %>
         </div>
 
         <div>
-          <%= f.label :street, "Ulica", class: "label font-semibold" %>
+          <%= f.label :street, "Street", class: "label font-semibold" %>
           <%= f.text_field :street, class: "input input-bordered w-full" %>
         </div>
 
         <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
           <div>
-            <%= f.label :city, "Mesto", class: "label font-semibold" %>
+            <%= f.label :city, "City", class: "label font-semibold" %>
             <%= f.text_field :city, class: "input input-bordered w-full" %>
           </div>
 
           <div>
-            <%= f.label :postal_code, "PSC", class: "label font-semibold" %>
-            <%= f.text_field :postal_code, class: "input input-bordered w-full" %>
+            <%= f.label :postal_code, "PSČ", class: "label font-semibold" %>
+            <%= f.text_field :postal_code,
+              class: "input input-bordered w-full",
+              inputmode: "numeric",
+              maxlength: 5,
+              pattern: "\\d{5}",
+              title: "Enter exactly 5 digits" %>
           </div>
 
           <div>
-            <%= f.label :country, "Stat", class: "label font-semibold" %>
+            <%= f.label :country, "Country", class: "label font-semibold" %>
             <%= f.text_field :country, class: "input input-bordered w-full" %>
           </div>
         </div>

@@ -3,21 +3,21 @@
 one:
   user: one
   name: MyString
-  ico: MyString
-  dic: MyString
-  ic_dph: MyString
+  ico: "12345678"
+  dic: "1234567890"
+  ic_dph: "SK1234567890"
   street: MyString
   city: MyString
-  postal_code: MyString
+  postal_code: "12345"
   country: MyString
 
 two:
   user: two
   name: MyString
-  ico: MyString
-  dic: MyString
-  ic_dph: MyString
+  ico: "87654321"
+  dic: "87654321"
+  ic_dph: "CZ1234567890"
   street: MyString
   city: MyString
-  postal_code: MyString
+  postal_code: "54321"
   country: MyString

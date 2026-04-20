@@ -29,3 +29,10 @@
 
 en:
   hello: "Hello world"
+  activerecord:
+    attributes:
+      company:
+        ico: "IČO"
+        dic: "DIČ"
+        ic_dph: "IČ DPH"
+        postal_code: "PSČ"
