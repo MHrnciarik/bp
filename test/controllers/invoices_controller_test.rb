@@ -67,5 +67,9 @@ class InvoicesControllerTest < ActionDispatch::IntegrationTest
     assert_equal companies(:one), invoice.company
     assert_equal BigDecimal("430.5"), invoice.amount
     assert_equal [ "Consulting", "Design" ], invoice.invoice_items.order(:name).pluck(:name)
+
+    progress = users(:one).mission_progresses.find_by!(mission_key: "create_invoice", period: "daily", period_start: Date.current)
+    assert_equal 1, progress.progress
+    assert progress.claimable?
   end
 end

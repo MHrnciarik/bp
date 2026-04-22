@@ -48,5 +48,13 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
     assert_equal companies(:one), expense.company
     assert_equal BigDecimal("9.78"), expense.amount
     assert_equal [ "Pasta", "Tomatoes" ], expense.expense_items.order(:name).pluck(:name)
+
+    log_progress = users(:one).mission_progresses.find_by!(mission_key: "log_expense", period: "daily", period_start: Date.current)
+    category_progress = users(:one).mission_progresses.find_by!(mission_key: "set_expense_category", period: "daily", period_start: Date.current)
+
+    assert_equal 1, log_progress.progress
+    assert_equal 1, category_progress.progress
+    assert log_progress.claimable?
+    assert category_progress.claimable?
   end
 end

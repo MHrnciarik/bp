@@ -7,6 +7,7 @@ class SessionsController < ApplicationController
 
     if user&.authenticate(params[:password])
       session[:user_id] = user.id
+      MissionTracker.track_login(user)
       redirect_to root_path, notice: "Logged in successfully."
     else
       flash.now[:alert] = "Invalid username or password."

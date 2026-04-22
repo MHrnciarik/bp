@@ -29,6 +29,7 @@ class InvoicesController < ApplicationController
     @invoice = current_company.invoices.new(invoice_params)
 
     if @invoice.save
+      MissionTracker.track_invoice_created(current_user)
       redirect_to @invoice, notice: "Invoice created!"
     else
       build_invoice_item

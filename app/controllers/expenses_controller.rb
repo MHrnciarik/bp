@@ -29,6 +29,8 @@ class ExpensesController < ApplicationController
   def create
     @expense = current_company.expenses.new(expense_params)
     if @expense.save
+       MissionTracker.track_expense_logged(current_user)
+       MissionTracker.track_expense_categorized(current_user) if @expense.category.present?
        redirect_to expenses_path, notice: "Expense was successfully created!"
     else
       build_expense_item
@@ -42,6 +44,9 @@ class ExpensesController < ApplicationController
 
   def update
     if @expense.update(expense_params)
+      if @expense.saved_change_to_category? && @expense.category.present? && @expense.category_before_last_save.blank?
+        MissionTracker.track_expense_categorized(current_user)
+      end
       redirect_to expenses_path, notice: "Expense was successfully updated!"
     else
       build_expense_item

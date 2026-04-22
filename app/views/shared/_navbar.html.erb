@@ -6,9 +6,17 @@
     <%= link_to "Expenses", expenses_path, class: "btn btn-ghost text-xl" %>
     <%= link_to "Profiles", profiles_path, class: "btn btn-ghost text-xl" %>
   </div>
-
   <div class="navbar-end px-4">
     <% if logged_in? && current_company.present? %>
+      <%= link_to daily_missions_path, class: "btn btn-ghost btn-circle mr-4 relative", aria: { label: "Daily missions" }, title: "Daily missions" do %>
+        <% if missions_ready_to_claim? %>
+          <span
+            class="absolute right-1.5 top-1.5 h-3 w-3 rounded-full bg-error shadow-sm shadow-error/70"
+            data-testid="missions-notification-dot"
+          ></span>
+        <% end %>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M12 2v4"/><path d="M16 2v4"/><rect width="16" height="18" x="4" y="4" rx="2"/><path d="M8 10h6"/><path d="M8 14h8"/><path d="M8 18h5"/></svg>
+      <% end %>
       <%= link_to profiles_path, class: "badge badge-primary badge-lg max-w-56 truncate" do %>
         <%= current_company.name %>
       <% end %>

@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   # Changes to the importmap will invalidate the etag for HTML responses
   stale_when_importmap_changes
 
-  helper_method :current_user, :logged_in?, :current_company
+  helper_method :current_user, :logged_in?, :current_company, :missions_ready_to_claim?
 
   private
 
@@ -26,6 +26,14 @@ class ApplicationController < ActionController::Base
 
       session[:current_company_id] = selected_company.id if selected_company.present?
       selected_company
+    end
+  end
+
+  def missions_ready_to_claim?
+    return false unless logged_in?
+
+    @missions_ready_to_claim ||= %w[daily weekly].any? do |period|
+      ::MissionTracker.progress_for(current_user, period).any?(&:claimable?)
     end
   end
 

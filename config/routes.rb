@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   get "login", to: "sessions#new"
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"
+  get "daily_missions", to: "daily_missions#index"
+  post "daily_missions/:period/:mission_key/claim", to: "daily_missions#claim", as: :claim_mission
 
 
   resources :invoices

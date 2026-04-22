@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_20_121000) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_22_110000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -82,11 +82,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_20_121000) do
     t.index ["company_id"], name: "index_invoices_on_company_id"
   end
 
+  create_table "mission_progresses", force: :cascade do |t|
+    t.datetime "claimed_at"
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.string "mission_key", null: false
+    t.string "period", null: false
+    t.date "period_start", null: false
+    t.integer "progress", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id", "mission_key", "period", "period_start"], name: "index_mission_progresses_on_user_mission_period", unique: true
+    t.index ["user_id"], name: "index_mission_progresses_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "password_digest", null: false
     t.datetime "updated_at", null: false
     t.string "username", null: false
+    t.integer "xp", default: 0, null: false
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
@@ -95,4 +110,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_20_121000) do
   add_foreign_key "expenses", "companies"
   add_foreign_key "invoice_items", "invoices"
   add_foreign_key "invoices", "companies"
+  add_foreign_key "mission_progresses", "users"
 end
