@@ -3,7 +3,7 @@
       data: { controller: "expense-items" } do |f| %>
   <% if @invoice.errors.any? %>
     <div class="rounded-box border border-error/30 bg-error/10 p-4">
-      <h2 class="font-semibold text-error">Please fix the highlighted issues.</h2>
+      <h2 class="font-semibold text-error">Oprav zvýraznené chyby.</h2>
       <ul class="mt-2 list-disc pl-5 text-sm">
         <% @invoice.errors.full_messages.each do |message| %>
           <li><%= message %></li>
@@ -14,7 +14,7 @@
 
   <fieldset class="fieldset">
     <div class="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-      <legend class="fieldset-legend text-2xl font-bold mb-2">Invoice Details</legend>
+      <legend class="fieldset-legend text-2xl font-bold mb-2">Detaily faktúry</legend>
 
       <div class="rounded-box border border-base-content/10 px-4 py-3">
         <p class="text-2xl font-bold"><%= @invoice.display_number %></p>
@@ -23,30 +23,30 @@
 
     <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
       <div>
-        <%= f.label :issued_on, "Issued on", class: "label font-semibold text-lg" %>
+        <%= f.label :issued_on, "Dátum vystavenia", class: "label font-semibold text-lg" %>
         <%= f.date_field :issued_on, class: "input input-bordered w-full" %>
       </div>
 
       <div>
-        <%= f.label :due_on, "Due on", class: "label font-semibold text-lg" %>
+        <%= f.label :due_on, "Dátum splatnosti", class: "label font-semibold text-lg" %>
         <%= f.date_field :due_on, class: "input input-bordered w-full" %>
       </div>
 
       <div>
-        <%= f.label :client_name, class: "label font-semibold text-lg" %>
+        <%= f.label :client_name, "Klient", class: "label font-semibold text-lg" %>
         <%= f.text_field :client_name, class: "input input-bordered w-full" %>
       </div>
 
       <div>
-        <%= f.label :status, class: "label font-semibold text-lg" %>
+        <%= f.label :status, "Stav", class: "label font-semibold text-lg" %>
         <%= f.select :status,
-              options_for_select(Invoice::STATUSES.map { |status| [status.capitalize, status] }, @invoice.status),
-              { prompt: "Select a status" },
+              invoice_status_options(@invoice.status),
+              { prompt: "Vyber stav" },
               { class: "select select-bordered w-full" } %>
       </div>
 
       <div>
-        <%= f.label :currency, class: "label font-semibold text-lg" %>
+        <%= f.label :currency, "Mena", class: "label font-semibold text-lg" %>
         <%= f.select :currency,
               options_for_select(Invoice::CURRENCIES, @invoice.currency),
               {},
@@ -66,17 +66,17 @@
       </div>
 
       <div class="md:col-span-2">
-        <%= f.label :client_address, class: "label font-semibold text-lg" %>
+        <%= f.label :client_address, "Adresa klienta", class: "label font-semibold text-lg" %>
         <%= f.text_field :client_address,
-              placeholder: "Address",
+              placeholder: "Adresa",
               class: "input input-bordered w-full" %>
       </div>
 
       <div class="md:col-span-2">
-        <%= f.label :note, class: "label font-semibold text-lg" %>
+        <%= f.label :note, "Poznámka", class: "label font-semibold text-lg" %>
         <%= f.text_area :note,
               rows: 4,
-              placeholder: "Optional note...",
+              placeholder: "Voliteľná poznámka...",
               class: "textarea textarea-bordered w-full" %>
       </div>
     </div>
@@ -84,18 +84,18 @@
 
   <fieldset class="fieldset">
     <div class="flex items-center justify-between gap-3">
-      <legend class="fieldset-legend text-2xl font-bold mb-2">Items</legend>
-      <button type="button" class="btn btn-sm btn-soft btn-primary" data-action="expense-items#addRow">Add item</button>
+      <legend class="fieldset-legend text-2xl font-bold mb-2">Položky</legend>
+      <button type="button" class="btn btn-sm btn-soft btn-primary" data-action="expense-items#addRow">Pridať položku</button>
     </div>
 
     <div class="overflow-x-auto rounded-box border border-base-content/10 bg-base-100/40 p-3">
       <table class="table w-full">
         <thead>
           <tr class="text-base-content/70">
-            <th>Name</th>
-            <th>Amount</th>
-            <th>Price</th>
-            <th class="px-0 text-right">Items total</th>
+            <th>Názov</th>
+            <th>Množstvo</th>
+            <th>Cena</th>
+            <th class="px-0 text-right">Spolu za položku</th>
             <th></th>
           </tr>
         </thead>
@@ -117,11 +117,11 @@
   <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
     <div class="rounded-box border border-base-content/10 bg-base-100/40 px-4 py-3">
       <p class="text-sm text-base-content/60">
-        Subtotal:
+        Medzisúčet:
         <span data-expense-items-target="subtotal">0.00</span>
         <span data-expense-items-target="currencyLabel"><%= @invoice.currency.presence || Invoice::CURRENCIES.first %></span>
       </p>
-      <p class="text-sm uppercase tracking-wide text-base-content/60">Invoice total</p>
+      <p class="text-sm uppercase tracking-wide text-base-content/60">Faktúra spolu</p>
       <p class="text-2xl font-bold">
         <span data-expense-items-target="total">0.00</span>
         <span><%= @invoice.currency.presence || Invoice::CURRENCIES.first %></span>
@@ -129,8 +129,8 @@
     </div>
 
     <div class="flex items-center justify-end gap-3">
-      <%= link_to "Cancel", invoices_path, class: "btn btn-ghost" %>
-      <%= f.submit class: "btn btn-primary" %>
+      <%= link_to "Zrušiť", invoices_path, class: "btn btn-ghost" %>
+      <%= f.submit(@invoice.persisted? ? "Uložiť faktúru" : "Vytvoriť faktúru", class: "btn btn-primary") %>
     </div>
   </div>
 <% end %>

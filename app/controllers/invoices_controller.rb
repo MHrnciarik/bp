@@ -30,7 +30,7 @@ class InvoicesController < ApplicationController
 
     if @invoice.save
       MissionTracker.track_invoice_created(current_user)
-      redirect_to @invoice, notice: "Invoice created!"
+      redirect_to @invoice, notice: "Faktúra bola vytvorená."
     else
       build_invoice_item
       render :new, status: :unprocessable_entity
@@ -39,7 +39,7 @@ class InvoicesController < ApplicationController
 
   def update
     if @invoice.update(invoice_params)
-      redirect_to @invoice, notice: "Invoice updated!"
+      redirect_to @invoice, notice: "Faktúra bola upravená."
     else
       build_invoice_item
       render :edit, status: :unprocessable_entity
@@ -52,7 +52,7 @@ class InvoicesController < ApplicationController
 
   def destroy
     @invoice.destroy
-    redirect_to invoices_path, notice: "Invoice deleted!"
+    redirect_to invoices_path, notice: "Faktúra bola vymazaná."
   end
 
   private

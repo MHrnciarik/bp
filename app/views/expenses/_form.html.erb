@@ -3,7 +3,7 @@
       data: { controller: "expense-items" } do |f| %>
   <% if @expense.errors.any? %>
     <div class="rounded-box border border-error/30 bg-error/10 p-4">
-      <h2 class="font-semibold text-error">Please fix the highlighted issues.</h2>
+      <h2 class="font-semibold text-error">Oprav zvýraznené chyby.</h2>
       <ul class="mt-2 list-disc pl-5 text-sm">
         <% @expense.errors.full_messages.each do |message| %>
           <li><%= message %></li>
@@ -13,16 +13,16 @@
   <% end %>
 
   <fieldset class="fieldset">
-    <legend class="fieldset-legend text-2xl font-bold mb-2">Expense Details</legend>
+    <legend class="fieldset-legend text-2xl font-bold mb-2">Detaily výdavku</legend>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
       <div>
-        <%= f.label :date, class: "label font-semibold text-lg" %>
+        <%= f.label :date, "Dátum", class: "label font-semibold text-lg" %>
         <%= f.date_field :date, class: "input input-bordered w-full" %>
       </div>
 
       <div>
-        <%= f.label :currency, class: "label font-semibold text-lg" %>
+        <%= f.label :currency, "Mena", class: "label font-semibold text-lg" %>
         <%= f.select :currency,
               options_for_select(Expense::CURRENCIES, @expense.currency),
               {},
@@ -31,23 +31,23 @@
       </div>
 
       <div>
-        <%= f.label :vendor, "Vendor / Merchant", class: "label font-semibold text-lg" %>
+        <%= f.label :vendor, "Dodávateľ / predajca", class: "label font-semibold text-lg" %>
         <%= f.text_field :vendor, class: "input input-bordered w-full" %>
       </div>
 
       <div>
-        <%= f.label :category, class: "label font-semibold text-lg" %>
+        <%= f.label :category, "Kategória", class: "label font-semibold text-lg" %>
         <%= f.select :category,
-              options_for_select(Expense::CATEGORIES, @expense.category),
-              { prompt: "Select a category" },
+              expense_category_options(@expense.category),
+              { prompt: "Vyber kategóriu" },
               { class: "select select-bordered w-full" } %>
       </div>
 
       <div>
-        <%= f.label :payment_method, class: "label font-semibold text-lg" %>
+        <%= f.label :payment_method, "Spôsob platby", class: "label font-semibold text-lg" %>
         <%= f.select :payment_method,
-              options_for_select(Expense::PAYMENT_METHODS, @expense.payment_method),
-              { prompt: "Select payment method" },
+              payment_method_options(@expense.payment_method),
+              { prompt: "Vyber spôsob platby" },
               { class: "select select-bordered w-full" } %>
       </div>
 
@@ -61,26 +61,26 @@
       </div>
 
       <div class="md:col-span-2">
-        <%= f.label :note, class: "label font-semibold text-lg" %>
-        <%= f.text_area :note, rows: 3, placeholder: "Optional notes...", class: "textarea textarea-bordered w-full" %>
+        <%= f.label :note, "Poznámka", class: "label font-semibold text-lg" %>
+        <%= f.text_area :note, rows: 3, placeholder: "Voliteľné poznámky...", class: "textarea textarea-bordered w-full" %>
       </div>
     </div>
   </fieldset>
 
   <fieldset class="fieldset">
     <div class="flex items-center justify-between gap-3">
-      <legend class="fieldset-legend text-2xl font-bold mb-2">Items</legend>
-      <button type="button" class="btn btn-sm btn-soft btn-primary" data-action="expense-items#addRow">Add item</button>
+      <legend class="fieldset-legend text-2xl font-bold mb-2">Položky</legend>
+      <button type="button" class="btn btn-sm btn-soft btn-primary" data-action="expense-items#addRow">Pridať položku</button>
     </div>
 
     <div class="overflow-x-auto rounded-box border border-base-content/10 bg-base-100/40 p-3">
       <table class="table w-full">
         <thead>
           <tr class="text-base-content/70">
-            <th>Name</th>
-            <th>Amount</th>
-            <th>Price</th>
-            <th class="px-0 text-right">Items total</th>
+            <th>Názov</th>
+            <th>Množstvo</th>
+            <th>Cena</th>
+            <th class="px-0 text-right">Spolu za položku</th>
             <th></th>
           </tr>
         </thead>
@@ -102,11 +102,11 @@
   <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
     <div class="rounded-box border border-base-content/10 bg-base-100/40 px-4 py-3">
       <p class="text-sm text-base-content/60">
-        Subtotal:
+        Medzisúčet:
         <span data-expense-items-target="subtotal">0.00</span>
         <span data-expense-items-target="currencyLabel"><%= @expense.currency.presence || Expense::CURRENCIES.first %></span>
       </p>
-      <p class="text-sm uppercase tracking-wide text-base-content/60">Expense total</p>
+      <p class="text-sm uppercase tracking-wide text-base-content/60">Výdavok spolu</p>
       <p class="text-2xl font-bold">
         <span data-expense-items-target="total">0.00</span>
         <span><%= @expense.currency.presence || Expense::CURRENCIES.first %></span>
@@ -114,8 +114,8 @@
     </div>
 
     <div class="flex items-center justify-end gap-3">
-      <%= link_to "Cancel", expenses_path, class: "btn btn-ghost btn-error" %>
-      <%= f.submit class: "btn btn-primary" %>
+      <%= link_to "Zrušiť", expenses_path, class: "btn btn-ghost btn-error" %>
+      <%= f.submit(@expense.persisted? ? "Uložiť výdavok" : "Vytvoriť výdavok", class: "btn btn-primary") %>
     </div>
   </div>
 <% end %>

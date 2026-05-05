@@ -1,7 +1,7 @@
 <div class="mx-auto w-full max-w-2xl px-4 py-10">
   <div class="card border border-base-content/10 bg-base-100 shadow-xl">
     <div class="card-body">
-      <h1 class="text-3xl font-bold text-center">Add company</h1>
+      <h1 class="text-3xl font-bold text-center">Pridať firmu</h1>
 
       <% if @company.errors.any? %>
         <div class="alert alert-error">
@@ -15,7 +15,7 @@
 
       <%= form_with model: @company, class: "space-y-4" do |f| %>
         <div>
-          <%= f.label :name, "Company name", class: "label font-semibold" %>
+          <%= f.label :name, "Názov firmy", class: "label font-semibold" %>
           <%= f.text_field :name, class: "input input-bordered w-full" %>
         </div>
 
@@ -27,7 +27,7 @@
               inputmode: "numeric",
               maxlength: 8,
               pattern: "\\d{8}",
-              title: "Enter exactly 8 digits" %>
+              title: "Zadaj presne 8 číslic" %>
           </div>
 
           <div>
@@ -37,7 +37,7 @@
               inputmode: "numeric",
               maxlength: 10,
               pattern: "\\d{8,10}",
-              title: "Enter 8 to 10 digits" %>
+              title: "Zadaj 8 až 10 číslic" %>
           </div>
         </div>
 
@@ -47,17 +47,17 @@
             class: "input input-bordered w-full",
             maxlength: 12,
             pattern: "(SK|CZ)\\d{10}",
-            title: "Enter SK or CZ followed by 10 digits" %>
+            title: "Zadaj SK alebo CZ a potom 10 číslic" %>
         </div>
 
         <div>
-          <%= f.label :street, "Street", class: "label font-semibold" %>
+          <%= f.label :street, "Ulica", class: "label font-semibold" %>
           <%= f.text_field :street, class: "input input-bordered w-full" %>
         </div>
 
         <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
           <div>
-            <%= f.label :city, "City", class: "label font-semibold" %>
+            <%= f.label :city, "Mesto", class: "label font-semibold" %>
             <%= f.text_field :city, class: "input input-bordered w-full" %>
           </div>
 
@@ -68,18 +68,18 @@
               inputmode: "numeric",
               maxlength: 5,
               pattern: "\\d{5}",
-              title: "Enter exactly 5 digits" %>
+              title: "Zadaj presne 5 číslic" %>
           </div>
 
           <div>
-            <%= f.label :country, "Country", class: "label font-semibold" %>
+            <%= f.label :country, "Krajina", class: "label font-semibold" %>
             <%= f.text_field :country, class: "input input-bordered w-full" %>
           </div>
         </div>
 
         <div class="flex justify-end gap-3">
-          <%= link_to "Back", profiles_path, class: "btn btn-ghost" %>
-          <%= f.submit "Save company", class: "btn btn-primary" %>
+          <%= link_to "Späť", profiles_path, class: "btn btn-ghost" %>
+          <%= f.submit "Uložiť firmu", class: "btn btn-primary" %>
         </div>
       <% end %>
     </div>

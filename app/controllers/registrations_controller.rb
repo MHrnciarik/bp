@@ -8,7 +8,7 @@ class RegistrationsController < ApplicationController
 
     if @user.save
       session[:user_id] = @user.id
-      redirect_to root_path, notice: "Account created successfully."
+      redirect_to root_path, notice: "Účet bol vytvorený."
     else
       render :new, status: :unprocessable_entity
     end

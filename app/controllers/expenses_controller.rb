@@ -31,7 +31,7 @@ class ExpensesController < ApplicationController
     if @expense.save
        MissionTracker.track_expense_logged(current_user)
        MissionTracker.track_expense_categorized(current_user) if @expense.category.present?
-       redirect_to expenses_path, notice: "Expense was successfully created!"
+       redirect_to expenses_path, notice: "Výdavok bol vytvorený."
     else
       build_expense_item
       render :new, status: :unprocessable_entity
@@ -47,7 +47,7 @@ class ExpensesController < ApplicationController
       if @expense.saved_change_to_category? && @expense.category.present? && @expense.category_before_last_save.blank?
         MissionTracker.track_expense_categorized(current_user)
       end
-      redirect_to expenses_path, notice: "Expense was successfully updated!"
+      redirect_to expenses_path, notice: "Výdavok bol upravený."
     else
       build_expense_item
       render :edit, status: :unprocessable_entity
@@ -56,7 +56,7 @@ class ExpensesController < ApplicationController
 
   def destroy
     @expense.destroy
-    redirect_to expenses_path, notice: "Expense was successfully deleted!"
+    redirect_to expenses_path, notice: "Výdavok bol vymazaný."
   end
 
   private

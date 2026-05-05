@@ -62,7 +62,7 @@ class Invoice < ApplicationRecord
   def must_have_at_least_one_item
     return if active_invoice_items.any?
 
-    errors.add(:invoice_items, "must include at least one item")
+    errors.add(:invoice_items, "musia obsahovať aspoň jednu položku")
   end
 
   def active_invoice_items

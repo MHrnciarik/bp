@@ -13,12 +13,12 @@ class DailyMissionsControllerTest < ActionDispatch::IntegrationTest
     get daily_missions_url
 
     assert_response :success
-    assert_select "h1", text: "Daily missions"
-    assert_select "h1", text: "Weekly missions"
-    assert_select "h2", text: "Log in"
-    assert_select "h2", text: "Reach the next user level"
-    assert_select "h2", text: "Log in 5 times"
-    assert_select "h2", text: "Complete all daily missions once"
+    assert_select "h1", text: "Denné misie"
+    assert_select "h1", text: "Týždenné misie"
+    assert_select "h2", text: "Prihlás sa"
+    assert_select "h2", text: "Dosiahni ďalšiu úroveň"
+    assert_select "h2", text: "Prihlás sa 5-krát"
+    assert_select "h2", text: "Dokonči všetky denné misie aspoň raz"
   end
 
   test "shows a red dot in the navbar when a mission is claimable" do

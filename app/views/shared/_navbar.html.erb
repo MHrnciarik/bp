@@ -2,13 +2,13 @@
   <div class="navbar-start"></div>
 
   <div class="navbar-center gap-6">
-    <%= link_to "Invoices", invoices_path, class: "btn btn-ghost text-xl" %>
-    <%= link_to "Expenses", expenses_path, class: "btn btn-ghost text-xl" %>
-    <%= link_to "Profiles", profiles_path, class: "btn btn-ghost text-xl" %>
+    <%= link_to "Faktúry", invoices_path, class: "btn btn-ghost text-xl" %>
+    <%= link_to "Výdavky", expenses_path, class: "btn btn-ghost text-xl" %>
+    <%= link_to "Profil", profiles_path, class: "btn btn-ghost text-xl" %>
   </div>
   <div class="navbar-end px-4">
     <% if logged_in? && current_company.present? %>
-      <%= link_to daily_missions_path, class: "btn btn-ghost btn-circle mr-4 relative", aria: { label: "Daily missions" }, title: "Daily missions" do %>
+      <%= link_to daily_missions_path, class: "btn btn-ghost btn-circle mr-4 relative", aria: { label: "Denné misie" }, title: "Denné misie" do %>
         <% if missions_ready_to_claim? %>
           <span
             class="absolute right-1.5 top-1.5 h-3 w-3 rounded-full bg-error shadow-sm shadow-error/70"

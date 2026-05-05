@@ -65,7 +65,7 @@ class Expense < ApplicationRecord
   def must_have_at_least_one_item
     return if active_expense_items.any?
 
-    errors.add(:expense_items, "must include at least one item")
+    errors.add(:expense_items, "musia obsahovať aspoň jednu položku")
   end
 
   def active_expense_items

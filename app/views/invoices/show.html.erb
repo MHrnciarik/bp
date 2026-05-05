@@ -2,35 +2,35 @@
   <div class="w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-4 mt-4">
     <div class="grid grid-cols-2 items-center">
       <div class="justify-self-start">
-        <%= link_to "Back", invoices_path, class: "btn btn-outline btn-sm" %>
+        <%= link_to "Späť", invoices_path, class: "btn btn-outline btn-sm" %>
       </div>
       <div class="justify-self-end">
-        <%= link_to "Edit", edit_invoice_path(@invoice), class: "btn btn-primary btn-sm" %>
+        <%= link_to "Upraviť", edit_invoice_path(@invoice), class: "btn btn-primary btn-sm" %>
       </div>
     </div>
   </div>
 
   <div class="w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-6">
     <dl class="grid grid-cols-2 gap-x-8 gap-y-3">
-      <dt class="font-semibold text-base-content/80">Invoice Number</dt>
+      <dt class="font-semibold text-base-content/80">Číslo faktúry</dt>
       <dd><%= @invoice.display_number %></dd>
 
-      <dt class="font-semibold text-base-content/80">Issued On</dt>
-      <dd><%= @invoice.issued_on.strftime("%B %d, %Y") %></dd>
+      <dt class="font-semibold text-base-content/80">Dátum vystavenia</dt>
+      <dd><%= l(@invoice.issued_on, format: :long) %></dd>
 
-      <dt class="font-semibold text-base-content/80">Due On</dt>
-      <dd><%= @invoice.due_on.strftime("%B %d, %Y") %></dd>
+      <dt class="font-semibold text-base-content/80">Dátum splatnosti</dt>
+      <dd><%= l(@invoice.due_on, format: :long) %></dd>
 
-      <dt class="font-semibold text-base-content/80">Client</dt>
+      <dt class="font-semibold text-base-content/80">Klient</dt>
       <dd><%= @invoice.client_name.presence || "—" %></dd>
 
-      <dt class="font-semibold text-base-content/80">Client Address</dt>
+      <dt class="font-semibold text-base-content/80">Adresa klienta</dt>
       <dd><%= @invoice.client_address.presence || "—" %></dd>
 
-      <dt class="font-semibold text-base-content/80">Status</dt>
-      <dd><%= @invoice.status.capitalize %></dd>
+      <dt class="font-semibold text-base-content/80">Stav</dt>
+      <dd><%= invoice_status_label(@invoice.status) %></dd>
 
-      <dt class="font-semibold text-base-content/80">Currency</dt>
+      <dt class="font-semibold text-base-content/80">Mena</dt>
       <dd><%= @invoice.currency %></dd>
 
       <dt class="font-semibold text-base-content/80">DPH</dt>
@@ -40,17 +40,17 @@
 
   <div class="w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-6">
     <div class="flex items-center justify-between gap-3">
-      <h2 class="text-lg font-bold">Items</h2>
+      <h2 class="text-lg font-bold">Položky</h2>
     </div>
 
     <div class="mt-4 overflow-x-auto">
       <table class="table w-full">
         <thead>
           <tr class="text-base-content/70">
-            <th>Name</th>
-            <th class="text-right">Amount</th>
-            <th class="text-right">Price</th>
-            <th class="text-right">Item total</th>
+            <th>Názov</th>
+            <th class="text-right">Množstvo</th>
+            <th class="text-right">Cena</th>
+            <th class="text-right">Spolu za položku</th>
           </tr>
         </thead>
         <tbody>
@@ -69,7 +69,7 @@
 
   <% if @invoice.note.present? %>
     <div class="w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-6">
-      <h2 class="mb-2 text-lg font-bold">Note</h2>
+      <h2 class="mb-2 text-lg font-bold">Poznámka</h2>
       <p class="text-base-content/90"><%= @invoice.note %></p>
     </div>
   <% end %>
@@ -79,17 +79,17 @@
       <div>
         <h2 class="text-lg font-bold mx-2">
           <span class="block text-sm font-normal text-base-content/60">
-            Subtotal: <%= number_to_currency(@invoice.subtotal_amount, unit: @invoice.currency, format: "%n %u") %>
+            Medzisúčet: <%= number_to_currency(@invoice.subtotal_amount, unit: @invoice.currency, format: "%n %u") %>
           </span>
-          Total:
+          Celkom:
           <span class="font-semibold text-base-content">
             <%= number_to_currency(@invoice.amount, unit: @invoice.currency, format: "%n %u") %>
           </span>
         </h2>
       </div>
       <div class="justify-self-end">
-        <%= button_to "Delete", invoice_path(@invoice), method: :delete,
-              data: { turbo_confirm: "Are you sure you want to delete this invoice?" },
+        <%= button_to "Vymazať", invoice_path(@invoice), method: :delete,
+              data: { turbo_confirm: "Naozaj chceš vymazať túto faktúru?" },
               class: "btn btn-error btn-outline btn-sm" %>
       </div>
     </div>

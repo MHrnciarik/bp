@@ -40,12 +40,12 @@ class ApplicationController < ActionController::Base
   def require_login
     return if logged_in?
 
-    redirect_to login_path, alert: "Please log in first."
+    redirect_to login_path, alert: "Najprv sa prihlás."
   end
 
   def require_current_company
     return if current_company.present?
 
-    redirect_to profiles_path, alert: "Add or select a company first."
+    redirect_to profiles_path, alert: "Najprv pridaj alebo vyber firmu."
   end
 end

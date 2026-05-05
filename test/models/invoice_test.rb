@@ -32,7 +32,7 @@ class InvoiceTest < ActiveSupport::TestCase
     )
 
     assert_not invoice.valid?
-    assert_includes invoice.errors[:invoice_items], "must include at least one item"
+    assert_includes invoice.errors[:invoice_items], "musia obsahovať aspoň jednu položku"
   end
 
   test "generates an invoice number after create" do

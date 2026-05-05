@@ -1,25 +1,25 @@
 <div class="mx-auto max-w-md px-4 py-12">
   <div class="card bg-base-100 shadow-xl">
     <div class="card-body">
-      <h1 class="text-3xl font-bold text-center">Log in</h1>
+      <h1 class="text-3xl font-bold text-center">Prihlásenie</h1>
 
       <%= form_with url: login_path, class: "space-y-4" do |f| %>
         <div>
-          <%= f.label :username, class: "label font-semibold" %>
+          <%= f.label :username, "Používateľské meno", class: "label font-semibold" %>
           <%= f.text_field :username, class: "input input-bordered w-full" %>
         </div>
 
         <div>
-          <%= f.label :password, class: "label font-semibold" %>
+          <%= f.label :password, "Heslo", class: "label font-semibold" %>
           <%= f.password_field :password, class: "input input-bordered w-full" %>
         </div>
 
-        <%= f.submit "Log in", class: "btn btn-primary w-full" %>
+        <%= f.submit "Prihlásiť sa", class: "btn btn-primary w-full" %>
       <% end %>
 
       <p class="text-center text-sm">
-        No account yet?
-        <%= link_to "Sign up", sign_up_path, class: "link link-primary" %>
+        Ešte nemáš účet?
+        <%= link_to "Zaregistruj sa", sign_up_path, class: "link link-primary" %>
       </p>
     </div>
   </div>

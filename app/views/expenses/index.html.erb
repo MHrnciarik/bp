@@ -1,84 +1,84 @@
 <div class="flex flex-col items-center">
   <div class="w-full max-w-5xl">
-    <!-- Filters -->
+    <!-- Filtre -->
     <details class="collapse collapse-arrow border-3 border-base-content/10 my-4">
-      <summary class="collapse-title font-bold">Filters</summary>
+      <summary class="collapse-title font-bold">Filtre</summary>
       <div class="collapse-content text-sm">
         <%= form_with url: expenses_path, method: :get, class:"grid grid-cols-5 gap-4 w-full" do |form| %>
           <div>
             <div class="input mb-4">
-              <%= form.label :start_date, "From", class:"label" %>
+              <%= form.label :start_date, "Od", class:"label" %>
               <%= form.date_field :start_date, value: params[:start_date], class:"date w-full" %>
             </div>
             <div class="input my-4">
-              <%= form.label :end_date, "To", class:"label" %>
+              <%= form.label :end_date, "Do", class:"label" %>
               <%= form.date_field :end_date, value: params[:end_date], class:"date w-full" %>
             </div>
 
             <div class="mt-4">
-              <%= form.submit "Filter", class:"btn btn-soft btn-primary" %>
-              <%= link_to "Clear", expenses_path, class:"btn btn-soft btn-error" %>
+              <%= form.submit "Filtrovať", class:"btn btn-soft btn-primary" %>
+              <%= link_to "Vymazať", expenses_path, class:"btn btn-soft btn-error" %>
             </div>
           </div>
 
           <div>
             <%= form.select :vendor,
                   options_for_select(@vendors, params[:vendor]),
-                  { include_blank: "All Vendors" },
+                  { include_blank: "Všetci dodávatelia" },
                   { class:"select w-full" } %>
           </div>
 
           <div>
             <%= form.select :category,
-                  options_for_select(Expense::CATEGORIES, params[:category]),
-                  { include_blank: "All Categories"},
+                  expense_category_options(params[:category]),
+                  { include_blank: "Všetky kategórie"},
                   { class:"select w-full"} %>
           </div>
 
           <div>
             <%= form.select :payment_method,
-                  options_for_select(Expense::PAYMENT_METHODS, params[:payment_method]),
-                  { include_blank: "All Payment Methods"},
+                  payment_method_options(params[:payment_method]),
+                  { include_blank: "Všetky spôsoby platby"},
                   { class:"select w-full mb-2" } %>
 
-            <%= form.label :min_amount, "Min Amount", class:"label" %>
+            <%= form.label :min_amount, "Min. suma", class:"label" %>
             <%= form.number_field :min_amount, min: 0, max: 1000000, step: 1, value: params[:min_amount] || 0, class: "input input-bordered w-full my-2" %>
           </div>
 
           <div>
             <%= form.select :currency,
                   options_for_select(Expense::CURRENCIES, params[:currency]),
-                  { include_blank: "All Currencies" },
+                  { include_blank: "Všetky meny" },
                   { class:"select w-full mb-2" } %>
 
-            <%= form.label :max_amount, "Max Amount", class:"label" %>
+            <%= form.label :max_amount, "Max. suma", class:"label" %>
             <%= form.number_field :max_amount, min: 0, max: 1000000, step: 1, value: params[:max_amount] || 1000000, class: "input input-bordered w-full my-2" %>
           </div>
         <% end %>
       </div>
     </details>
 
-    <!-- Expenses Table -->
+    <!-- Tabuľka výdavkov -->
     <% if @expenses.any? %>
     <div class="flex justify-center">
       <div class="overflow-x-auto rounded-box border-3 border-base-content/10 w-full">
         <table class="table-lg table-fixed w-full">
           <thead>
             <tr class="border-b-2 border-base-content/10 text-left">
-              <th>Date</th>
-              <th>Vendor</th>
-              <th>Category</th>
-              <th>Payment</th>
-              <th class="text-right">Amount</th>
+              <th>Dátum</th>
+              <th>Dodávateľ</th>
+              <th>Kategória</th>
+              <th>Platba</th>
+              <th class="text-right">Suma</th>
             </tr>
           </thead>
           <tbody>
             <% @expenses.each do |expense| %>
               <tr class="hover:bg-base-300 border-b border-base-content/5 cursor-pointer" onclick="window.location='<%= expense_path(expense) %>'">
-                <td><%= expense.date.strftime("%b %d, %Y") %></td>
+                <td><%= l(expense.date, format: :short) %></td>
                 <td><%= expense.vendor.presence || "—" %></td>
-                <td><%= expense.category %></td>
-                <td><%= expense.payment_method %></td>
+                <td><%= expense_category_label(expense.category) %></td>
+                <td><%= payment_method_label(expense.payment_method) %></td>
                 <td class="text-right"><%= number_to_currency(expense.amount, unit: expense.currency, format: "%n %u") %></td>
               </tr>
             <% end %>
@@ -87,7 +87,7 @@
       </div>
     </div>
     <% else %>
-      <p>No expenses found.</p>
+      <p>Nenašli sa žiadne výdavky.</p>
     <% end %>
   </div>
 </div>

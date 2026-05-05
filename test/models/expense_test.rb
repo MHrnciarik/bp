@@ -30,6 +30,6 @@ class ExpenseTest < ActiveSupport::TestCase
     )
 
     assert_not expense.valid?
-    assert_includes expense.errors[:expense_items], "must include at least one item"
+    assert_includes expense.errors[:expense_items], "musia obsahovať aspoň jednu položku"
   end
 end
