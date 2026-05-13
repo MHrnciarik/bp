@@ -16,6 +16,8 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert daily_progress.claimable?
     assert_equal 1, weekly_progress.progress
     assert_equal 1, users(:one).reload.login_count
+    assert_equal 1, users(:one).total_login_days
+    assert_equal 1, users(:one).current_login_streak
     assert users(:one).user_achievements.exists?(achievement_key: "logins_1")
   end
 end

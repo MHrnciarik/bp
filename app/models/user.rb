@@ -1,4 +1,9 @@
 class User < ApplicationRecord
+  LOGIN_STREAK_REWARDS = {
+    3 => 100,
+    7 => 250
+  }.freeze
+
   has_secure_password
   has_many :companies, dependent: :destroy
   has_many :mission_progresses, dependent: :destroy
@@ -8,6 +13,8 @@ class User < ApplicationRecord
   validates :password, length: { minimum: 8 }, if: -> { password.present? }
   validates :xp, numericality: { greater_than_or_equal_to: 0 }
   validates :login_count, numericality: { greater_than_or_equal_to: 0 }
+  validates :current_login_streak, numericality: { greater_than_or_equal_to: 0 }
+  validates :total_login_days, numericality: { greater_than_or_equal_to: 0 }
 
   def level
     (xp / 250) + 1
@@ -23,5 +30,37 @@ class User < ApplicationRecord
 
   def xp_progress_percentage
     ((xp_in_current_level.to_f / xp_for_next_level) * 100).round
+  end
+
+  def login_streak_day_count
+    [ current_login_streak.to_i, 7 ].min
+  end
+
+  def login_streak_reward_claimable?(day)
+    LOGIN_STREAK_REWARDS.key?(day.to_i) &&
+      current_login_streak.to_i >= day.to_i &&
+      !login_streak_reward_claimed?(day)
+  end
+
+  def login_streak_reward_claimed?(day)
+    case day.to_i
+    when 3
+      login_streak_reward_3_claimed_at.present?
+    when 7
+      login_streak_reward_7_claimed_at.present?
+    else
+      false
+    end
+  end
+
+  def mark_login_streak_reward_claimed!(day)
+    case day.to_i
+    when 3
+      update!(login_streak_reward_3_claimed_at: Time.current)
+    when 7
+      update!(login_streak_reward_7_claimed_at: Time.current)
+    else
+      raise ArgumentError, "Unknown login streak reward"
+    end
   end
 end

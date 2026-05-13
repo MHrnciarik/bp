@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_13_130000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_13_133000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -122,8 +122,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_13_130000) do
 
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.integer "current_login_streak", default: 0, null: false
+    t.date "last_login_on"
     t.integer "login_count", default: 0, null: false
+    t.datetime "login_streak_reward_3_claimed_at"
+    t.datetime "login_streak_reward_7_claimed_at"
     t.string "password_digest", null: false
+    t.integer "total_login_days", default: 0, null: false
     t.datetime "updated_at", null: false
     t.string "username", null: false
     t.integer "xp", default: 0, null: false

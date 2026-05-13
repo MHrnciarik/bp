@@ -7,6 +7,7 @@ class SessionsController < ApplicationController
 
     if user&.authenticate(params[:password])
       session[:user_id] = user.id
+      LoginStreakTracker.track!(user)
       MissionTracker.track_login(user)
       flash_achievements(AchievementTracker.track_login!(user))
       redirect_to root_path, notice: "Prihlásenie prebehlo úspešne."

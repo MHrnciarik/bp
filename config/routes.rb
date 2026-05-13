@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   delete "logout", to: "sessions#destroy"
   get "daily_missions", to: "daily_missions#index"
   post "daily_missions/:period/:mission_key/claim", to: "daily_missions#claim", as: :claim_mission
+  post "login_streak_rewards/:day/claim", to: "login_streak_rewards#create", as: :claim_login_streak_reward
   get "leaderboard", to: "leaderboards#index"
 
 
