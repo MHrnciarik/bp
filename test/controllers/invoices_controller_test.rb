@@ -48,13 +48,12 @@ class InvoicesControllerTest < ActionDispatch::IntegrationTest
             due_on: Date.current + 14.days,
             status: "unpaid",
             currency: "EUR",
-            tax_rate: 23,
             client_name: "Acme",
             client_address: "Example Street 1",
             note: "Design work",
             invoice_items_attributes: {
-              "0" => { name: "Design", quantity: 4, unit_price: 50 },
-              "1" => { name: "Consulting", quantity: 2, unit_price: 75 }
+              "0" => { name: "Design", quantity: 4, unit_price: 50, tax_rate: 23 },
+              "1" => { name: "Consulting", quantity: 2, unit_price: 75, tax_rate: 23 }
             }
           }
         }
@@ -71,5 +70,29 @@ class InvoicesControllerTest < ActionDispatch::IntegrationTest
     progress = users(:one).mission_progresses.find_by!(mission_key: "create_invoice", period: "daily", period_start: Date.current)
     assert_equal 1, progress.progress
     assert progress.claimable?
+  end
+
+  test "creates an invoice with a saved client" do
+    assert_difference("Invoice.count", 1) do
+      post invoices_path, params: {
+        invoice: {
+          issued_on: Date.current,
+          due_on: Date.current + 14.days,
+          status: "unpaid",
+          currency: "EUR",
+          client_entry_mode: "saved",
+          client_id: clients(:acme).id,
+          invoice_items_attributes: {
+            "0" => { name: "Design", quantity: 1, unit_price: 100, tax_rate: 23 }
+          }
+        }
+      }
+    end
+
+    invoice = Invoice.order(:created_at).last
+
+    assert_equal clients(:acme), invoice.client
+    assert_equal "Acme Corp", invoice.client_name
+    assert_equal "Example Street 1", invoice.client_address
   end
 end

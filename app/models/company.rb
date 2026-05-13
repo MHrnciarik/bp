@@ -2,6 +2,8 @@ class Company < ApplicationRecord
   belongs_to :user
   has_many :invoices, dependent: :destroy
   has_many :expenses, dependent: :destroy
+  has_many :clients, dependent: :destroy
+  has_many :vendors, dependent: :destroy
 
   validates :name, presence: true
   validates :ico, presence: true, format: {

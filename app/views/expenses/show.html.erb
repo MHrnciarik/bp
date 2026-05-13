@@ -25,7 +25,13 @@
       <dd><%= payment_method_label(@expense.payment_method) %></dd>
 
       <dt class="font-semibold text-base-content/80">Dodávateľ / predajca</dt>
-      <dd><%= @expense.vendor.presence || "—" %></dd>
+      <dd>
+        <% if @expense.vendor_record.present? %>
+          <%= link_to @expense.vendor, vendor_path(@expense.vendor_record), class: "link link-primary" %>
+        <% else %>
+          <%= @expense.vendor.presence || "—" %>
+        <% end %>
+      </dd>
 
       <dt class="font-semibold text-base-content/80">Mena</dt>
       <dd><%= @expense.currency %></dd>
@@ -43,8 +49,9 @@
           <tr class="text-base-content/70">
             <th>Názov</th>
             <th class="text-right">Množstvo</th>
-            <th class="text-right">Cena</th>
-            <th class="text-right">Spolu za položku</th>
+            <th class="text-right">Cena bez DPH</th>
+            <th class="text-right">DPH</th>
+            <th class="text-right">Spolu s DPH</th>
           </tr>
         </thead>
         <tbody>
@@ -53,6 +60,7 @@
               <td><%= item.name %></td>
               <td class="text-right"><%= item.quantity %></td>
               <td class="text-right"><%= number_to_currency(item.unit_price, unit: @expense.currency, format: "%n %u") %></td>
+              <td class="text-right"><%= number_with_precision(item.tax_rate, precision: 2) %>%</td>
               <td class="text-right font-semibold"><%= number_to_currency(item.total_price, unit: @expense.currency, format: "%n %u") %></td>
             </tr>
           <% end %>
@@ -72,11 +80,14 @@
     <div class="grid grid-cols-2 items-center">
       <div>
         <h2 class="text-lg font-bold mx-2">
-        Celkom:
-        <span class="font-semibold text-base-content">
-          <%= number_to_currency(@expense.amount, unit: @expense.currency, format: "%n %u") %>
-        </span>
-      </h2>
+          <span class="block text-sm font-normal text-base-content/60">
+            Medzisúčet: <%= number_to_currency(@expense.subtotal_amount, unit: @expense.currency, format: "%n %u") %>
+          </span>
+          Celkom:
+          <span class="font-semibold text-base-content">
+            <%= number_to_currency(@expense.amount, unit: @expense.currency, format: "%n %u") %>
+          </span>
+        </h2>
       </div>
       <div class="justify-self-end">
         <%= button_to "Vymazať", expense_path(@expense), method: :delete,

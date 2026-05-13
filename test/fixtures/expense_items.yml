@@ -3,27 +3,32 @@ one_apples:
   name: Apples
   quantity: 2
   unit_price: 2.50
+  tax_rate: 23
 
 one_bread:
   expense: one
   name: Bread
   quantity: 1
   unit_price: 4.99
+  tax_rate: 23
 
 two_fuel:
   expense: two
   name: Fuel
   quantity: 1
   unit_price: 20.00
+  tax_rate: 23
 
 two_snacks:
   expense: two
   name: Snacks
   quantity: 1
   unit_price: 4.50
+  tax_rate: 23
 
 three_paper:
   expense: three
   name: Paper
   quantity: 1
   unit_price: 12.00
+  tax_rate: 23

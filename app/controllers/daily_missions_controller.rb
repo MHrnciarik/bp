@@ -12,6 +12,7 @@ class DailyMissionsController < ApplicationController
       period: params[:period],
       mission_key: params[:mission_key]
     )
+    flash_achievements(AchievementTracker.award_new!(current_user))
 
     redirect_to daily_missions_path, notice: "Odmena bola získaná."
   rescue ActiveRecord::RecordNotFound, ArgumentError

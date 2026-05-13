@@ -48,6 +48,7 @@ export default class extends Controller {
 
   updateTotals() {
     let subtotal = 0
+    let total = 0
 
     this.rowTargets.forEach((row) => {
       if (row.classList.contains("hidden")) {
@@ -56,18 +57,18 @@ export default class extends Controller {
 
       const quantity = this.#numberValue(row, "quantity")
       const price = this.#numberValue(row, "price")
-      const lineTotal = quantity * price
+      const taxRate = this.#numberValue(row, "taxRate")
+      const lineSubtotal = quantity * price
+      const lineTotal = lineSubtotal * (1 + taxRate / 100)
       const lineTotalElement = row.querySelector("[data-expense-items-target='lineTotal']")
 
       if (lineTotalElement) {
         lineTotalElement.textContent = this.#format(lineTotal)
       }
 
-      subtotal += lineTotal
+      subtotal += lineSubtotal
+      total += lineTotal
     })
-
-    const taxRate = this.#taxRate()
-    const total = subtotal * (1 + taxRate / 100)
 
     if (this.hasSubtotalTarget) {
       this.subtotalTarget.textContent = this.#format(subtotal)
@@ -85,14 +86,5 @@ export default class extends Controller {
 
   #format(value) {
     return value.toFixed(2)
-  }
-
-  #taxRate() {
-    if (!this.hasTaxRateTarget) {
-      return 0
-    }
-
-    const value = Number.parseFloat(this.taxRateTarget.value || "")
-    return Number.isFinite(value) ? value : 0
   }
 }

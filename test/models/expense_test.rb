@@ -6,12 +6,11 @@ class ExpenseTest < ActiveSupport::TestCase
       company: companies(:one),
       date: Date.current,
       currency: "EUR",
-      tax_rate: 23,
       category: "Shopping",
       payment_method: "Debit Card",
       expense_items: [
-        ExpenseItem.new(name: "Milk", quantity: 2, unit_price: 1.99),
-        ExpenseItem.new(name: "Bread", quantity: 1, unit_price: 3.50)
+        ExpenseItem.new(name: "Milk", quantity: 2, unit_price: 1.99, tax_rate: 23),
+        ExpenseItem.new(name: "Bread", quantity: 1, unit_price: 3.50, tax_rate: 23)
       ]
     )
 
@@ -24,7 +23,6 @@ class ExpenseTest < ActiveSupport::TestCase
       company: companies(:one),
       date: Date.current,
       currency: "EUR",
-      tax_rate: 23,
       category: "Shopping",
       payment_method: "Debit Card"
     )

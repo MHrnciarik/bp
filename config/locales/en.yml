@@ -64,7 +64,10 @@ en:
       expense_item: "Položka výdavku"
       invoice: "Faktúra"
       invoice_item: "Položka faktúry"
+      client: "Klient"
+      user_achievement: "Odznak"
       user: "Používateľ"
+      vendor: "Predajca"
     attributes:
       company:
         name: "Názov firmy"
@@ -82,19 +85,18 @@ en:
         vendor: "Dodávateľ"
         category: "Kategória"
         payment_method: "Spôsob platby"
-        tax_rate: "DPH"
         note: "Poznámka"
         expense_items: "Položky výdavku"
       expense_item:
         name: "Názov položky"
         quantity: "Množstvo"
         unit_price: "Jednotková cena"
+        tax_rate: "DPH"
       invoice:
         issued_on: "Dátum vystavenia"
         due_on: "Dátum splatnosti"
         status: "Stav"
         currency: "Mena"
-        tax_rate: "DPH"
         client_name: "Klient"
         client_address: "Adresa klienta"
         note: "Poznámka"
@@ -103,6 +105,18 @@ en:
         name: "Názov položky"
         quantity: "Množstvo"
         unit_price: "Jednotková cena"
+        tax_rate: "DPH"
+      client:
+        name: "Meno"
+        address: "Adresa"
+        note: "Poznámka"
+      user_achievement:
+        achievement_key: "Odznak"
+        awarded_at: "Získané"
+      vendor:
+        name: "Meno"
+        address: "Adresa"
+        note: "Poznámka"
       user:
         username: "Používateľské meno"
         password: "Heslo"

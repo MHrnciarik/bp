@@ -1,6 +1,6 @@
 <%= form_with model: @expense,
       class: "w-full max-w-4xl mx-auto rounded-box border-3 border-base-content/10 bg-base-100/30 p-6 space-y-6 mb-4",
-      data: { controller: "expense-items" } do |f| %>
+      data: { controller: "expense-items party-switch" } do |f| %>
   <% if @expense.errors.any? %>
     <div class="rounded-box border border-error/30 bg-error/10 p-4">
       <h2 class="font-semibold text-error">Oprav zvýraznené chyby.</h2>
@@ -30,7 +30,44 @@
               data: { expense_items_target: "currencySelect", action: "change->expense-items#updateCurrency" } %>
       </div>
 
-      <div>
+      <% vendor_mode = @expense.vendor_entry_mode.presence || (@expense.vendor_id.present? ? "saved" : "manual") %>
+      <div class="md:col-span-2">
+        <span class="label font-semibold text-lg">Dodávateľ / predajca</span>
+        <div class="flex flex-wrap gap-3">
+          <label class="btn btn-sm <%= vendor_mode == "saved" ? "btn-primary" : "btn-soft" %>"
+                 data-party-switch-target="option"
+                 data-party-switch-mode-value="saved">
+            <%= f.radio_button :vendor_entry_mode,
+                  "saved",
+                  checked: vendor_mode == "saved",
+                  class: "hidden",
+                  data: { party_switch_target: "mode", action: "change->party-switch#update" } %>
+            Uložený predajca
+          </label>
+          <label class="btn btn-sm <%= vendor_mode == "manual" ? "btn-primary" : "btn-soft" %>"
+                 data-party-switch-target="option"
+                 data-party-switch-mode-value="manual">
+            <%= f.radio_button :vendor_entry_mode,
+                  "manual",
+                  checked: vendor_mode == "manual",
+                  class: "hidden",
+                  data: { party_switch_target: "mode", action: "change->party-switch#update" } %>
+            Manuálne
+          </label>
+        </div>
+      </div>
+
+      <div class="<%= "hidden" unless vendor_mode == "saved" %>" data-party-switch-target="saved">
+        <%= f.label :vendor_id, "Vyber predajcu", class: "label font-semibold text-lg" %>
+        <%= f.collection_select :vendor_id,
+              @saved_vendors,
+              :id,
+              :name,
+              { prompt: "Vyber uloženého predajcu" },
+              { class: "select select-bordered w-full" } %>
+      </div>
+
+      <div class="<%= "hidden" unless vendor_mode == "manual" %>" data-party-switch-target="manual">
         <%= f.label :vendor, "Dodávateľ / predajca", class: "label font-semibold text-lg" %>
         <%= f.text_field :vendor, class: "input input-bordered w-full" %>
       </div>
@@ -49,15 +86,6 @@
               payment_method_options(@expense.payment_method),
               { prompt: "Vyber spôsob platby" },
               { class: "select select-bordered w-full" } %>
-      </div>
-
-      <div>
-        <%= f.label :tax_rate, "DPH (%)", class: "label font-semibold text-lg" %>
-        <%= f.number_field :tax_rate,
-              step: 0.01,
-              min: 0,
-              class: "input input-bordered w-full",
-              data: { expense_items_target: "taxRate", action: "input->expense-items#updateTotals" } %>
       </div>
 
       <div class="md:col-span-2">
@@ -80,7 +108,8 @@
             <th>Názov</th>
             <th>Množstvo</th>
             <th>Cena</th>
-            <th class="px-0 text-right">Spolu za položku</th>
+            <th>DPH (%)</th>
+            <th class="px-0 text-right">Spolu s DPH</th>
             <th></th>
           </tr>
         </thead>
@@ -93,7 +122,7 @@
     </div>
 
     <template data-expense-items-target="template">
-      <%= f.fields_for :expense_items, ExpenseItem.new(quantity: 1), child_index: "NEW_RECORD" do |item_fields| %>
+      <%= f.fields_for :expense_items, ExpenseItem.new(quantity: 1, tax_rate: 23), child_index: "NEW_RECORD" do |item_fields| %>
         <%= render "expense_item_fields", f: item_fields %>
       <% end %>
     </template>

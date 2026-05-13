@@ -1,0 +1,11 @@
+corner_shop:
+  company: one
+  name: Corner Shop
+  address: Market Street 4
+  note: Grocery supplier
+
+supply_store:
+  company: another_one
+  name: Supply Store
+  address: Warehouse Road 8
+  note: Other company supplier

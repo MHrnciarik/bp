@@ -1,0 +1,34 @@
+<div class="flex flex-col items-center">
+  <div class="w-full max-w-5xl">
+    <% if @clients.any? %>
+      <div class="flex justify-center my-4">
+        <div class="overflow-x-auto rounded-box border-3 border-base-content/10 w-full">
+          <table class="table-lg table-fixed w-full">
+            <thead>
+              <tr class="border-b-2 border-base-content/10 text-left">
+                <th>Meno</th>
+                <th>Adresa</th>
+                <th>Poznámka</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @clients.each do |client| %>
+                <tr class="hover:bg-base-300 border-b border-base-content/5 cursor-pointer" onclick="window.location='<%= client_path(client) %>'">
+                  <td><%= client.name %></td>
+                  <td><%= client.address.presence || "—" %></td>
+                  <td><%= truncate(client.note, length: 80).presence || "—" %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% else %>
+      <p class="my-4">Nenašli sa žiadni klienti.</p>
+    <% end %>
+  </div>
+</div>
+
+<div class="fab m-4">
+  <%= link_to "+", new_client_path, class: "btn btn-lg btn-circle btn-primary" %>
+</div>

@@ -23,6 +23,14 @@
           class: "input input-bordered w-full text-right",
           data: { expense_items_target: "price", action: "input->expense-items#updateTotals" } %>
   </td>
+  <td class="px-0 py-2 pr-2">
+    <%= f.number_field :tax_rate,
+          step: 0.10,
+          min: 0,
+          placeholder: "23",
+          class: "input input-bordered w-full text-right",
+          data: { expense_items_target: "taxRate", action: "input->expense-items#updateTotals" } %>
+  </td>
   <td class="px-0 py-2 pr-2 text-right align-middle">
     <span class="font-semibold" data-expense-items-target="lineTotal">0.00</span>
   </td>

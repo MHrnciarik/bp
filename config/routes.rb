@@ -22,6 +22,9 @@ Rails.application.routes.draw do
 
   resources :invoices
   resources :expenses
+  resources :clients
+  resources :vendors
+  resources :achievements, only: [ :index ]
   resources :profiles, only: [ :index ]
   resources :companies, only: [ :new, :create, :destroy ] do
     patch :select, on: :member

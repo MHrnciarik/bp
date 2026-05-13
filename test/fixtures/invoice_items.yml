@@ -3,15 +3,18 @@ one_design:
   name: Design
   quantity: 1
   unit_price: 49.99
+  tax_rate: 23
 
 two_consulting:
   invoice: two
   name: Consulting
   quantity: 1
   unit_price: 199.99
+  tax_rate: 23
 
 three_support:
   invoice: three
   name: Support
   quantity: 1
   unit_price: 120.00
+  tax_rate: 23

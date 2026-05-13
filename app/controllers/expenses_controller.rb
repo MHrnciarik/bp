@@ -2,6 +2,7 @@ class ExpensesController < ApplicationController
   before_action :require_login
   before_action :require_current_company
   before_action :set_expense, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_vendors, only: [ :new, :create, :edit, :update ]
 
   def index
     company_expenses = current_company.expenses
@@ -22,7 +23,7 @@ class ExpensesController < ApplicationController
   end
 
   def new
-    @expense = current_company.expenses.new(date: Date.current, currency: "EUR", tax_rate: 23)
+    @expense = current_company.expenses.new(date: Date.current, currency: "EUR")
     build_expense_item
   end
 
@@ -31,6 +32,7 @@ class ExpensesController < ApplicationController
     if @expense.save
        MissionTracker.track_expense_logged(current_user)
        MissionTracker.track_expense_categorized(current_user) if @expense.category.present?
+       flash_achievements(AchievementTracker.award_new!(current_user))
        redirect_to expenses_path, notice: "Výdavok bol vytvorený."
     else
       build_expense_item
@@ -64,12 +66,13 @@ class ExpensesController < ApplicationController
     params.require(:expense).permit(
       :date,
       :currency,
-      :tax_rate,
+      :vendor_id,
+      :vendor_entry_mode,
       :vendor,
       :category,
       :payment_method,
       :note,
-      expense_items_attributes: [ :id, :name, :quantity, :unit_price, :_destroy ]
+      expense_items_attributes: [ :id, :name, :quantity, :unit_price, :tax_rate, :_destroy ]
     )
   end
 
@@ -77,9 +80,13 @@ class ExpensesController < ApplicationController
     @expense = current_company.expenses.find(params[:id])
   end
 
+  def set_vendors
+    @saved_vendors = current_company.vendors.alphabetical
+  end
+
   def build_expense_item
     return if @expense.expense_items.reject(&:marked_for_destruction?).any?
 
-    @expense.expense_items.build(quantity: 1)
+    @expense.expense_items.build(quantity: 1, tax_rate: 23)
   end
 end

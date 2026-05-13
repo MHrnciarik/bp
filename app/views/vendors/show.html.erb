@@ -1,0 +1,33 @@
+<div class="flex flex-col items-center gap-4">
+  <div class="w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-4">
+    <div class="grid grid-cols-2 items-center">
+      <div class="justify-self-start">
+        <%= link_to "Späť", vendors_path, class: "btn btn-outline btn-sm" %>
+      </div>
+      <div class="justify-self-end">
+        <%= link_to "Upraviť", edit_vendor_path(@vendor), class: "btn btn-primary btn-sm" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-6">
+    <dl class="grid grid-cols-2 gap-x-8 gap-y-3">
+      <dt class="font-semibold text-base-content/80">Meno</dt>
+      <dd><%= @vendor.name %></dd>
+
+      <dt class="font-semibold text-base-content/80">Adresa</dt>
+      <dd><%= simple_format(@vendor.address.presence || "—") %></dd>
+
+      <dt class="font-semibold text-base-content/80">Poznámka</dt>
+      <dd><%= simple_format(@vendor.note.presence || "—") %></dd>
+    </dl>
+  </div>
+
+  <div class="w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-4">
+    <div class="flex justify-end">
+      <%= button_to "Vymazať", vendor_path(@vendor), method: :delete,
+            data: { turbo_confirm: "Naozaj chceš vymazať tohto predajcu?" },
+            class: "btn btn-error btn-outline btn-sm" %>
+    </div>
+  </div>
+</div>

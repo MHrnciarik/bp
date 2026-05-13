@@ -43,6 +43,24 @@
         </div>
       <% end %>
 
+      <% if flash[:achievements].present? %>
+        <div class="mx-auto mb-4 w-full max-w-md px-4">
+          <% flash[:achievements].each do |achievement| %>
+            <div class="alert alert-info shadow-md mb-4">
+              <div class="flex items-center gap-3">
+                <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-3 border-info-content/40 font-bold">
+                  <%= achievement["target"] || achievement[:target] %>
+                </span>
+                <span>
+                  Nový odznak:
+                  <strong><%= achievement["title"] || achievement[:title] %></strong>
+                </span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
       <%= yield %>
     </main>
   </body>

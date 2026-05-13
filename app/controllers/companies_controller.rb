@@ -10,6 +10,7 @@ class CompaniesController < ApplicationController
 
     if @company.save
       session[:current_company_id] ||= @company.id
+      flash_achievements(AchievementTracker.award_new!(current_user))
       redirect_to profiles_path, notice: "Firma bola vytvorená."
     else
       render :new, status: :unprocessable_entity

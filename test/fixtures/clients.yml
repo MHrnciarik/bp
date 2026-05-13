@@ -1,0 +1,11 @@
+acme:
+  company: one
+  name: Acme Corp
+  address: Example Street 1
+  note: Main invoice client
+
+gamma:
+  company: another_one
+  name: Gamma GmbH
+  address: Third Street 3
+  note: Other company client

@@ -8,3 +8,60 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+@media print {
+  @page {
+    margin: 14mm;
+  }
+
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  nav,
+  footer,
+  .navbar,
+  .footer,
+  .fab,
+  .alert,
+  .no-print {
+    display: none !important;
+  }
+
+  main {
+    padding-top: 0 !important;
+  }
+
+  .invoice-print {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .invoice-print > div {
+    max-width: none !important;
+    width: 100% !important;
+    break-inside: avoid;
+    border: 1.5px solid #111 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    margin-bottom: 18px !important;
+    padding: 18px !important;
+  }
+
+  .invoice-print table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  .invoice-print th,
+  .invoice-print td {
+    border-bottom: 1px solid #111 !important;
+    padding: 10px !important;
+  }
+
+  .invoice-print a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+}

@@ -28,14 +28,13 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
           expense: {
             date: Date.current,
             currency: "EUR",
-            tax_rate: 23,
             vendor: "Market Hall",
             category: "Shopping",
             payment_method: "Debit Card",
             note: "Weekly groceries",
             expense_items_attributes: {
-              "0" => { name: "Tomatoes", quantity: 3, unit_price: 1.25 },
-              "1" => { name: "Pasta", quantity: 2, unit_price: 2.10 }
+              "0" => { name: "Tomatoes", quantity: 3, unit_price: 1.25, tax_rate: 23 },
+              "1" => { name: "Pasta", quantity: 2, unit_price: 2.10, tax_rate: 23 }
             }
           }
         }
@@ -56,5 +55,28 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, category_progress.progress
     assert log_progress.claimable?
     assert category_progress.claimable?
+  end
+
+  test "creates an expense with a saved vendor" do
+    assert_difference("Expense.count", 1) do
+      post expenses_path, params: {
+        expense: {
+          date: Date.current,
+          currency: "EUR",
+          vendor_entry_mode: "saved",
+          vendor_id: vendors(:corner_shop).id,
+          category: "Shopping",
+          payment_method: "Debit Card",
+          expense_items_attributes: {
+            "0" => { name: "Apples", quantity: 2, unit_price: 2.50, tax_rate: 23 }
+          }
+        }
+      }
+    end
+
+    expense = Expense.order(:created_at).last
+
+    assert_equal vendors(:corner_shop), expense.vendor_record
+    assert_equal "Corner Shop", expense.vendor
   end
 end

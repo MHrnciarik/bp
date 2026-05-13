@@ -1,0 +1,39 @@
+<%= form_with model: @client,
+      class: "w-full max-w-3xl mx-auto rounded-box border-3 border-base-content/10 bg-base-100/30 p-6 space-y-6 mb-4" do |f| %>
+  <% if @client.errors.any? %>
+    <div class="rounded-box border border-error/30 bg-error/10 p-4">
+      <h2 class="font-semibold text-error">Oprav zvýraznené chyby.</h2>
+      <ul class="mt-2 list-disc pl-5 text-sm">
+        <% @client.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <fieldset class="fieldset">
+    <legend class="fieldset-legend text-2xl font-bold mb-2">Detaily klienta</legend>
+
+    <div class="space-y-4">
+      <div>
+        <%= f.label :name, "Meno", class: "label font-semibold text-lg" %>
+        <%= f.text_field :name, class: "input input-bordered w-full" %>
+      </div>
+
+      <div>
+        <%= f.label :address, "Adresa", class: "label font-semibold text-lg" %>
+        <%= f.text_area :address, rows: 3, class: "textarea textarea-bordered w-full" %>
+      </div>
+
+      <div>
+        <%= f.label :note, "Poznámka", class: "label font-semibold text-lg" %>
+        <%= f.text_area :note, rows: 4, class: "textarea textarea-bordered w-full" %>
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="flex items-center justify-end gap-3">
+    <%= link_to "Zrušiť", clients_path, class: "btn btn-ghost" %>
+    <%= f.submit(@client.persisted? ? "Uložiť klienta" : "Vytvoriť klienta", class: "btn btn-primary") %>
+  </div>
+<% end %>

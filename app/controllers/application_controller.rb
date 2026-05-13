@@ -48,4 +48,10 @@ class ApplicationController < ActionController::Base
 
     redirect_to profiles_path, alert: "Najprv pridaj alebo vyber firmu."
   end
+
+  def flash_achievements(achievements)
+    return if achievements.blank?
+
+    flash[:achievements] = achievements.map { |achievement| achievement.slice(:title, :target) }
+  end
 end

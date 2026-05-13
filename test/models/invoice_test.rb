@@ -8,16 +8,15 @@ class InvoiceTest < ActiveSupport::TestCase
       due_on: Date.current,
       status: "unpaid",
       currency: "EUR",
-      tax_rate: 23,
       client_name: "Acme",
       invoice_items: [
-        InvoiceItem.new(name: "Design", quantity: 2, unit_price: 50),
-        InvoiceItem.new(name: "Support", quantity: 1, unit_price: 25)
+        InvoiceItem.new(name: "Design", quantity: 2, unit_price: 50, tax_rate: 23),
+        InvoiceItem.new(name: "Support", quantity: 1, unit_price: 25, tax_rate: 10)
       ]
     )
 
     assert invoice.valid?
-    assert_equal BigDecimal("153.75"), invoice.amount
+    assert_equal BigDecimal("150.50"), invoice.amount
   end
 
   test "requires at least one item" do
@@ -27,7 +26,6 @@ class InvoiceTest < ActiveSupport::TestCase
       due_on: Date.current,
       status: "unpaid",
       currency: "EUR",
-      tax_rate: 23,
       client_name: "Acme"
     )
 
@@ -42,9 +40,8 @@ class InvoiceTest < ActiveSupport::TestCase
       due_on: Date.current,
       status: "unpaid",
       currency: "EUR",
-      tax_rate: 23,
       client_name: "Acme",
-      invoice_items: [ InvoiceItem.new(name: "Design", quantity: 1, unit_price: 125.50) ]
+      invoice_items: [ InvoiceItem.new(name: "Design", quantity: 1, unit_price: 125.50, tax_rate: 23) ]
     )
 
     assert_equal format(Invoice::NUMBER_FORMAT, invoice.id), invoice.reload.number
@@ -57,9 +54,8 @@ class InvoiceTest < ActiveSupport::TestCase
       due_on: Date.current,
       status: "unpaid",
       currency: "EUR",
-      tax_rate: 23,
       client_name: "Acme",
-      invoice_items: [ InvoiceItem.new(name: "Design", quantity: 1, unit_price: 125.50) ]
+      invoice_items: [ InvoiceItem.new(name: "Design", quantity: 1, unit_price: 125.50, tax_rate: 23) ]
     )
 
     expected_number = format(Invoice::NUMBER_FORMAT, Invoice.maximum(:id).to_i + 1)

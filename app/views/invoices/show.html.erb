@@ -1,10 +1,11 @@
-<div class="flex flex-col items-center gap-4">
-  <div class="w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-4">
+<div class="invoice-print flex flex-col items-center gap-4">
+  <div class="no-print w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-4">
     <div class="grid grid-cols-2 items-center">
       <div class="justify-self-start">
         <%= link_to "Späť", invoices_path, class: "btn btn-outline btn-sm" %>
       </div>
-      <div class="justify-self-end">
+      <div class="flex justify-self-end gap-3">
+        <button type="button" class="btn btn-outline btn-sm" onclick="window.print()">Tlačiť</button>
         <%= link_to "Upraviť", edit_invoice_path(@invoice), class: "btn btn-primary btn-sm" %>
       </div>
     </div>
@@ -22,7 +23,13 @@
       <dd><%= l(@invoice.due_on, format: :long) %></dd>
 
       <dt class="font-semibold text-base-content/80">Klient</dt>
-      <dd><%= @invoice.client_name.presence || "—" %></dd>
+      <dd>
+        <% if @invoice.client.present? %>
+          <%= link_to @invoice.client_name, client_path(@invoice.client), class: "link link-primary" %>
+        <% else %>
+          <%= @invoice.client_name.presence || "—" %>
+        <% end %>
+      </dd>
 
       <dt class="font-semibold text-base-content/80">Adresa klienta</dt>
       <dd><%= @invoice.client_address.presence || "—" %></dd>
@@ -32,9 +39,6 @@
 
       <dt class="font-semibold text-base-content/80">Mena</dt>
       <dd><%= @invoice.currency %></dd>
-
-      <dt class="font-semibold text-base-content/80">DPH</dt>
-      <dd><%= number_with_precision(@invoice.tax_rate, precision: 2) %>%</dd>
     </dl>
   </div>
 
@@ -49,8 +53,9 @@
           <tr class="text-base-content/70">
             <th>Názov</th>
             <th class="text-right">Množstvo</th>
-            <th class="text-right">Cena</th>
-            <th class="text-right">Spolu za položku</th>
+            <th class="text-right">Cena bez DPH</th>
+            <th class="text-right">DPH</th>
+            <th class="text-right">Spolu s DPH</th>
           </tr>
         </thead>
         <tbody>
@@ -59,6 +64,7 @@
               <td><%= item.name %></td>
               <td class="text-right"><%= item.quantity %></td>
               <td class="text-right"><%= number_to_currency(item.unit_price, unit: @invoice.currency, format: "%n %u") %></td>
+              <td class="text-right"><%= number_with_precision(item.tax_rate, precision: 2) %>%</td>
               <td class="text-right font-semibold"><%= number_to_currency(item.total_price, unit: @invoice.currency, format: "%n %u") %></td>
             </tr>
           <% end %>
@@ -87,7 +93,7 @@
           </span>
         </h2>
       </div>
-      <div class="justify-self-end">
+      <div class="no-print justify-self-end">
         <%= button_to "Vymazať", invoice_path(@invoice), method: :delete,
               data: { turbo_confirm: "Naozaj chceš vymazať túto faktúru?" },
               class: "btn btn-error btn-outline btn-sm" %>
