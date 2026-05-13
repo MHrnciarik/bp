@@ -1,5 +1,5 @@
 <%= form_with model: @invoice,
-      class: "w-full max-w-4xl mx-auto rounded-box border-3 border-base-content/10 bg-base-100/30 p-6 space-y-6 my-4",
+      class: "w-full max-w-4xl mx-auto rounded-box border-3 border-base-content/10 bg-base-100/30 p-6 space-y-6 mb-4",
       data: { controller: "expense-items" } do |f| %>
   <% if @invoice.errors.any? %>
     <div class="rounded-box border border-error/30 bg-error/10 p-4">

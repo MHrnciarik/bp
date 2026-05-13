@@ -1,4 +1,4 @@
-<div class="mx-auto w-full max-w-6xl px-4 py-12">
+<div class="mx-auto w-full max-w-6xl px-4 pb-12">
   <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
     <section class="rounded-[2.5rem] border border-base-content/10 bg-base-100 shadow-xl">
       <div class="border-b border-base-content/10 px-8 py-8 text-center">
@@ -13,7 +13,7 @@
                 <h2 class="text-lg font-semibold"><%= mission[:title] %></h2>
                 <p class="mt-1 text-sm text-base-content/65">
                   <% if mission[:claimed] %>
-                    Odmena vyzdvihnutá
+                    Odmena bola získaná
                   <% else %>
                     Postup: <%= mission[:progress] %> / <%= mission[:target] %>
                   <% end %>
@@ -23,12 +23,12 @@
               <div class="shrink-0 text-right">
                 <p class="text-xl font-bold"><%= mission[:xp] %> XP</p>
                 <% if mission[:claimable] %>
-                  <%= button_to "Vyzdvihnúť",
+                  <%= button_to "Získať",
                     claim_mission_path(period: mission[:period], mission_key: mission[:key]),
                     method: :post,
                     class: "btn btn-success btn-sm mt-2" %>
                 <% elsif mission[:claimed] %>
-                  <span class="badge badge-primary mt-2">Vyzdvihnuté</span>
+                  <span class="badge badge-primary mt-2">Získané</span>
                 <% elsif mission[:completed] %>
                   <span class="badge badge-accent mt-2">Pripravené</span>
                 <% else %>
@@ -54,7 +54,7 @@
                 <h2 class="text-lg font-semibold"><%= mission[:title] %></h2>
                 <p class="mt-1 text-sm text-base-content/65">
                   <% if mission[:claimed] %>
-                    Odmena vyzdvihnutá
+                    Odmena bola získaná
                   <% else %>
                     Postup: <%= mission[:progress] %> / <%= mission[:target] %>
                   <% end %>
@@ -64,12 +64,12 @@
               <div class="shrink-0 text-right">
                 <p class="text-xl font-bold"><%= mission[:xp] %> XP</p>
                 <% if mission[:claimable] %>
-                  <%= button_to "Vyzdvihnúť",
+                  <%= button_to "Získať",
                     claim_mission_path(period: mission[:period], mission_key: mission[:key]),
                     method: :post,
                     class: "btn btn-success btn-sm mt-2" %>
                 <% elsif mission[:claimed] %>
-                  <span class="badge badge-primary mt-2">Vyzdvihnuté</span>
+                  <span class="badge badge-primary mt-2">Získané</span>
                 <% elsif mission[:completed] %>
                   <span class="badge badge-accent mt-2">Pripravené</span>
                 <% else %>

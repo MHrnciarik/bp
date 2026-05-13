@@ -13,9 +13,9 @@ class DailyMissionsController < ApplicationController
       mission_key: params[:mission_key]
     )
 
-    redirect_to daily_missions_path, notice: "Odmena za misiu bola vyzdvihnutá."
+    redirect_to daily_missions_path, notice: "Odmena bola získaná."
   rescue ActiveRecord::RecordNotFound, ArgumentError
-    redirect_to daily_missions_path, alert: "Táto misia ešte nie je pripravená na vyzdvihnutie."
+    redirect_to daily_missions_path, alert: "Táto misia ešte nie je pripravená na získanie."
   end
 
   private

@@ -1,0 +1,32 @@
+<div class="mx-auto w-full max-w-4xl px-4 pb-10">
+  <div class="rounded-box overflow-hidden border-3 border-base-content/10 bg-base-100/30">
+    <div class="border-b border-base-content/10 px-6 py-5">
+      <h1 class="text-3xl font-bold center text-center">TOP Používatelia</h1>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="table w-full">
+        <thead>
+          <tr class="text-base-content/70">
+            <th class="w-20">Poradie</th>
+            <th>Používateľ</th>
+            <th class="text-right">Úroveň</th>
+            <th class="text-right">XP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @users.each_with_index do |user, index| %>
+            <tr class="<%= "bg-primary/10" if user == current_user %>">
+              <td class="font-semibold"><%= index + 1 %>.</td>
+              <td class="font-semibold"><%= user.username %></td>
+              <td class="text-right">
+                <span class="badge badge-primary">Úroveň <%= user.level %></span>
+              </td>
+              <td class="text-right font-semibold"><%= user.xp %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
