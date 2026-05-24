@@ -78,7 +78,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_13_133000) do
   end
 
   create_table "invoices", force: :cascade do |t|
-    t.decimal "amount", precision: 10, scale: 2
+    t.decimal "amount", precision: 12, scale: 2, default: "0.0", null: false
     t.text "client_address"
     t.bigint "client_id"
     t.string "client_name"

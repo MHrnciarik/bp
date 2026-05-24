@@ -12,5 +12,6 @@ class AchievementsControllerTest < ActionDispatch::IntegrationTest
     assert_select "h1", text: "Moje odznaky"
     assert_match "Prvé prihlásenie", response.body
     assert_match "10 faktúr", response.body
+    assert_no_match "Prvá firma", response.body
   end
 end

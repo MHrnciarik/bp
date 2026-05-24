@@ -5,7 +5,6 @@ class AchievementCatalog
     expenses: "Výdavky",
     clients: "Klienti",
     vendors: "Predajcovia",
-    companies: "Firmy",
     levels: "Úrovne"
   }.freeze
 
@@ -34,11 +33,6 @@ class AchievementCatalog
     { key: "vendors_10", group: :vendors, title: "10 predajcov", target: 10, metric: :vendors },
     { key: "vendors_50", group: :vendors, title: "50 predajcov", target: 50, metric: :vendors },
     { key: "vendors_100", group: :vendors, title: "100 predajcov", target: 100, metric: :vendors },
-
-    { key: "companies_1", group: :companies, title: "Prvá firma", target: 1, metric: :companies },
-    { key: "companies_3", group: :companies, title: "3 firmy", target: 3, metric: :companies },
-    { key: "companies_5", group: :companies, title: "5 firiem", target: 5, metric: :companies },
-    { key: "companies_10", group: :companies, title: "10 firiem", target: 10, metric: :companies },
 
     { key: "levels_2", group: :levels, title: "Úroveň 2", target: 2, metric: :levels },
     { key: "levels_5", group: :levels, title: "Úroveň 5", target: 5, metric: :levels },
