@@ -10,17 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_13_133000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_24_122000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "clients", force: :cascade do |t|
     t.text "address"
+    t.string "city"
     t.bigint "company_id", null: false
+    t.string "country"
     t.datetime "created_at", null: false
+    t.string "dic"
+    t.string "email"
+    t.string "first_name"
+    t.string "ic_dph"
+    t.string "ico"
+    t.string "kind", default: "company", null: false
+    t.string "last_name"
     t.string "name", null: false
     t.text "note"
+    t.string "phone"
+    t.string "postal_code"
+    t.string "street"
     t.datetime "updated_at", null: false
+    t.string "website"
     t.index ["company_id"], name: "index_clients_on_company_id"
   end
 
@@ -80,8 +93,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_13_133000) do
   create_table "invoices", force: :cascade do |t|
     t.decimal "amount", precision: 12, scale: 2, default: "0.0", null: false
     t.text "client_address"
+    t.string "client_city"
+    t.string "client_country"
+    t.string "client_dic"
+    t.string "client_ic_dph"
+    t.string "client_ico"
     t.bigint "client_id"
     t.string "client_name"
+    t.string "client_postal_code"
+    t.string "client_street"
     t.bigint "company_id"
     t.datetime "created_at", null: false
     t.string "currency"

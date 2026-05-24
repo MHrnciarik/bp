@@ -32,7 +32,28 @@
       </dd>
 
       <dt class="font-semibold text-base-content/80">Adresa klienta</dt>
-      <dd><%= @invoice.client_address.presence || "—" %></dd>
+      <dd><%= @invoice.client_display_address.presence || "—" %></dd>
+
+      <dt class="font-semibold text-base-content/80">IČO klienta</dt>
+      <dd><%= @invoice.client_ico.presence || "—" %></dd>
+
+      <dt class="font-semibold text-base-content/80">DIČ klienta</dt>
+      <dd><%= @invoice.client_dic.presence || "—" %></dd>
+
+      <dt class="font-semibold text-base-content/80">IČ DPH klienta</dt>
+      <dd><%= @invoice.client_ic_dph.presence || "—" %></dd>
+
+      <dt class="font-semibold text-base-content/80">Ulica klienta</dt>
+      <dd><%= @invoice.client_street.presence || "—" %></dd>
+
+      <dt class="font-semibold text-base-content/80">Mesto klienta</dt>
+      <dd><%= @invoice.client_city.presence || "—" %></dd>
+
+      <dt class="font-semibold text-base-content/80">PSČ klienta</dt>
+      <dd><%= @invoice.client_postal_code.presence || "—" %></dd>
+
+      <dt class="font-semibold text-base-content/80">Krajina klienta</dt>
+      <dd><%= @invoice.client_country.presence || "—" %></dd>
 
       <dt class="font-semibold text-base-content/80">Stav</dt>
       <dd><%= invoice_status_label(@invoice.status) %></dd>

@@ -11,7 +11,7 @@ class ClientsController < ApplicationController
   end
 
   def new
-    @client = current_company.clients.new
+    @client = current_company.clients.new(kind: "company")
   end
 
   def create
@@ -48,6 +48,23 @@ class ClientsController < ApplicationController
   end
 
   def client_params
-    params.require(:client).permit(:name, :address, :note)
+    params.require(:client).permit(
+      :name,
+      :kind,
+      :first_name,
+      :last_name,
+      :ico,
+      :dic,
+      :ic_dph,
+      :street,
+      :city,
+      :postal_code,
+      :country,
+      :email,
+      :website,
+      :phone,
+      :address,
+      :note
+    )
   end
 end

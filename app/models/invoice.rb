@@ -3,7 +3,7 @@ class Invoice < ApplicationRecord
   belongs_to :client, optional: true
   has_many :invoice_items, dependent: :destroy, inverse_of: :invoice
   accepts_nested_attributes_for :invoice_items, allow_destroy: true, reject_if: :all_blank
-  attr_accessor :client_entry_mode
+  attr_accessor :client_entry_mode, :client_kind, :client_first_name, :client_last_name
 
   STATUSES = [ "unpaid", "paid", "overdue" ].freeze
   CURRENCIES = [ "EUR", "CZK", "HUF", "PLN" ].freeze
@@ -16,6 +16,42 @@ class Invoice < ApplicationRecord
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :status, inclusion: { in: STATUSES }
   validates :currency, inclusion: { in: CURRENCIES }
+  validates :client_ico, format: {
+    with: /\A\d{8}\z/,
+    message: "must be exactly 8 digits",
+    allow_blank: true
+  }
+  validates :client_dic, format: {
+    with: /\A\d{8,10}\z/,
+    message: "must be 8 to 10 digits",
+    allow_blank: true
+  }
+  validates :client_ic_dph, format: {
+    with: /\A(SK|CZ)\d{10}\z/,
+    message: "must start with SK or CZ followed by 10 digits",
+    allow_blank: true
+  }
+  validates :client_postal_code, format: {
+    with: /\A\d{5}\z/,
+    message: "must be exactly 5 digits",
+    allow_blank: true
+  }
+  validates :client_name,
+    :client_ico,
+    :client_street,
+    :client_city,
+    :client_postal_code,
+    :client_country,
+    presence: true,
+    if: :manual_company_client?
+  validates :client_first_name,
+    :client_last_name,
+    :client_street,
+    :client_city,
+    :client_postal_code,
+    :client_country,
+    presence: true,
+    if: :manual_person_client?
   validate :must_have_at_least_one_item
   validate :client_must_belong_to_company
 
@@ -45,6 +81,19 @@ class Invoice < ApplicationRecord
     active_invoice_items.sum(&:subtotal_price)
   end
 
+  def client_display_address
+    [
+      client_street,
+      client_city,
+      client_postal_code,
+      client_country
+    ].filter_map(&:presence).join(", ").presence || client_address
+  end
+
+  def manual_client_kind
+    client_kind.presence || (new_record? || client_ico.present? ? "company" : "person")
+  end
+
   private
 
   def assign_generated_number
@@ -62,15 +111,57 @@ class Invoice < ApplicationRecord
   end
 
   def sync_client_fields
-    if client_entry_mode == "manual"
+    if manual_client_entry?
       self.client = nil
+      sync_manual_client_fields
+      sync_client_address_from_parts
       return
     end
 
     return if client.blank?
 
-    self.client_name = client.name
-    self.client_address = client.address
+    self.client_name = client.display_name
+    self.client_ico = client.ico
+    self.client_dic = client.dic
+    self.client_ic_dph = client.ic_dph
+    self.client_street = client.street
+    self.client_city = client.city
+    self.client_postal_code = client.postal_code
+    self.client_country = client.country
+    self.client_address = client.display_address
+  end
+
+  def sync_manual_client_fields
+    if manual_person_client?
+      self.client_name = [ client_first_name, client_last_name ].filter_map(&:presence).join(" ")
+      self.client_ico = nil
+      self.client_dic = nil
+      self.client_ic_dph = nil
+    else
+      self.client_first_name = nil
+      self.client_last_name = nil
+    end
+  end
+
+  def sync_client_address_from_parts
+    self.client_address = client_display_address if [
+      client_street,
+      client_city,
+      client_postal_code,
+      client_country
+    ].any?(&:present?)
+  end
+
+  def manual_client_entry?
+    client_entry_mode == "manual"
+  end
+
+  def manual_company_client?
+    manual_client_entry? && manual_client_kind == "company"
+  end
+
+  def manual_person_client?
+    manual_client_entry? && manual_client_kind == "person"
   end
 
   def must_have_at_least_one_item

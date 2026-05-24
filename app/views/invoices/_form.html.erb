@@ -64,14 +64,117 @@
         <%= f.collection_select :client_id,
               @clients,
               :id,
-              :name,
+              :display_name,
               { prompt: "Vyber uloženého klienta" },
               { class: "select select-bordered w-full" } %>
       </div>
 
-      <div class="<%= "hidden" unless client_mode == "manual" %>" data-party-switch-target="manual">
-        <%= f.label :client_name, "Klient", class: "label font-semibold text-lg" %>
-        <%= f.text_field :client_name, class: "input input-bordered w-full" %>
+      <% manual_client_kind = @invoice.manual_client_kind %>
+      <div class="md:col-span-2 space-y-5 <%= "hidden" unless client_mode == "manual" %>"
+           data-party-switch-target="manual"
+           data-controller="client-kind">
+        <div>
+          <span class="label font-semibold text-lg">Typ klienta</span>
+          <div class="flex flex-wrap gap-3">
+            <label class="btn btn-sm <%= manual_client_kind == "company" ? "btn-primary" : "btn-soft" %>"
+                   data-client-kind-target="option"
+                   data-client-kind-mode-value="company">
+              <%= f.radio_button :client_kind,
+                    "company",
+                    checked: manual_client_kind == "company",
+                    class: "hidden",
+                    data: { client_kind_target: "mode", action: "change->client-kind#update" } %>
+              Firma
+            </label>
+            <label class="btn btn-sm <%= manual_client_kind == "person" ? "btn-primary" : "btn-soft" %>"
+                   data-client-kind-target="option"
+                   data-client-kind-mode-value="person">
+              <%= f.radio_button :client_kind,
+                    "person",
+                    checked: manual_client_kind == "person",
+                    class: "hidden",
+                    data: { client_kind_target: "mode", action: "change->client-kind#update" } %>
+              Súkromná osoba
+            </label>
+          </div>
+        </div>
+
+        <div class="space-y-4 <%= "hidden" unless manual_client_kind == "company" %>" data-client-kind-target="company">
+          <div>
+            <%= f.label :client_name, "Názov firmy", class: "label font-semibold text-lg" %>
+            <%= f.text_field :client_name, class: "input input-bordered w-full" %>
+          </div>
+
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div>
+              <%= f.label :client_ico, "IČO klienta", class: "label font-semibold text-lg" %>
+              <%= f.text_field :client_ico,
+                class: "input input-bordered w-full",
+                inputmode: "numeric",
+                maxlength: 8,
+                pattern: "\\d{8}",
+                title: "Zadaj presne 8 číslic" %>
+            </div>
+
+            <div>
+              <%= f.label :client_dic, "DIČ klienta", class: "label font-semibold text-lg" %>
+              <%= f.text_field :client_dic,
+                class: "input input-bordered w-full",
+                inputmode: "numeric",
+                maxlength: 10,
+                pattern: "\\d{8,10}",
+                title: "Zadaj 8 až 10 číslic" %>
+            </div>
+          </div>
+
+          <div>
+            <%= f.label :client_ic_dph, "IČ DPH klienta", class: "label font-semibold text-lg" %>
+            <%= f.text_field :client_ic_dph,
+              class: "input input-bordered w-full",
+              maxlength: 12,
+              pattern: "(SK|CZ)\\d{10}",
+              title: "Zadaj SK alebo CZ a potom 10 číslic" %>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 <%= "hidden" unless manual_client_kind == "person" %>" data-client-kind-target="person">
+          <div>
+            <%= f.label :client_first_name, "Meno", class: "label font-semibold text-lg" %>
+            <%= f.text_field :client_first_name, class: "input input-bordered w-full" %>
+          </div>
+
+          <div>
+            <%= f.label :client_last_name, "Priezvisko", class: "label font-semibold text-lg" %>
+            <%= f.text_field :client_last_name, class: "input input-bordered w-full" %>
+          </div>
+        </div>
+
+        <div>
+          <%= f.label :client_street, "Ulica klienta", class: "label font-semibold text-lg" %>
+          <%= f.text_field :client_street, class: "input input-bordered w-full" %>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div>
+            <%= f.label :client_city, "Mesto klienta", class: "label font-semibold text-lg" %>
+            <%= f.text_field :client_city, class: "input input-bordered w-full" %>
+          </div>
+
+          <div>
+            <%= f.label :client_postal_code, "PSČ klienta", class: "label font-semibold text-lg" %>
+            <%= f.text_field :client_postal_code,
+              class: "input input-bordered w-full",
+              inputmode: "numeric",
+              maxlength: 5,
+              pattern: "\\d{5}",
+              title: "Zadaj presne 5 číslic" %>
+          </div>
+
+          <div>
+            <%= f.label :client_country, "Krajina klienta", class: "label font-semibold text-lg" %>
+            <%= f.text_field :client_country, class: "input input-bordered w-full" %>
+          </div>
+        </div>
       </div>
 
       <div>
@@ -91,13 +194,6 @@
                 class: "select select-bordered w-full",
                 data: { expense_items_target: "currencySelect", action: "change->expense-items#updateCurrency" }
               } %>
-      </div>
-
-      <div class="md:col-span-2 <%= "hidden" unless client_mode == "manual" %>" data-party-switch-target="manual">
-        <%= f.label :client_address, "Adresa klienta", class: "label font-semibold text-lg" %>
-        <%= f.text_field :client_address,
-              placeholder: "Adresa",
-              class: "input input-bordered w-full" %>
       </div>
 
       <div class="md:col-span-2">

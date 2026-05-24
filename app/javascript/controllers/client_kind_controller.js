@@ -1,19 +1,19 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = [ "manual", "mode", "option", "saved" ]
+  static targets = [ "company", "mode", "option", "person" ]
 
   connect() {
     this.update()
   }
 
   update() {
-    const mode = this.modeTargets.find((field) => field.checked)?.value || "manual"
+    const kind = this.modeTargets.find((field) => field.checked)?.value || "company"
 
-    this.toggleGroup(this.savedTargets, mode !== "saved")
-    this.toggleGroup(this.manualTargets, mode !== "manual")
+    this.toggleGroup(this.companyTargets, kind !== "company")
+    this.toggleGroup(this.personTargets, kind !== "person")
     this.optionTargets.forEach((element) => {
-      const active = element.dataset.partySwitchModeValue === mode
+      const active = element.dataset.clientKindModeValue === kind
 
       element.classList.toggle("btn-primary", active)
       element.classList.toggle("btn-soft", !active)

@@ -6,7 +6,9 @@
           <table class="table-lg table-fixed w-full">
             <thead>
               <tr class="border-b-2 border-base-content/10 text-left">
-                <th>Meno</th>
+                <th>Klient</th>
+                <th>Typ</th>
+                <th>IČO</th>
                 <th>Adresa</th>
                 <th>Poznámka</th>
               </tr>
@@ -14,8 +16,10 @@
             <tbody>
               <% @clients.each do |client| %>
                 <tr class="hover:bg-base-300 border-b border-base-content/5 cursor-pointer" onclick="window.location='<%= client_path(client) %>'">
-                  <td><%= client.name %></td>
-                  <td><%= client.address.presence || "—" %></td>
+                  <td><%= client.display_name %></td>
+                  <td><%= client.person? ? "Súkromná osoba" : "Firma" %></td>
+                  <td><%= client.ico.presence || "—" %></td>
+                  <td><%= client.display_address.presence || "—" %></td>
                   <td><%= truncate(client.note, length: 80).presence || "—" %></td>
                 </tr>
               <% end %>

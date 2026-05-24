@@ -1,11 +1,27 @@
 acme:
   company: one
+  kind: company
   name: Acme Corp
+  ico: 12345678
+  dic: 1234567890
+  ic_dph: SK1234567890
+  street: Example Street 1
+  city: Bratislava
+  postal_code: 81101
+  country: Slovensko
   address: Example Street 1
   note: Main invoice client
 
 gamma:
   company: another_one
+  kind: company
   name: Gamma GmbH
+  ico: 87654321
+  dic: 9876543210
+  ic_dph: CZ9876543210
+  street: Third Street 3
+  city: Praha
+  postal_code: 11000
+  country: Cesko
   address: Third Street 3
   note: Other company client
