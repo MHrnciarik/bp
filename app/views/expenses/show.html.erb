@@ -1,16 +1,19 @@
-<div class="flex flex-col items-center gap-4">
-  <div class="w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-4">
+<div class="invoice-print flex flex-col items-center gap-4">
+  <div class="no-print w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-4">
     <div class="grid grid-cols-2 items-center">
       <div class="justify-self-start">
         <%= link_to "Späť", expenses_path, class:"btn btn-outline btn-sm" %>
       </div>
-      <div class="justify-self-end">
+      <div class="flex justify-self-end gap-3">
+        <button type="button" class="btn btn-outline btn-sm" onclick="window.print()">Tlačiť</button>
         <%= link_to "Upraviť", edit_expense_path(@expense), class:"btn btn-primary btn-sm" %>
       </div>
     </div>
   </div>
 
   <div class="w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-6">
+    <h1 class="mb-4 text-2xl font-bold">Výdavok</h1>
+
     <dl class="grid grid-cols-2 gap-x-8 gap-y-3">
       <dt class="font-semibold text-base-content/80">Dátum</dt>
       <dd><%= l(@expense.date, format: :long) %></dd>
@@ -113,7 +116,7 @@
           </span>
         </h2>
       </div>
-      <div class="justify-self-end">
+      <div class="no-print justify-self-end">
         <%= button_to "Vymazať", expense_path(@expense), method: :delete,
               data: { turbo_confirm: "Naozaj chceš vymazať tento výdavok?" },
               class:"btn btn-error btn-outline btn-sm" %>
