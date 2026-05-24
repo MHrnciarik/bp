@@ -254,7 +254,7 @@
     </div>
 
     <div class="flex items-center justify-end gap-3">
-      <%= link_to "Zrušiť", invoices_path, class: "btn btn-ghost" %>
+      <%= link_to "Zrušiť", @invoice.persisted? ? invoice_path(@invoice) : invoices_path, class: "btn btn-ghost" %>
       <%= f.submit(@invoice.persisted? ? "Uložiť faktúru" : "Vytvoriť faktúru", class: "btn btn-primary") %>
     </div>
   </div>

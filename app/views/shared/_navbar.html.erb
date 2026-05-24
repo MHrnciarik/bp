@@ -6,7 +6,6 @@
     <%= link_to "Výdavky", expenses_path, class: "btn btn-ghost text-xl" %>
     <%= link_to "Klienti", clients_path, class: "btn btn-ghost text-xl" %>
     <%= link_to "Predajcovia", vendors_path, class: "btn btn-ghost text-xl" %>
-    <%= link_to "Profil", profiles_path, class: "btn btn-ghost text-xl" %>
   </div>
   <div class="navbar-end px-4">
     <% if logged_in? && current_company.present? %>
@@ -24,7 +23,13 @@
         <% end %>
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M12 2v4"/><path d="M16 2v4"/><rect width="16" height="18" x="4" y="4" rx="2"/><path d="M8 10h6"/><path d="M8 14h8"/><path d="M8 18h5"/></svg>
       <% end %>
-      <%= link_to profiles_path, class: "badge badge-primary badge-lg max-w-56 truncate" do %>
+      <%= link_to profiles_path, class: "badge badge-primary badge-lg max-w-56 truncate relative" do %>
+        <% if login_streak_reward_ready_to_claim? %>
+          <span
+            class="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-error shadow-sm shadow-error/70"
+            data-testid="login-streak-notification-dot"
+          ></span>
+        <% end %>
         <%= current_company.name %>
       <% end %>
     <% end %>

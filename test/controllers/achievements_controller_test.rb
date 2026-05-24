@@ -10,6 +10,9 @@ class AchievementsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "h1", text: "Moje odznaky"
+    assert_match "Odmeny za odznaky", response.body
+    assert_match "5 odznakov", response.body
+    assert_match "250 XP", response.body
     assert_match "Prvé prihlásenie", response.body
     assert_match "10 faktúr", response.body
     assert_no_match "Prvá firma", response.body

@@ -3,6 +3,12 @@ class User < ApplicationRecord
     3 => 100,
     7 => 250
   }.freeze
+  ACHIEVEMENT_COUNT_REWARDS = {
+    5 => 50,
+    10 => 100,
+    15 => 150,
+    20 => 250
+  }.freeze
 
   has_secure_password
   has_many :companies, dependent: :destroy
@@ -61,6 +67,29 @@ class User < ApplicationRecord
       update!(login_streak_reward_7_claimed_at: Time.current)
     else
       raise ArgumentError, "Unknown login streak reward"
+    end
+  end
+
+  def achievement_count_reward_claimed?(target)
+    achievement_count_reward_claimed_at(target).present?
+  end
+
+  def mark_achievement_count_reward_claimed(target)
+    public_send(:"achievement_reward_#{target}_claimed_at=", Time.current)
+  end
+
+  private
+
+  def achievement_count_reward_claimed_at(target)
+    case target.to_i
+    when 5
+      achievement_reward_5_claimed_at
+    when 10
+      achievement_reward_10_claimed_at
+    when 15
+      achievement_reward_15_claimed_at
+    when 20
+      achievement_reward_20_claimed_at
     end
   end
 end

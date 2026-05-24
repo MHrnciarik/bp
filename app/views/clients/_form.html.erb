@@ -130,7 +130,7 @@
 
         <div>
           <%= f.label :website, "Webová stránka", class: "label font-semibold text-lg" %>
-          <%= f.url_field :website, class: "input input-bordered w-full" %>
+          <%= f.text_field :website, class: "input input-bordered w-full" %>
         </div>
 
         <div>
@@ -147,7 +147,7 @@
   </fieldset>
 
   <div class="flex items-center justify-end gap-3">
-    <%= link_to "Zrušiť", clients_path, class: "btn btn-ghost" %>
+    <%= link_to "Zrušiť", @client.persisted? ? client_path(@client) : clients_path, class: "btn btn-ghost" %>
     <%= f.submit(@client.persisted? ? "Uložiť klienta" : "Vytvoriť klienta", class: "btn btn-primary") %>
   </div>
 <% end %>

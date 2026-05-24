@@ -34,10 +34,11 @@ class Client < ApplicationRecord
   }
   validates :website, format: {
     with: /\Ahttps?:\/\/[^\s]+\z/,
-    message: "must start with http:// or https://",
+    message: "must be a valid web address",
     allow_blank: true
   }
 
+  before_validation :normalize_website
   before_validation :sync_name_from_person
   before_validation :clear_irrelevant_fields
   before_validation :sync_address_from_parts
@@ -61,6 +62,13 @@ class Client < ApplicationRecord
   end
 
   private
+
+  def normalize_website
+    self.website = website.to_s.strip.presence
+    return if website.blank? || website.match?(/\Ahttps?:\/\//i)
+
+    self.website = "https://#{website}"
+  end
 
   def sync_name_from_person
     return unless person?

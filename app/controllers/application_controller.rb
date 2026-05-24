@@ -5,7 +5,11 @@ class ApplicationController < ActionController::Base
   # Changes to the importmap will invalidate the etag for HTML responses
   stale_when_importmap_changes
 
-  helper_method :current_user, :logged_in?, :current_company, :missions_ready_to_claim?
+  helper_method :current_user,
+    :logged_in?,
+    :current_company,
+    :missions_ready_to_claim?,
+    :login_streak_reward_ready_to_claim?
 
   private
 
@@ -37,6 +41,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def login_streak_reward_ready_to_claim?
+    return false unless logged_in?
+
+    @login_streak_reward_ready_to_claim ||= User::LOGIN_STREAK_REWARDS.keys.any? do |day|
+      current_user.login_streak_reward_claimable?(day)
+    end
+  end
+
   def require_login
     return if logged_in?
 
@@ -50,8 +62,13 @@ class ApplicationController < ActionController::Base
   end
 
   def flash_achievements(achievements)
-    return if achievements.blank?
+    if achievements.present?
+      flash[:achievements] = Array(flash[:achievements]) + achievements.map { |achievement| achievement.slice(:title, :target) }
+    end
 
-    flash[:achievements] = achievements.map { |achievement| achievement.slice(:title, :target) }
+    xp_rewards = AchievementTracker.award_badge_count_rewards!(current_user)
+    return if xp_rewards.blank?
+
+    flash[:xp_rewards] = Array(flash[:xp_rewards]) + xp_rewards
   end
 end

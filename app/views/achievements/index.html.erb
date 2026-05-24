@@ -2,13 +2,40 @@
   <div class="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
     <div>
       <h1 class="text-3xl font-bold">Moje odznaky</h1>
-      <p class="mt-2 text-base-content/70">
-        Získané odznaky: <%= @earned_by_key.size %> / <%= AchievementCatalog.all.size %>
-      </p>
     </div>
 
     <%= link_to "Späť na profil", profiles_path, class: "btn btn-outline" %>
   </div>
+
+  <section class="mb-6 rounded-box border-3 border-base-content/10 bg-base-100/30 p-5">
+    <div class="mb-5 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+      <div>
+        <h2 class="text-xl font-bold">Odmeny za odznaky</h2>
+        <p class="text-sm text-base-content/60">
+          Získané odznaky: <%= @earned_achievement_count %>
+        </p>
+      </div>
+    </div>
+
+    <div class="relative px-3 py-4">
+      <div class="absolute left-8 right-8 top-12 h-1 rounded-full bg-base-content/15"></div>
+
+      <div class="relative grid grid-cols-4 gap-3">
+        <% User::ACHIEVEMENT_COUNT_REWARDS.each do |target, xp| %>
+          <% claimed = current_user.achievement_count_reward_claimed?(target) %>
+          <div class="flex flex-col items-center gap-2 text-center">
+            <div class="flex h-14 w-14 items-center justify-center rounded-full border-3 font-bold <%= claimed ? "border-success bg-success text-success-content" : "border-base-content/25 bg-base-100 text-base-content/70" %>">
+              <%= claimed ? "✓" : target %>
+            </div>
+            <div>
+              <p class="text-sm font-semibold"><%= target %> odznakov</p>
+              <p class="text-xs text-base-content/60"><%= xp %> XP</p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
 
   <div class="space-y-6">
     <% @achievement_groups.each do |group, achievements| %>

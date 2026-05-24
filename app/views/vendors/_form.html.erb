@@ -33,7 +33,7 @@
   </fieldset>
 
   <div class="flex items-center justify-end gap-3">
-    <%= link_to "Zrušiť", vendors_path, class: "btn btn-ghost" %>
+    <%= link_to "Zrušiť", @vendor.persisted? ? vendor_path(@vendor) : vendors_path, class: "btn btn-ghost" %>
     <%= f.submit(@vendor.persisted? ? "Uložiť predajcu" : "Vytvoriť predajcu", class: "btn btn-primary") %>
   </div>
 <% end %>

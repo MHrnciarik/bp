@@ -28,7 +28,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
           postal_code: "04001",
           country: "Slovensko",
           email: "billing@beta.example",
-          website: "https://beta.example",
+          website: "www.beta.example",
           phone: "+421 900 123 456",
           address: "Other Street 2",
           note: "Secondary client"
@@ -43,7 +43,7 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Beta LLC", client.name
     assert_equal "23456789", client.ico
     assert_equal "billing@beta.example", client.email
-    assert_equal "https://beta.example", client.website
+    assert_equal "https://www.beta.example", client.website
     assert_equal "+421 900 123 456", client.phone
     assert_equal "Other Street 2, Kosice, 04001, Slovensko", client.address
   end
@@ -72,6 +72,26 @@ class ClientsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Jana Novakova", client.name
     assert_equal "Jana Novakova", client.display_name
     assert_nil client.ico
+  end
+
+  test "updates a client website without protocol" do
+    patch client_path(clients(:acme)), params: {
+      client: {
+        kind: "company",
+        name: "Acme Corp",
+        ico: "12345678",
+        dic: "1234567890",
+        ic_dph: "SK1234567890",
+        street: "Example Street 1",
+        city: "Bratislava",
+        postal_code: "81101",
+        country: "Slovensko",
+        website: "www.acme.example"
+      }
+    }
+
+    assert_redirected_to client_path(clients(:acme))
+    assert_equal "https://www.acme.example", clients(:acme).reload.website
   end
 
   test "does not create a client without required business details" do

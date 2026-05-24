@@ -26,6 +26,33 @@ class AchievementTracker
       awarded
     end
 
+    def award_badge_count_rewards!(user)
+      rewards = []
+      previous_level = nil
+
+      user.with_lock do
+        user.reload
+        previous_level = user.level
+        earned_count = user.user_achievements.where(achievement_key: achievement_keys).count
+
+        User::ACHIEVEMENT_COUNT_REWARDS.each do |target, xp|
+          next if earned_count < target
+          next if user.achievement_count_reward_claimed?(target)
+
+          user.xp += xp
+          user.mark_achievement_count_reward_claimed(target)
+          rewards << { target: target, xp: xp }
+        end
+
+        user.save! if rewards.any?
+      end
+
+      levels_gained = user.reload.level - previous_level.to_i
+      MissionTracker.track_level_up(user, amount: levels_gained) if rewards.any? && levels_gained.positive?
+
+      rewards
+    end
+
     def stats_for(user)
       company_scope = Company.where(user_id: user.id)
 
@@ -38,6 +65,10 @@ class AchievementTracker
         companies: company_scope.count,
         levels: user.level
       }
+    end
+
+    def achievement_keys
+      AchievementCatalog.all.map { |achievement| achievement[:key] }
     end
   end
 end

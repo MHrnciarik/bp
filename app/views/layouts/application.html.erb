@@ -61,6 +61,24 @@
         </div>
       <% end %>
 
+      <% if flash[:xp_rewards].present? %>
+        <div class="mx-auto mb-4 w-full max-w-md px-4">
+          <% flash[:xp_rewards].each do |reward| %>
+            <div class="alert alert-success shadow-md mb-4">
+              <div class="flex items-center gap-3">
+                <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-3 border-success-content/40 font-bold">
+                  XP
+                </span>
+                <span>
+                  Získali ste <strong><%= reward["target"] || reward[:target] %> odznakov</strong> -
+                  získavate <strong><%= reward["xp"] || reward[:xp] %> XP</strong>.
+                </span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
       <%= yield %>
     </main>
   </body>
