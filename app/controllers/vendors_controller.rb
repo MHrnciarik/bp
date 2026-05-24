@@ -11,7 +11,7 @@ class VendorsController < ApplicationController
   end
 
   def new
-    @vendor = current_company.vendors.new
+    @vendor = current_company.vendors.new(kind: "company")
   end
 
   def create
@@ -48,6 +48,23 @@ class VendorsController < ApplicationController
   end
 
   def vendor_params
-    params.require(:vendor).permit(:name, :address, :note)
+    params.require(:vendor).permit(
+      :kind,
+      :name,
+      :first_name,
+      :last_name,
+      :ico,
+      :dic,
+      :ic_dph,
+      :street,
+      :city,
+      :postal_code,
+      :country,
+      :email,
+      :website,
+      :phone,
+      :address,
+      :note
+    )
   end
 end

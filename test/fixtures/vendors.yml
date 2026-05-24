@@ -1,11 +1,27 @@
 corner_shop:
   company: one
+  kind: company
   name: Corner Shop
+  ico: 12345678
+  dic: 1234567890
+  ic_dph: SK1234567890
+  street: Market Street 4
+  city: Bratislava
+  postal_code: 81101
+  country: Slovensko
   address: Market Street 4
   note: Grocery supplier
 
 supply_store:
   company: another_one
+  kind: company
   name: Supply Store
+  ico: 87654321
+  dic: 9876543210
+  ic_dph: CZ9876543210
+  street: Warehouse Road 8
+  city: Praha
+  postal_code: 11000
+  country: Cesko
   address: Warehouse Road 8
   note: Other company supplier

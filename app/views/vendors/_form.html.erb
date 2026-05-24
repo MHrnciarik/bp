@@ -1,5 +1,6 @@
 <%= form_with model: @vendor,
-      class: "w-full max-w-3xl mx-auto rounded-box border-3 border-base-content/10 bg-base-100/30 p-6 space-y-6 mb-4" do |f| %>
+      class: "w-full max-w-3xl mx-auto rounded-box border-3 border-base-content/10 bg-base-100/30 p-6 space-y-6 mb-4",
+      data: { controller: "client-kind" } do |f| %>
   <% if @vendor.errors.any? %>
     <div class="rounded-box border border-error/30 bg-error/10 p-4">
       <h2 class="font-semibold text-error">Oprav zvýraznené chyby.</h2>
@@ -15,14 +16,127 @@
     <legend class="fieldset-legend text-2xl font-bold mb-2">Detaily predajcu</legend>
 
     <div class="space-y-4">
+      <% vendor_kind = @vendor.kind.presence || "company" %>
       <div>
-        <%= f.label :name, "Meno", class: "label font-semibold text-lg" %>
-        <%= f.text_field :name, class: "input input-bordered w-full" %>
+        <span class="label font-semibold text-lg">Typ predajcu</span>
+        <div class="flex flex-wrap gap-3">
+          <label class="btn btn-sm <%= vendor_kind == "company" ? "btn-primary" : "btn-soft" %>"
+                 data-client-kind-target="option"
+                 data-client-kind-mode-value="company">
+            <%= f.radio_button :kind,
+                  "company",
+                  checked: vendor_kind == "company",
+                  class: "hidden",
+                  data: { client_kind_target: "mode", action: "change->client-kind#update" } %>
+            Firma
+          </label>
+          <label class="btn btn-sm <%= vendor_kind == "person" ? "btn-primary" : "btn-soft" %>"
+                 data-client-kind-target="option"
+                 data-client-kind-mode-value="person">
+            <%= f.radio_button :kind,
+                  "person",
+                  checked: vendor_kind == "person",
+                  class: "hidden",
+                  data: { client_kind_target: "mode", action: "change->client-kind#update" } %>
+            Súkromná osoba
+          </label>
+        </div>
+      </div>
+
+      <div class="space-y-4 <%= "hidden" unless vendor_kind == "company" %>" data-client-kind-target="company">
+        <div>
+          <%= f.label :name, "Názov firmy", class: "label font-semibold text-lg" %>
+          <%= f.text_field :name, required: true, class: "input input-bordered w-full" %>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <%= f.label :ico, "IČO", class: "label font-semibold text-lg" %>
+            <%= f.text_field :ico,
+              class: "input input-bordered w-full",
+              required: true,
+              inputmode: "numeric",
+              maxlength: 8,
+              pattern: "\\d{8}",
+              title: "Zadaj presne 8 číslic" %>
+          </div>
+
+          <div>
+            <%= f.label :dic, "DIČ", class: "label font-semibold text-lg" %>
+            <%= f.text_field :dic,
+              class: "input input-bordered w-full",
+              inputmode: "numeric",
+              maxlength: 10,
+              pattern: "\\d{8,10}",
+              title: "Zadaj 8 až 10 číslic" %>
+          </div>
+        </div>
+
+        <div>
+          <%= f.label :ic_dph, "IČ DPH", class: "label font-semibold text-lg" %>
+          <%= f.text_field :ic_dph,
+            class: "input input-bordered w-full",
+            maxlength: 12,
+            pattern: "(SK|CZ)\\d{10}",
+            title: "Zadaj SK alebo CZ a potom 10 číslic" %>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 <%= "hidden" unless vendor_kind == "person" %>" data-client-kind-target="person">
+        <div>
+          <%= f.label :first_name, "Meno", class: "label font-semibold text-lg" %>
+          <%= f.text_field :first_name, required: true, class: "input input-bordered w-full" %>
+        </div>
+
+        <div>
+          <%= f.label :last_name, "Priezvisko", class: "label font-semibold text-lg" %>
+          <%= f.text_field :last_name, required: true, class: "input input-bordered w-full" %>
+        </div>
       </div>
 
       <div>
-        <%= f.label :address, "Adresa", class: "label font-semibold text-lg" %>
-        <%= f.text_area :address, rows: 3, class: "textarea textarea-bordered w-full" %>
+        <%= f.label :street, "Ulica", class: "label font-semibold text-lg" %>
+        <%= f.text_field :street, required: true, class: "input input-bordered w-full" %>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div>
+          <%= f.label :city, "Mesto", class: "label font-semibold text-lg" %>
+          <%= f.text_field :city, required: true, class: "input input-bordered w-full" %>
+        </div>
+
+        <div>
+          <%= f.label :postal_code, "PSČ", class: "label font-semibold text-lg" %>
+          <%= f.text_field :postal_code,
+            class: "input input-bordered w-full",
+            required: true,
+            inputmode: "numeric",
+            maxlength: 5,
+            pattern: "\\d{5}",
+            title: "Zadaj presne 5 číslic" %>
+        </div>
+
+        <div>
+          <%= f.label :country, "Krajina", class: "label font-semibold text-lg" %>
+          <%= f.text_field :country, required: true, class: "input input-bordered w-full" %>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div>
+          <%= f.label :email, "E-mail", class: "label font-semibold text-lg" %>
+          <%= f.email_field :email, class: "input input-bordered w-full" %>
+        </div>
+
+        <div>
+          <%= f.label :website, "Webová stránka", class: "label font-semibold text-lg" %>
+          <%= f.text_field :website, class: "input input-bordered w-full" %>
+        </div>
+
+        <div>
+          <%= f.label :phone, "Telefónne číslo", class: "label font-semibold text-lg" %>
+          <%= f.telephone_field :phone, class: "input input-bordered w-full" %>
+        </div>
       </div>
 
       <div>

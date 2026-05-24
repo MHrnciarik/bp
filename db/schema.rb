@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_24_123000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_24_124000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -74,7 +74,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_123000) do
     t.string "payment_method"
     t.datetime "updated_at", null: false
     t.string "vendor"
+    t.string "vendor_city"
+    t.string "vendor_country"
+    t.string "vendor_dic"
+    t.string "vendor_ic_dph"
+    t.string "vendor_ico"
     t.bigint "vendor_id"
+    t.string "vendor_postal_code"
+    t.string "vendor_street"
     t.index ["company_id"], name: "index_expenses_on_company_id"
     t.index ["vendor_id"], name: "index_expenses_on_vendor_id"
   end
@@ -161,11 +168,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_123000) do
 
   create_table "vendors", force: :cascade do |t|
     t.text "address"
+    t.string "city"
     t.bigint "company_id", null: false
+    t.string "country"
     t.datetime "created_at", null: false
+    t.string "dic"
+    t.string "email"
+    t.string "first_name"
+    t.string "ic_dph"
+    t.string "ico"
+    t.string "kind", default: "company", null: false
+    t.string "last_name"
     t.string "name", null: false
     t.text "note"
+    t.string "phone"
+    t.string "postal_code"
+    t.string "street"
     t.datetime "updated_at", null: false
+    t.string "website"
     t.index ["company_id"], name: "index_vendors_on_company_id"
   end
 

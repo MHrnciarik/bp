@@ -28,7 +28,16 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
           expense: {
             date: Date.current,
             currency: "EUR",
+            vendor_entry_mode: "manual",
+            vendor_kind: "company",
             vendor: "Market Hall",
+            vendor_ico: "23456789",
+            vendor_dic: "2345678901",
+            vendor_ic_dph: "SK2345678901",
+            vendor_street: "Central Square 5",
+            vendor_city: "Kosice",
+            vendor_postal_code: "04001",
+            vendor_country: "Slovensko",
             category: "Shopping",
             payment_method: "Debit Card",
             note: "Weekly groceries",
@@ -45,6 +54,8 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to expenses_path
     assert_equal companies(:one), expense.company
+    assert_equal "23456789", expense.vendor_ico
+    assert_equal "Central Square 5, Kosice, 04001, Slovensko", expense.vendor_display_address
     assert_equal BigDecimal("9.78"), expense.amount
     assert_equal [ "Pasta", "Tomatoes" ], expense.expense_items.order(:name).pluck(:name)
 
@@ -78,5 +89,38 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal vendors(:corner_shop), expense.vendor_record
     assert_equal "Corner Shop", expense.vendor
+    assert_equal "12345678", expense.vendor_ico
+    assert_equal "Market Street 4, Bratislava, 81101, Slovensko", expense.vendor_display_address
+  end
+
+  test "creates a manual expense for a private person vendor" do
+    assert_difference("Expense.count", 1) do
+      post expenses_path, params: {
+        expense: {
+          date: Date.current,
+          currency: "EUR",
+          vendor_entry_mode: "manual",
+          vendor_kind: "person",
+          vendor_first_name: "Jana",
+          vendor_last_name: "Novakova",
+          vendor_street: "Personal Street 4",
+          vendor_city: "Nitra",
+          vendor_postal_code: "94901",
+          vendor_country: "Slovensko",
+          category: "Shopping",
+          payment_method: "Debit Card",
+          expense_items_attributes: {
+            "0" => { name: "Apples", quantity: 2, unit_price: 2.50, tax_rate: 23 }
+          }
+        }
+      }
+    end
+
+    expense = Expense.order(:created_at).last
+
+    assert_redirected_to expenses_path
+    assert_equal "Jana Novakova", expense.vendor
+    assert_nil expense.vendor_ico
+    assert_equal "Personal Street 4, Nitra, 94901, Slovensko", expense.vendor_display_address
   end
 end

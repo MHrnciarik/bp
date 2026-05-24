@@ -33,6 +33,30 @@
         <% end %>
       </dd>
 
+      <dt class="font-semibold text-base-content/80">Adresa predajcu</dt>
+      <dd><%= @expense.vendor_display_address.presence || "—" %></dd>
+
+      <dt class="font-semibold text-base-content/80">IČO predajcu</dt>
+      <dd><%= @expense.vendor_ico.presence || "—" %></dd>
+
+      <dt class="font-semibold text-base-content/80">DIČ predajcu</dt>
+      <dd><%= @expense.vendor_dic.presence || "—" %></dd>
+
+      <dt class="font-semibold text-base-content/80">IČ DPH predajcu</dt>
+      <dd><%= @expense.vendor_ic_dph.presence || "—" %></dd>
+
+      <dt class="font-semibold text-base-content/80">Ulica predajcu</dt>
+      <dd><%= @expense.vendor_street.presence || "—" %></dd>
+
+      <dt class="font-semibold text-base-content/80">Mesto predajcu</dt>
+      <dd><%= @expense.vendor_city.presence || "—" %></dd>
+
+      <dt class="font-semibold text-base-content/80">PSČ predajcu</dt>
+      <dd><%= @expense.vendor_postal_code.presence || "—" %></dd>
+
+      <dt class="font-semibold text-base-content/80">Krajina predajcu</dt>
+      <dd><%= @expense.vendor_country.presence || "—" %></dd>
+
       <dt class="font-semibold text-base-content/80">Mena</dt>
       <dd><%= @expense.currency %></dd>
     </dl>

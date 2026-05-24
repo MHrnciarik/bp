@@ -12,11 +12,58 @@
 
   <div class="w-full max-w-3xl rounded-box border-3 border-base-content/10 bg-base-100/30 p-6">
     <dl class="grid grid-cols-2 gap-x-8 gap-y-3">
-      <dt class="font-semibold text-base-content/80">Meno</dt>
-      <dd><%= @vendor.name %></dd>
+      <dt class="font-semibold text-base-content/80">Typ predajcu</dt>
+      <dd><%= @vendor.person? ? "Súkromná osoba" : "Firma" %></dd>
+
+      <dt class="font-semibold text-base-content/80"><%= @vendor.person? ? "Meno a priezvisko" : "Názov firmy" %></dt>
+      <dd><%= @vendor.display_name %></dd>
+
+      <% if @vendor.company? %>
+        <dt class="font-semibold text-base-content/80">IČO</dt>
+        <dd><%= @vendor.ico.presence || "—" %></dd>
+
+        <dt class="font-semibold text-base-content/80">DIČ</dt>
+        <dd><%= @vendor.dic.presence || "—" %></dd>
+
+        <dt class="font-semibold text-base-content/80">IČ DPH</dt>
+        <dd><%= @vendor.ic_dph.presence || "—" %></dd>
+      <% end %>
+
+      <dt class="font-semibold text-base-content/80">Ulica</dt>
+      <dd><%= @vendor.street.presence || "—" %></dd>
+
+      <dt class="font-semibold text-base-content/80">Mesto</dt>
+      <dd><%= @vendor.city.presence || "—" %></dd>
+
+      <dt class="font-semibold text-base-content/80">PSČ</dt>
+      <dd><%= @vendor.postal_code.presence || "—" %></dd>
+
+      <dt class="font-semibold text-base-content/80">Krajina</dt>
+      <dd><%= @vendor.country.presence || "—" %></dd>
 
       <dt class="font-semibold text-base-content/80">Adresa</dt>
-      <dd><%= simple_format(@vendor.address.presence || "—") %></dd>
+      <dd><%= simple_format(@vendor.display_address.presence || "—") %></dd>
+
+      <dt class="font-semibold text-base-content/80">E-mail</dt>
+      <dd>
+        <% if @vendor.email.present? %>
+          <%= mail_to @vendor.email, @vendor.email, class: "link link-primary" %>
+        <% else %>
+          —
+        <% end %>
+      </dd>
+
+      <dt class="font-semibold text-base-content/80">Webová stránka</dt>
+      <dd>
+        <% if @vendor.website.present? %>
+          <%= link_to @vendor.website, @vendor.website, class: "link link-primary", target: "_blank", rel: "noopener" %>
+        <% else %>
+          —
+        <% end %>
+      </dd>
+
+      <dt class="font-semibold text-base-content/80">Telefónne číslo</dt>
+      <dd><%= @vendor.phone.presence || "—" %></dd>
 
       <dt class="font-semibold text-base-content/80">Poznámka</dt>
       <dd><%= simple_format(@vendor.note.presence || "—") %></dd>

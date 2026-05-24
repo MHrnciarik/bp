@@ -62,14 +62,117 @@
         <%= f.collection_select :vendor_id,
               @saved_vendors,
               :id,
-              :name,
+              :display_name,
               { prompt: "Vyber uloženého predajcu" },
               { class: "select select-bordered w-full" } %>
       </div>
 
-      <div class="<%= "hidden" unless vendor_mode == "manual" %>" data-party-switch-target="manual">
-        <%= f.label :vendor, "Dodávateľ / predajca", class: "label font-semibold text-lg" %>
-        <%= f.text_field :vendor, class: "input input-bordered w-full" %>
+      <% manual_vendor_kind = @expense.manual_vendor_kind %>
+      <div class="md:col-span-2 space-y-5 <%= "hidden" unless vendor_mode == "manual" %>"
+           data-party-switch-target="manual"
+           data-controller="client-kind">
+        <div>
+          <span class="label font-semibold text-lg">Typ predajcu</span>
+          <div class="flex flex-wrap gap-3">
+            <label class="btn btn-sm <%= manual_vendor_kind == "company" ? "btn-primary" : "btn-soft" %>"
+                   data-client-kind-target="option"
+                   data-client-kind-mode-value="company">
+              <%= f.radio_button :vendor_kind,
+                    "company",
+                    checked: manual_vendor_kind == "company",
+                    class: "hidden",
+                    data: { client_kind_target: "mode", action: "change->client-kind#update" } %>
+              Firma
+            </label>
+            <label class="btn btn-sm <%= manual_vendor_kind == "person" ? "btn-primary" : "btn-soft" %>"
+                   data-client-kind-target="option"
+                   data-client-kind-mode-value="person">
+              <%= f.radio_button :vendor_kind,
+                    "person",
+                    checked: manual_vendor_kind == "person",
+                    class: "hidden",
+                    data: { client_kind_target: "mode", action: "change->client-kind#update" } %>
+              Súkromná osoba
+            </label>
+          </div>
+        </div>
+
+        <div class="space-y-4 <%= "hidden" unless manual_vendor_kind == "company" %>" data-client-kind-target="company">
+          <div>
+            <%= f.label :vendor, "Názov firmy", class: "label font-semibold text-lg" %>
+            <%= f.text_field :vendor, class: "input input-bordered w-full" %>
+          </div>
+
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div>
+              <%= f.label :vendor_ico, "IČO predajcu", class: "label font-semibold text-lg" %>
+              <%= f.text_field :vendor_ico,
+                class: "input input-bordered w-full",
+                inputmode: "numeric",
+                maxlength: 8,
+                pattern: "\\d{8}",
+                title: "Zadaj presne 8 číslic" %>
+            </div>
+
+            <div>
+              <%= f.label :vendor_dic, "DIČ predajcu", class: "label font-semibold text-lg" %>
+              <%= f.text_field :vendor_dic,
+                class: "input input-bordered w-full",
+                inputmode: "numeric",
+                maxlength: 10,
+                pattern: "\\d{8,10}",
+                title: "Zadaj 8 až 10 číslic" %>
+            </div>
+          </div>
+
+          <div>
+            <%= f.label :vendor_ic_dph, "IČ DPH predajcu", class: "label font-semibold text-lg" %>
+            <%= f.text_field :vendor_ic_dph,
+              class: "input input-bordered w-full",
+              maxlength: 12,
+              pattern: "(SK|CZ)\\d{10}",
+              title: "Zadaj SK alebo CZ a potom 10 číslic" %>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 <%= "hidden" unless manual_vendor_kind == "person" %>" data-client-kind-target="person">
+          <div>
+            <%= f.label :vendor_first_name, "Meno", class: "label font-semibold text-lg" %>
+            <%= f.text_field :vendor_first_name, class: "input input-bordered w-full" %>
+          </div>
+
+          <div>
+            <%= f.label :vendor_last_name, "Priezvisko", class: "label font-semibold text-lg" %>
+            <%= f.text_field :vendor_last_name, class: "input input-bordered w-full" %>
+          </div>
+        </div>
+
+        <div>
+          <%= f.label :vendor_street, "Ulica predajcu", class: "label font-semibold text-lg" %>
+          <%= f.text_field :vendor_street, class: "input input-bordered w-full" %>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div>
+            <%= f.label :vendor_city, "Mesto predajcu", class: "label font-semibold text-lg" %>
+            <%= f.text_field :vendor_city, class: "input input-bordered w-full" %>
+          </div>
+
+          <div>
+            <%= f.label :vendor_postal_code, "PSČ predajcu", class: "label font-semibold text-lg" %>
+            <%= f.text_field :vendor_postal_code,
+              class: "input input-bordered w-full",
+              inputmode: "numeric",
+              maxlength: 5,
+              pattern: "\\d{5}",
+              title: "Zadaj presne 5 číslic" %>
+          </div>
+
+          <div>
+            <%= f.label :vendor_country, "Krajina predajcu", class: "label font-semibold text-lg" %>
+            <%= f.text_field :vendor_country, class: "input input-bordered w-full" %>
+          </div>
+        </div>
       </div>
 
       <div>

@@ -6,7 +6,9 @@
           <table class="table-lg table-fixed w-full">
             <thead>
               <tr class="border-b-2 border-base-content/10 text-left">
-                <th>Meno</th>
+                <th>Predajca</th>
+                <th>Typ</th>
+                <th>IČO</th>
                 <th>Adresa</th>
                 <th>Poznámka</th>
               </tr>
@@ -14,8 +16,10 @@
             <tbody>
               <% @vendors.each do |vendor| %>
                 <tr class="hover:bg-base-300 border-b border-base-content/5 cursor-pointer" onclick="window.location='<%= vendor_path(vendor) %>'">
-                  <td><%= vendor.name %></td>
-                  <td><%= vendor.address.presence || "—" %></td>
+                  <td><%= vendor.display_name %></td>
+                  <td><%= vendor.person? ? "Súkromná osoba" : "Firma" %></td>
+                  <td><%= vendor.ico.presence || "—" %></td>
+                  <td><%= vendor.display_address.presence || "—" %></td>
                   <td><%= truncate(vendor.note, length: 80).presence || "—" %></td>
                 </tr>
               <% end %>
