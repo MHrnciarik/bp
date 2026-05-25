@@ -60,12 +60,9 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
     assert_equal [ "Pasta", "Tomatoes" ], expense.expense_items.order(:name).pluck(:name)
 
     log_progress = users(:one).mission_progresses.find_by!(mission_key: "log_expense", period: "daily", period_start: Date.current)
-    category_progress = users(:one).mission_progresses.find_by!(mission_key: "set_expense_category", period: "daily", period_start: Date.current)
 
     assert_equal 1, log_progress.progress
-    assert_equal 1, category_progress.progress
     assert log_progress.claimable?
-    assert category_progress.claimable?
   end
 
   test "creates an expense with a saved vendor" do
@@ -91,6 +88,13 @@ class ExpensesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Corner Shop", expense.vendor
     assert_equal "12345678", expense.vendor_ico
     assert_equal "Market Street 4, Bratislava, 81101, Slovensko", expense.vendor_display_address
+
+    progress = users(:one).mission_progresses.find_by!(mission_key: "log_expense_with_saved_vendor", period: "daily", period_start: Date.current)
+    assert_equal 1, progress.progress
+    assert progress.claimable?
+
+    weekly_progress = users(:one).mission_progresses.find_by!(mission_key: "log_3_expenses_with_saved_vendor", period: "weekly", period_start: Date.current.beginning_of_week)
+    assert_equal 1, weekly_progress.progress
   end
 
   test "creates a manual expense for a private person vendor" do

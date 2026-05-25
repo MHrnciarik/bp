@@ -31,6 +31,7 @@ class ExpensesController < ApplicationController
     @expense = current_company.expenses.new(expense_params)
     if @expense.save
        MissionTracker.track_expense_logged(current_user)
+       MissionTracker.track_expense_with_saved_vendor(current_user) if @expense.vendor_record.present?
        MissionTracker.track_expense_categorized(current_user) if @expense.category.present?
        flash_achievements(AchievementTracker.award_new!(current_user))
        redirect_to expenses_path, notice: "Výdavok bol vytvorený."

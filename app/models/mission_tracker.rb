@@ -1,23 +1,43 @@
 class MissionTracker
+  WEEKLY_COMPLETION_EXCLUDED_KEYS = %w[
+    complete_all_daily_missions_once
+    complete_all_weekly_missions_once
+  ].freeze
+
   class << self
     def track_login(user)
       track(user, daily: "log_in", weekly: "log_in_5_times")
     end
 
     def track_invoice_created(user)
-      track(user, daily: "create_invoice", weekly: "create_3_invoices")
+      track(user, daily: "create_invoice", weekly: "create_5_invoices")
+    end
+
+    def track_invoice_with_saved_client(user)
+      increment(user, "daily", "create_invoice_with_saved_client", 1)
+      increment(user, "weekly", "create_3_invoices_with_saved_client", 1)
+      refresh_complete_all_daily(user)
+      refresh_complete_all_weekly(user)
     end
 
     def track_expense_logged(user)
       track(user, daily: "log_expense", weekly: "log_5_expenses")
     end
 
-    def track_expense_categorized(user)
-      track(user, daily: "set_expense_category", weekly: "categorize_5_expenses")
+    def track_expense_with_saved_vendor(user)
+      increment(user, "daily", "log_expense_with_saved_vendor", 1)
+      increment(user, "weekly", "log_3_expenses_with_saved_vendor", 1)
+      refresh_complete_all_daily(user)
+      refresh_complete_all_weekly(user)
+    end
+
+    def track_expense_categorized(_user)
+      # Kept for existing controller calls; there is no longer a category mission.
     end
 
     def track_level_up(user, amount: 1)
-      increment(user, "daily", "reach_next_level", amount)
+      return if amount.to_i <= 0
+
       refresh_complete_all_daily(user)
     end
 
@@ -64,6 +84,7 @@ class MissionTracker
       increment(user, "daily", daily, 1)
       increment(user, "weekly", weekly, 1)
       refresh_complete_all_daily(user)
+      refresh_complete_all_weekly(user)
     end
 
     def increment(user, period, mission_key, amount)
@@ -88,6 +109,18 @@ class MissionTracker
       return unless completed
 
       increment(user, "weekly", "complete_all_daily_missions_once", 1)
+    end
+
+    def refresh_complete_all_weekly(user)
+      completed = MissionCatalog::WEEKLY_MISSIONS.reject do |definition|
+        WEEKLY_COMPLETION_EXCLUDED_KEYS.include?(definition[:key])
+      end.all? do |definition|
+        progress = find_progress(user, "weekly", definition[:key])
+        progress&.completed?
+      end
+      return unless completed
+
+      increment(user, "weekly", "complete_all_weekly_missions_once", 1)
     end
 
     def find_progress(user, period, mission_key)

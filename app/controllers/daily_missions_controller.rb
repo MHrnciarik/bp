@@ -3,7 +3,15 @@ class DailyMissionsController < ApplicationController
 
   def index
     @daily_missions = build_missions("daily")
-    @weekly_missions = build_missions("weekly")
+    weekly_missions = build_missions("weekly")
+    @daily_completion_reward = weekly_missions.find { |mission| mission[:key] == "complete_all_daily_missions_once" }
+    @weekly_completion_reward = weekly_missions.find { |mission| mission[:key] == "complete_all_weekly_missions_once" }
+    @weekly_missions = weekly_missions.reject do |mission|
+      %w[
+        complete_all_daily_missions_once
+        complete_all_weekly_missions_once
+      ].include?(mission[:key])
+    end
   end
 
   def claim

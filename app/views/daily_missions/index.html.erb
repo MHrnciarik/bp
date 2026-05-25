@@ -1,9 +1,76 @@
 <div class="mx-auto w-full max-w-6xl px-4 pb-12">
   <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-    <section class="rounded-[2.5rem] border border-base-content/10 bg-base-100 shadow-xl">
+    <% daily_reward = @daily_completion_reward %>
+    <% weekly_reward = @weekly_completion_reward %>
+    <% daily_section_class =
+      if daily_reward && daily_reward[:claimed]
+        "border-base-content/10 bg-base-200 text-base-content/65"
+      elsif daily_reward && daily_reward[:claimable]
+        "border-success/40 bg-success/10 shadow-success/10"
+      else
+        "border-base-content/10 bg-base-100"
+      end %>
+    <% weekly_section_class =
+      if weekly_reward && weekly_reward[:claimed]
+        "border-base-content/10 bg-base-200 text-base-content/65"
+      elsif weekly_reward && weekly_reward[:claimable]
+        "border-success/40 bg-success/10 shadow-success/10"
+      else
+        "border-base-content/10 bg-base-100"
+      end %>
+
+    <section class="rounded-[2.5rem] border <%= daily_section_class %> shadow-xl transition">
       <div class="border-b border-base-content/10 px-8 py-8 text-center">
         <h1 class="mt-2 text-3xl font-bold">Denné misie</h1>
       </div>
+
+      <% if daily_reward.present? %>
+        <div class="border-b border-base-content/10 px-8 py-6">
+          <% if daily_reward[:claimable] %>
+            <%= button_to claim_mission_path(period: daily_reward[:period], mission_key: daily_reward[:key]),
+                  method: :post,
+                  form: { class: "w-full" },
+                  class: "w-full cursor-pointer rounded-2xl border border-success/40 bg-success px-5 py-4 text-left text-success-content shadow-lg transition hover:brightness-105" do %>
+              <span class="flex items-center justify-between gap-4">
+                <span>
+                  <span class="block text-lg font-bold"><%= daily_reward[:title] %></span>
+                  <span class="mt-1 block text-sm opacity-80">Všetky denné misie sú hotové</span>
+                </span>
+                <span class="shrink-0 text-right">
+                  <span class="block text-2xl font-bold"><%= daily_reward[:xp] %> XP</span>
+                  <span class="text-sm font-semibold">Získať</span>
+                </span>
+              </span>
+            <% end %>
+          <% elsif daily_reward[:claimed] %>
+            <div class="rounded-2xl border border-base-content/10 bg-base-content/10 px-5 py-4">
+              <div class="flex items-center justify-between gap-4">
+                <div>
+                  <h2 class="text-lg font-bold"><%= daily_reward[:title] %></h2>
+                  <p class="mt-1 text-sm text-base-content/60">Denný bonus bol získaný</p>
+                </div>
+                <div class="shrink-0 text-right">
+                  <p class="text-2xl font-bold"><%= daily_reward[:xp] %> XP</p>
+                  <span class="badge badge-primary mt-1">Získané</span>
+                </div>
+              </div>
+            </div>
+          <% else %>
+            <div class="rounded-2xl border border-base-content/10 bg-base-200/50 px-5 py-4">
+              <div class="flex items-center justify-between gap-4">
+                <div>
+                  <h2 class="text-lg font-bold"><%= daily_reward[:title] %></h2>
+                  <p class="mt-1 text-sm text-base-content/65">Dokonči všetky úlohy nižšie</p>
+                </div>
+                <div class="shrink-0 text-right">
+                  <p class="text-2xl font-bold"><%= daily_reward[:xp] %> XP</p>
+                  <span class="badge badge-ghost mt-1"><%= daily_reward[:progress] %>/<%= daily_reward[:target] %></span>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
 
       <div>
         <% @daily_missions.each_with_index do |mission, index| %>
@@ -41,10 +108,59 @@
       </div>
     </section>
 
-    <section class="rounded-[2.5rem] border border-base-content/10 bg-base-100 shadow-xl">
+    <section class="rounded-[2.5rem] border <%= weekly_section_class %> shadow-xl transition">
       <div class="border-b border-base-content/10 px-8 py-8 text-center">
         <h1 class="mt-2 text-3xl font-bold">Týždenné misie</h1>
+        <p class="mt-2 text-sm text-base-content/60">Obnovujú sa každý pondelok.</p>
       </div>
+
+      <% if weekly_reward.present? %>
+        <div class="border-b border-base-content/10 px-8 py-6">
+          <% if weekly_reward[:claimable] %>
+            <%= button_to claim_mission_path(period: weekly_reward[:period], mission_key: weekly_reward[:key]),
+                  method: :post,
+                  form: { class: "w-full" },
+                  class: "w-full cursor-pointer rounded-2xl border border-success/40 bg-success px-5 py-4 text-left text-success-content shadow-lg transition hover:brightness-105" do %>
+              <span class="flex items-center justify-between gap-4">
+                <span>
+                  <span class="block text-lg font-bold"><%= weekly_reward[:title] %></span>
+                  <span class="mt-1 block text-sm opacity-80">Všetky týždenné misie sú hotové</span>
+                </span>
+                <span class="shrink-0 text-right">
+                  <span class="block text-2xl font-bold"><%= weekly_reward[:xp] %> XP</span>
+                  <span class="text-sm font-semibold">Získať</span>
+                </span>
+              </span>
+            <% end %>
+          <% elsif weekly_reward[:claimed] %>
+            <div class="rounded-2xl border border-base-content/10 bg-base-content/10 px-5 py-4">
+              <div class="flex items-center justify-between gap-4">
+                <div>
+                  <h2 class="text-lg font-bold"><%= weekly_reward[:title] %></h2>
+                  <p class="mt-1 text-sm text-base-content/60">Týždenný bonus bol získaný</p>
+                </div>
+                <div class="shrink-0 text-right">
+                  <p class="text-2xl font-bold"><%= weekly_reward[:xp] %> XP</p>
+                  <span class="badge badge-primary mt-1">Získané</span>
+                </div>
+              </div>
+            </div>
+          <% else %>
+            <div class="rounded-2xl border border-base-content/10 bg-base-200/50 px-5 py-4">
+              <div class="flex items-center justify-between gap-4">
+                <div>
+                  <h2 class="text-lg font-bold"><%= weekly_reward[:title] %></h2>
+                  <p class="mt-1 text-sm text-base-content/65">Dokonči všetky úlohy nižšie</p>
+                </div>
+                <div class="shrink-0 text-right">
+                  <p class="text-2xl font-bold"><%= weekly_reward[:xp] %> XP</p>
+                  <span class="badge badge-ghost mt-1"><%= weekly_reward[:progress] %>/<%= weekly_reward[:target] %></span>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
 
       <div>
         <% @weekly_missions.each_with_index do |mission, index| %>

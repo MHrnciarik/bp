@@ -136,6 +136,13 @@ class InvoicesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Acme Corp", invoice.client_name
     assert_equal "12345678", invoice.client_ico
     assert_equal "Example Street 1, Bratislava, 81101, Slovensko", invoice.client_address
+
+    progress = users(:one).mission_progresses.find_by!(mission_key: "create_invoice_with_saved_client", period: "daily", period_start: Date.current)
+    assert_equal 1, progress.progress
+    assert progress.claimable?
+
+    weekly_progress = users(:one).mission_progresses.find_by!(mission_key: "create_3_invoices_with_saved_client", period: "weekly", period_start: Date.current.beginning_of_week)
+    assert_equal 1, weekly_progress.progress
   end
 
   test "does not create a manual-client invoice without required business details" do

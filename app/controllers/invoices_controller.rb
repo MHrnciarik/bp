@@ -31,6 +31,7 @@ class InvoicesController < ApplicationController
 
     if @invoice.save
       MissionTracker.track_invoice_created(current_user)
+      MissionTracker.track_invoice_with_saved_client(current_user) if @invoice.client.present?
       flash_achievements(AchievementTracker.award_new!(current_user))
       redirect_to @invoice, notice: "Faktúra bola vytvorená."
     else
