@@ -22,6 +22,14 @@
     <section class="rounded-[2.5rem] border <%= daily_section_class %> shadow-xl transition">
       <div class="border-b border-base-content/10 px-8 py-8 text-center">
         <h1 class="mt-2 text-3xl font-bold">Denné misie</h1>
+        <p class="mt-2 text-sm text-base-content/60">
+          Obnovia sa o
+          <span
+            data-controller="daily-reset-countdown"
+            data-daily-reset-countdown-reset-at-value="<%= @daily_missions_reset_at.iso8601 %>"
+            data-daily-reset-countdown-format-value="hours"
+          ><%= @daily_missions_reset_in %></span>.
+        </p>
       </div>
 
       <% if daily_reward.present? %>
@@ -111,7 +119,14 @@
     <section class="rounded-[2.5rem] border <%= weekly_section_class %> shadow-xl transition">
       <div class="border-b border-base-content/10 px-8 py-8 text-center">
         <h1 class="mt-2 text-3xl font-bold">Týždenné misie</h1>
-        <p class="mt-2 text-sm text-base-content/60">Obnovujú sa každý pondelok.</p>
+        <p class="mt-2 text-sm text-base-content/60">
+          Obnovujú sa o
+          <span
+            data-controller="daily-reset-countdown"
+            data-daily-reset-countdown-reset-at-value="<%= @weekly_missions_reset_at.iso8601 %>"
+            data-daily-reset-countdown-format-value="days"
+          ><%= @weekly_missions_reset_in %></span>.
+        </p>
       </div>
 
       <% if weekly_reward.present? %>

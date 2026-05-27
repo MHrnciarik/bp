@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get "login", to: "sessions#new"
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"
+  resources :passwords, param: :token, only: [ :new, :create, :edit, :update ]
   get "daily_missions", to: "daily_missions#index"
   post "daily_missions/:period/:mission_key/claim", to: "daily_missions#claim", as: :claim_mission
   post "login_streak_rewards/:day/claim", to: "login_streak_rewards#create", as: :claim_login_streak_reward
@@ -27,7 +28,7 @@ Rails.application.routes.draw do
   resources :vendors
   resources :achievements, only: [ :index ]
   resources :profiles, only: [ :index ]
-  resources :companies, only: [ :new, :create, :destroy ] do
+  resources :companies, only: [ :new, :create, :edit, :update, :destroy ] do
     patch :select, on: :member
   end
 

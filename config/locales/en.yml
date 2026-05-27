@@ -118,7 +118,8 @@ en:
         address: "Adresa"
         note: "Poznámka"
       user:
-        username: "Používateľské meno"
+        email: "E-mail"
+        username: "Prezývka"
         password: "Heslo"
         password_confirmation: "Potvrdenie hesla"
 

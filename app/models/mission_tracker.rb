@@ -6,7 +6,13 @@ class MissionTracker
 
   class << self
     def track_login(user)
-      track(user, daily: "log_in", weekly: "log_in_5_times")
+      daily_progress = find_or_initialize_progress(user, "daily", "log_in")
+      login_day_already_counted = daily_progress.completed?
+
+      increment(user, "daily", "log_in", 1)
+      increment(user, "weekly", "log_in_5_times", 1) unless login_day_already_counted
+      refresh_complete_all_daily(user)
+      refresh_complete_all_weekly(user)
     end
 
     def track_invoice_created(user)

@@ -1,6 +1,8 @@
 require "test_helper"
 
 class DailyMissionsControllerTest < ActionDispatch::IntegrationTest
+  include ActiveSupport::Testing::TimeHelpers
+
   test "should redirect index when not logged in" do
     get daily_missions_url
 
@@ -8,23 +10,27 @@ class DailyMissionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get index when logged in" do
-    sign_in_as(users(:one))
+    travel_to Time.zone.local(2026, 5, 27, 10, 15, 0) do
+      sign_in_as(users(:one))
 
-    get daily_missions_url
+      get daily_missions_url
 
-    assert_response :success
-    assert_select "h1", text: "Denné misie"
-    assert_select "h1", text: "Týždenné misie"
-    assert_select "h2", text: "Prihlás sa"
-    assert_select "h2", text: "Vytvor faktúru s uloženým klientom"
-    assert_select "h2", text: "Zapíš výdavok s uloženým predajcom"
-    assert_select "h2", text: "Prihlás sa 5-krát"
-    assert_select "h2", text: "Vytvor 5 faktúr"
-    assert_select "h2", text: "Kategorizuj 5 výdavkov", count: 0
-    assert_select "h2", text: "Vytvor 3 faktúry s uloženým klientom"
-    assert_select "h2", text: "Vytvor 3 výdavky s uloženým predajcom"
-    assert_select "h2", text: "Dokonči všetky denné misie"
-    assert_select "h2", text: "Dokonči všetky týždenné misie", count: 1
+      assert_response :success
+      assert_select "h1", text: "Denné misie"
+      assert_select "p", text: "Obnovia sa o 13:45."
+      assert_select "h1", text: "Týždenné misie"
+      assert_match(/Obnovujú sa o\s+<span[^>]*>\s*4:13:45\s*<\/span>\./, response.body)
+      assert_select "h2", text: "Prihlás sa"
+      assert_select "h2", text: "Vytvor faktúru s uloženým klientom"
+      assert_select "h2", text: "Zapíš výdavok s uloženým predajcom"
+      assert_select "h2", text: "Prihlás sa 5 dní"
+      assert_select "h2", text: "Vytvor 5 faktúr"
+      assert_select "h2", text: "Kategorizuj 5 výdavkov", count: 0
+      assert_select "h2", text: "Vytvor 3 faktúry s uloženým klientom"
+      assert_select "h2", text: "Vytvor 3 výdavky s uloženým predajcom"
+      assert_select "h2", text: "Dokonči všetky denné misie"
+      assert_select "h2", text: "Dokonči všetky týždenné misie", count: 1
+    end
   end
 
   test "daily saved party missions award 25 xp" do

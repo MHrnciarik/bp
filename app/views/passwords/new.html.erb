@@ -1,0 +1,20 @@
+<div class="mx-auto max-w-md px-4 pb-12">
+  <div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h1 class="text-3xl font-bold text-center">Obnova hesla</h1>
+
+      <%= form_with url: passwords_path, class: "space-y-4" do |f| %>
+        <div>
+          <%= f.label :email, "E-mail", class: "label font-semibold" %>
+          <%= f.email_field :email, autocomplete: "email", class: "input input-bordered w-full" %>
+        </div>
+
+        <%= f.submit "Poslať odkaz", class: "btn btn-primary w-full" %>
+      <% end %>
+
+      <p class="text-center text-sm">
+        <%= link_to "Späť na prihlásenie", login_path, class: "link link-primary" %>
+      </p>
+    </div>
+  </div>
+</div>

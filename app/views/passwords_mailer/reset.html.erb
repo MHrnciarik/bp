@@ -1,0 +1,8 @@
+<p>Ahoj <%= @user.username %>,</p>
+
+<p>
+  Heslo si môžeš obnoviť cez tento odkaz:
+  <%= link_to "obnoviť heslo", edit_password_url(@user.password_reset_token) %>.
+</p>
+
+<p>Odkaz je platný <%= @user.password_reset_token_expires_in.to_i / 60 %> minút.</p>

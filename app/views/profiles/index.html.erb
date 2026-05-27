@@ -11,7 +11,7 @@
                 <h2 class="text-xl font-bold">Login streak</h2>
               </div>
 
-              <span class="badge badge-primary badge-lg shrink-0"><%= current_user.total_login_days %> dní</span>
+              <span class="badge badge-primary badge-lg shrink-0"><%= current_user.current_login_streak %> dní</span>
             </div>
 
             <div class="mt-5 grid grid-cols-7 gap-2">
@@ -98,11 +98,14 @@
                       <% end %>
                     </div>
 
-                    <%= button_to "Vymazať",
-                      company_path(company),
-                      method: :delete,
-                      class: "btn btn-error btn-sm",
-                      form: { data: { turbo_confirm: "Vymazať firmu #{company.name}?" } } %>
+                    <div class="relative z-10 flex shrink-0 gap-2">
+                      <%= link_to "Upraviť", edit_company_path(company), class: "btn btn-primary btn-sm" %>
+                      <%= button_to "Vymazať",
+                        company_path(company),
+                        method: :delete,
+                        class: "btn btn-error btn-sm",
+                        form: { data: { turbo_confirm: "Vymazať firmu #{company.name}?" } } %>
+                    </div>
                   </div>
 
                   <div class="mt-2 space-y-1 text-sm text-base-content/70">

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_24_124000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_25_100000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -154,6 +154,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_124000) do
     t.datetime "achievement_reward_5_claimed_at"
     t.datetime "created_at", null: false
     t.integer "current_login_streak", default: 0, null: false
+    t.string "email", null: false
     t.date "last_login_on"
     t.integer "login_count", default: 0, null: false
     t.datetime "login_streak_reward_3_claimed_at"
@@ -163,6 +164,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_124000) do
     t.datetime "updated_at", null: false
     t.string "username", null: false
     t.integer "xp", default: 0, null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 

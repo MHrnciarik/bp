@@ -8,7 +8,7 @@ module MissionCatalog
   ].freeze
 
   WEEKLY_MISSIONS = [
-    { key: "log_in_5_times", title: "Prihlás sa 5-krát", xp: 100, target: 5 },
+    { key: "log_in_5_times", title: "Prihlás sa 5 dní", xp: 100, target: 5 },
     { key: "create_5_invoices", title: "Vytvor 5 faktúr", xp: 150, target: 5 },
     { key: "log_5_expenses", title: "Zapíš 5 výdavkov", xp: 150, target: 5 },
     { key: "create_3_invoices_with_saved_client", title: "Vytvor 3 faktúry s uloženým klientom", xp: 100, target: 3 },

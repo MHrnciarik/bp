@@ -3,7 +3,8 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user = User.find_by(username: params[:username])
+    @email = params[:email].to_s.strip.downcase
+    user = User.find_by(email: @email)
 
     if user&.authenticate(params[:password])
       session[:user_id] = user.id
@@ -12,7 +13,7 @@ class SessionsController < ApplicationController
       flash_achievements(AchievementTracker.track_login!(user))
       redirect_to root_path, notice: "Prihlásenie prebehlo úspešne."
     else
-      flash.now[:alert] = "Neplatné používateľské meno alebo heslo."
+      flash.now[:alert] = "Neplatný e-mail alebo heslo."
       render :new, status: :unprocessable_entity
     end
   end

@@ -15,7 +15,10 @@ class User < ApplicationRecord
   has_many :mission_progresses, dependent: :destroy
   has_many :user_achievements, dependent: :destroy
 
-  validates :username, presence: true, uniqueness: true
+  before_validation :normalize_email
+
+  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: { case_sensitive: false }
+  validates :username, presence: true, uniqueness: { case_sensitive: false }
   validates :password, length: { minimum: 8 }, if: -> { password.present? }
   validates :xp, numericality: { greater_than_or_equal_to: 0 }
   validates :login_count, numericality: { greater_than_or_equal_to: 0 }
@@ -39,7 +42,10 @@ class User < ApplicationRecord
   end
 
   def login_streak_day_count
-    [ current_login_streak.to_i, 7 ].min
+    streak = current_login_streak.to_i
+    return 0 if streak.zero?
+
+    ((streak - 1) % 7) + 1
   end
 
   def login_streak_reward_claimable?(day)
@@ -79,6 +85,10 @@ class User < ApplicationRecord
   end
 
   private
+
+  def normalize_email
+    self.email = email.to_s.strip.downcase.presence
+  end
 
   def achievement_count_reward_claimed_at(target)
     case target.to_i

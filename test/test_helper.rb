@@ -17,7 +17,7 @@ end
 class ActionDispatch::IntegrationTest
   def sign_in_as(user, password: "password123")
     post login_path, params: {
-      username: user.username,
+      email: user.email,
       password: password
     }
   end

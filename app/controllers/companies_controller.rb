@@ -17,6 +17,20 @@ class CompaniesController < ApplicationController
     end
   end
 
+  def edit
+    @company = current_user.companies.find(params[:id])
+  end
+
+  def update
+    @company = current_user.companies.find(params[:id])
+
+    if @company.update(company_params)
+      redirect_to profiles_path, notice: "Firma bola upravená."
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   def select
     @company = current_user.companies.find(params[:id])
     session[:current_company_id] = @company.id
