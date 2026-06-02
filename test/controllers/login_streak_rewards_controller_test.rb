@@ -33,7 +33,7 @@ class LoginStreakRewardsControllerTest < ActionDispatch::IntegrationTest
     get profiles_path
 
     assert_response :success
-    assert_select "[data-testid='login-streak-notification-dot']", count: 1
+    assert_select "[data-testid='login-streak-notification-dot'].bg-error.opacity-100", count: 1
     assert_select "a", text: "Profil", count: 0
   end
 end
