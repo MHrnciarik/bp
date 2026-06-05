@@ -35,10 +35,3 @@ Server sa spúšťa s príkazom
 bin/dev
 ```
 
-Použité technológie:
-  Ruby on Rails
-  PostgreSQL
-  Tailwind CSS
-  DaisyUI
-  Hotwire / Turbo
-
