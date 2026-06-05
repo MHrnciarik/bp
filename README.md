@@ -35,3 +35,36 @@ Server sa spúšťa s príkazom
 bin/dev
 ```
 
+## Súborová štruktúra aplikácie
+
+```bash
+.
+├── app/
+│   ├── assets/              # štýly a statické assety aplikácie
+│   ├── controllers/         # Ruby controllery
+│   ├── helpers/             # pomocné metódy pre views
+│   ├── javascript/          # JavaScript a Stimulus controllery
+│   ├── mailers/             # e-mailová komunikácia
+│   ├── models/              # modely a aplikačná logika
+│   └── views/               # ERB šablóny používateľského rozhrania
+│
+├── bin/                     # spúšťacie skripty Rails aplikácie
+├── config/                  # konfigurácia aplikácie, routy, prostredia
+├── db/
+│   ├── migrate/             # databázové migrácie
+│   └── schema.rb            # aktuálna schéma databázy
+│
+├── lib/                     # doplnkové úlohy a pomocné súbory
+├── public/                  # verejne dostupné súbory
+├── storage/                 # lokálne úložisko súborov
+├── test/                    # automatizované testy aplikácie
+├── vendor/                  # externé JavaScript knižnice
+│
+├── Dockerfile               # konfigurácia kontajnera
+├── Gemfile                  # Ruby závislosti projektu
+├── Gemfile.lock             # uzamknuté verzie závislostí
+├── Procfile.dev             # spustenie vývojového prostredia
+├── Rakefile                 # definícia Rake úloh
+├── README.md                # základný opis projektu
+└── config.ru                # Rack konfigurácia aplikácie
+```
