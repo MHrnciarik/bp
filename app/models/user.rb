@@ -50,7 +50,7 @@ class User < ApplicationRecord
 
   def login_streak_reward_claimable?(day)
     LOGIN_STREAK_REWARDS.key?(day.to_i) &&
-      current_login_streak.to_i >= day.to_i &&
+      login_streak_day_count >= day.to_i &&
       !login_streak_reward_claimed?(day)
   end
 

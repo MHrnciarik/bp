@@ -27,6 +27,28 @@ class LoginStreakRewardsControllerTest < ActionDispatch::IntegrationTest
     assert_nil user.login_streak_reward_3_claimed_at
   end
 
+  test "does not claim next cycle rewards on the eighth streak day" do
+    user = users(:one)
+    user.reload.update!(current_login_streak: 8, xp: 0, achievement_reward_5_claimed_at: Time.current)
+
+    post claim_login_streak_reward_path(3)
+
+    assert_redirected_to profiles_path
+    assert_equal 0, user.reload.xp
+    assert_nil user.login_streak_reward_3_claimed_at
+  end
+
+  test "claims the day 3 reward again after reaching day 3 of the next cycle" do
+    user = users(:one)
+    user.reload.update!(current_login_streak: 10, xp: 0, achievement_reward_5_claimed_at: Time.current)
+
+    post claim_login_streak_reward_path(3)
+
+    assert_redirected_to profiles_path
+    assert_equal 100, user.reload.xp
+    assert user.login_streak_reward_3_claimed_at.present?
+  end
+
   test "shows a red dot on the selected company when a login streak reward is claimable" do
     users(:one).update!(current_login_streak: 3)
 

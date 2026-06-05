@@ -40,4 +40,24 @@ class LoginStreakTrackerTest < ActiveSupport::TestCase
     assert_equal 4, user.total_login_days
     assert_nil user.login_streak_reward_3_claimed_at
   end
+
+  test "starts a new reward cycle after seven consecutive login days" do
+    user = users(:one)
+    user.update!(
+      last_login_on: Date.new(2026, 5, 19),
+      current_login_streak: 7,
+      total_login_days: 7,
+      login_streak_reward_3_claimed_at: Time.current,
+      login_streak_reward_7_claimed_at: Time.current
+    )
+
+    LoginStreakTracker.track!(user, today: Date.new(2026, 5, 20))
+
+    user.reload
+    assert_equal 8, user.current_login_streak
+    assert_equal 1, user.login_streak_day_count
+    assert_equal 8, user.total_login_days
+    assert_nil user.login_streak_reward_3_claimed_at
+    assert_nil user.login_streak_reward_7_claimed_at
+  end
 end

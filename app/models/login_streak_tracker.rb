@@ -7,6 +7,10 @@ class LoginStreakTracker
 
         if last_login_on == today.yesterday
           user.current_login_streak = user.current_login_streak.to_i + 1
+          if user.login_streak_day_count == 1
+            user.login_streak_reward_3_claimed_at = nil
+            user.login_streak_reward_7_claimed_at = nil
+          end
         else
           user.current_login_streak = 1
           user.login_streak_reward_3_claimed_at = nil

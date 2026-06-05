@@ -36,4 +36,16 @@ class UserTest < ActiveSupport::TestCase
     user.current_login_streak = 8
     assert_equal 1, user.login_streak_day_count
   end
+
+  test "checks login streak rewards against the current seven day cycle" do
+    user = users(:one)
+
+    user.current_login_streak = 8
+    assert_not user.login_streak_reward_claimable?(3)
+    assert_not user.login_streak_reward_claimable?(7)
+
+    user.current_login_streak = 10
+    assert user.login_streak_reward_claimable?(3)
+    assert_not user.login_streak_reward_claimable?(7)
+  end
 end
