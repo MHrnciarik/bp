@@ -1,4 +1,4 @@
-# Webová plikácia Funance
+# Webová aplikácia Funance
 
 Webová aplikácia vytvorená v Ruby on Rails. Aplikácia slúži na správu používateľského profilu, firiem, faktúr, výdavkov a zároveň obsahuje gamifikačné prvky ako XP, úrovne, odznaky, denné misie a sériu prihlásení.
 Aplikácia je určená najmä pre menších podnikateľov alebo používateľov, ktorí chcú mať prehľad o svojich firmách, faktúrach a výdavkoch. Okrem základnej správy obsahuje aj motivačný systém, kde používateľ získava XP, odznaky a odmeny za pravidelné používanie aplikácie.
