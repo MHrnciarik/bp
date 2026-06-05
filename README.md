@@ -1,24 +1,44 @@
-# README
+# Webová plikácia Funance
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Webová aplikácia vytvorená v Ruby on Rails. Aplikácia slúži na správu používateľského profilu, firiem, faktúr, výdavkov a zároveň obsahuje gamifikačné prvky ako XP, úrovne, odznaky, denné misie a sériu prihlásení.
+Aplikácia je určená najmä pre menších podnikateľov alebo používateľov, ktorí chcú mať prehľad o svojich firmách, faktúrach a výdavkoch. Okrem základnej správy obsahuje aj motivačný systém, kde používateľ získava XP, odznaky a odmeny za pravidelné používanie aplikácie.
 
-Things you may want to cover:
+## Požiadavky
 
-* Ruby version
+Na spustenie aplikácie je potrebné mať nainštalované:
 
-* System dependencies
+- Ruby
+- Ruby on Rails
+- PostgreSQL
+- Node.js / npm
 
-* Configuration
+## Spustenie aplikácie
 
-* Database creation
+Najprv je potrebné nainštalovať závislosti:
 
-* Database initialization
+```bash
+bundle install
+npm install
+```
 
-* How to run the test suite
+Potom pripraviť databázu:
 
-* Services (job queues, cache servers, search engines, etc.)
+```bash
+bin/rails db:create
+bin/rails db:migrate
+bin/rails db:seed
+```
+Databázu seedujeme len ak chceme demo ukážkový profil.
 
-* Deployment instructions
+Server sa spúšťa s príkazom
+```bash
+bin/dev
+```
 
-* ...
+Použité technológie:
+  Ruby on Rails
+  PostgreSQL
+  Tailwind CSS
+  DaisyUI
+  Hotwire / Turbo
+
